@@ -94,7 +94,7 @@ const RELEASE_NOTES: ReleaseNote[] = [
         version: '3.2.2',
         date: '2026-06-30',
         showOnUpdate: false,
-        info: 'Quick fix to make drag and drop work again with external images.',
+        info: 'Quick fix to make drag and drop work again with external images.'
     },
     {
         version: '3.2.1',
