@@ -36,6 +36,7 @@ const OBSIDIAN_FILE_MIME = 'obsidian/file';
 const OBSIDIAN_FILES_MIME = 'obsidian/files';
 const TEXT_URI_LIST_MIME = 'text/uri-list';
 const TEXT_PLAIN_MIME = 'text/plain';
+const EXTERNAL_FILES_MIME = 'Files';
 const OBSIDIAN_OPEN_URI = 'obsidian://open';
 
 // Determines if a value is a non-empty string
@@ -129,6 +130,11 @@ export function hasPotentialObsidianFileDragType(types: DOMStringList | readonly
         hasObsidianFileDragType(typeList) ||
         (typeList.length === 2 && typeList.includes(TEXT_URI_LIST_MIME) && typeList.includes(TEXT_PLAIN_MIME))
     );
+}
+
+export function hasExternalFileDragType(types: DOMStringList | readonly string[] | null | undefined): boolean {
+    const typeList = Array.from(types ?? []);
+    return typeList.includes(EXTERNAL_FILES_MIME);
 }
 
 /**

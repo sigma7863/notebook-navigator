@@ -17,7 +17,12 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import { extractFilePathsFromDataTransfer, hasObsidianFileDragType, hasPotentialObsidianFileDragType } from '../../src/utils/dragData';
+import {
+    extractFilePathsFromDataTransfer,
+    hasExternalFileDragType,
+    hasObsidianFileDragType,
+    hasPotentialObsidianFileDragType
+} from '../../src/utils/dragData';
 
 class TestDataTransfer {
     readonly types: string[];
@@ -162,6 +167,18 @@ describe('dragData', () => {
 
         it('does not classify URI drags with extra non-native types as Obsidian file drags', () => {
             expect(hasPotentialObsidianFileDragType(['text/plain', 'text/uri-list', 'DownloadURL'])).toBe(false);
+        });
+    });
+
+    describe('hasExternalFileDragType', () => {
+        it('recognizes OS file drags before FileList contents are exposed', () => {
+            expect(hasExternalFileDragType(['Files'])).toBe(true);
+            expect(hasExternalFileDragType(['Files', 'text/uri-list'])).toBe(true);
+        });
+
+        it('rejects Obsidian and URL drag types', () => {
+            expect(hasExternalFileDragType(['obsidian/file'])).toBe(false);
+            expect(hasExternalFileDragType(['text/plain', 'text/uri-list'])).toBe(false);
         });
     });
 });

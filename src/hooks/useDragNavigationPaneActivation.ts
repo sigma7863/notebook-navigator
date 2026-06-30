@@ -19,7 +19,7 @@
 // src/hooks/useDragNavigationPaneActivation.ts
 import { useEffect, useRef } from 'react';
 import { DRAG_AUTO_EXPAND_DELAY } from './useDragAndDrop';
-import { hasPotentialObsidianFileDragType } from '../utils/dragData';
+import { hasExternalFileDragType, hasPotentialObsidianFileDragType } from '../utils/dragData';
 
 // Pixels from left edge that trigger navigation pane activation
 const EDGE_ACTIVATION_THRESHOLD = 32;
@@ -43,9 +43,10 @@ function isWithinRect(event: DragEvent, rect: DOMRect | null): boolean {
     return event.clientX >= rect.left && event.clientX <= rect.right && event.clientY >= rect.top && event.clientY <= rect.bottom;
 }
 
-// Determines if the drag event contains Obsidian file data
+// Determines if the drag event contains file data that can be dropped in the navigator
 function isEligibleFileDrag(event: DragEvent): boolean {
-    return hasPotentialObsidianFileDragType(event.dataTransfer?.types);
+    const types = event.dataTransfer?.types;
+    return hasPotentialObsidianFileDragType(types) || hasExternalFileDragType(types);
 }
 
 /**
