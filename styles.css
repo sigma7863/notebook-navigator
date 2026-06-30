@@ -201,8 +201,8 @@ body {
     --nn-theme-calendar-feature-image-overlay-color: rgb(0 0 0 / 0.05);
     --nn-theme-calendar-day-today-color: var(--nn-theme-calendar-day-in-month-color);
     --nn-theme-calendar-day-today-bg: var(--text-selection);
-    --nn-theme-calendar-day-active-border-color: #f94040;
-    --nn-theme-calendar-day-active-border-width: 3px;
+    --nn-theme-calendar-day-active-border-color: var(--interactive-accent);
+    --nn-theme-calendar-day-active-border-width: 2px;
 
     /* -- Folder & Tag Items -- */
     --nn-theme-navitem-chevron-color: var(--nn-theme-foreground-muted);
@@ -2978,6 +2978,11 @@ button.nn-navigation-calendar-year-month {
     border-radius: inherit;
     pointer-events: none;
     z-index: 2;
+}
+
+.nn-navigation-calendar-day.has-feature-image.is-active-editor-file .nn-navigation-calendar-active-outline,
+.nn-navigation-calendar-year-month.has-feature-image.is-selected-month .nn-navigation-calendar-active-outline {
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.65);
 }
 
 .nn-navigation-calendar-year-month-label {
@@ -9357,8 +9362,8 @@ settings:
         default-dark: '#'
     -
         id: nn-theme-calendar-day-active-border-color
-        title: Active day outline color
-        description: Border color for the outline shown on the active day in the calendar.
+        title: Selection outline color
+        description: Border color for active calendar outlines.
         type: variable-themed-color
         opacity: true
         format: rgb
@@ -9366,10 +9371,10 @@ settings:
         default-dark: '#'
     -
         id: nn-theme-calendar-day-active-border-width
-        title: Active day outline thickness
-        description: Border width for the outline shown on the active day in the calendar.
+        title: Selection outline thickness
+        description: Border width for active calendar outlines.
         type: variable-number-slider
-        default: 3
+        default: 2
         format: px
         min: 1
         max: 4

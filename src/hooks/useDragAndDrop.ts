@@ -34,7 +34,12 @@ import { buildFilePathInFolder, generateUniqueFilename } from '../utils/fileCrea
 import { setNativeDragPreview } from '../utils/nativeDragPreview';
 import { normalizeTagPathValue } from '../utils/tagPrefixMatcher';
 import { runAsyncAction } from '../utils/async';
-import { extractFilePathsFromDataTransfer, hasObsidianFileDragType, hasPotentialObsidianFileDragType } from '../utils/dragData';
+import {
+    extractFilePathsFromDataTransfer,
+    hasExternalFileDragType,
+    hasObsidianFileDragType,
+    hasPotentialObsidianFileDragType
+} from '../utils/dragData';
 import { FolderMoveError } from '../services/FileSystemService';
 import { getFilesForNavigationSelection } from '../utils/selectionUtils';
 import { expandNavigationTreeItems, getFolderAncestorPaths, getTagAncestorPaths } from '../utils/navigationExpansion';
@@ -79,7 +84,7 @@ const isSupportedDropPayload = (
         return hasObsidianData || isExternalOnly;
     }
     if (dropType === 'tag') {
-        return hasTagPayload || hasObsidianData || isExternalOnly;
+        return hasTagPayload || hasObsidianData;
     }
     if (dropType === 'tag-root') {
         return hasTagPayload;
@@ -797,7 +802,8 @@ export function useDragAndDrop(containerRef: React.RefObject<HTMLElement | null>
                 const typesList = e.dataTransfer.types;
                 const hasObsidianData = hasPotentialObsidianFileDragType(typesList);
                 const hasTagPayload = Boolean(typesList?.includes(TAG_DRAG_MIME));
-                const hasExternalFiles = Boolean(e.dataTransfer.files && e.dataTransfer.files.length > 0);
+                const hasExternalFiles =
+                    hasExternalFileDragType(typesList) || Boolean(e.dataTransfer.files && e.dataTransfer.files.length > 0);
                 const isInternalTransfer = hasObsidianData || hasTagPayload;
                 const isExternalOnly = hasExternalFiles && !isInternalTransfer;
 
@@ -1130,7 +1136,7 @@ export function useDragAndDrop(containerRef: React.RefObject<HTMLElement | null>
                 });
                 const hasObsidianData = hasObsidianFileDragType(typesList) || Boolean(selectedPaths && selectedPaths.length > 0);
                 const hasTagPayload = Boolean(typesList?.includes(TAG_DRAG_MIME));
-                const hasExternalFiles = Boolean(externalFiles && externalFiles.length > 0);
+                const hasExternalFiles = hasExternalFileDragType(typesList) || Boolean(externalFiles && externalFiles.length > 0);
                 const isInternalTransfer = hasObsidianData || hasTagPayload;
                 const isExternalOnly = hasExternalFiles && !isInternalTransfer;
 
@@ -1191,14 +1197,6 @@ export function useDragAndDrop(containerRef: React.RefObject<HTMLElement | null>
                     }
 
                     if (dragTypeRef.current === ItemType.FOLDER) {
-                        return;
-                    }
-
-                    if (isExternalOnly) {
-                        showNotice(strings.fileSystem.notifications.tagOperationsNotAvailable, {
-                            timeout: TIMEOUTS.NOTICE_ERROR,
-                            variant: 'warning'
-                        });
                         return;
                     }
 
