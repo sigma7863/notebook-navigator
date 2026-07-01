@@ -1,6 +1,6 @@
 # Notebook Navigator Scroll Orchestration
 
-Updated: March 17, 2026
+Updated: July 1, 2026
 
 ## Table of Contents
 
@@ -94,7 +94,7 @@ Key principles:
 
 Both panes maintain `indexVersionRef` counters.
 
-- **Navigation pane** increments when the `pathToIndex` map changes size or identity.
+- **Navigation pane** increments when the effective `pathToIndex` mapping changes.
 - **List pane** increments when the effective `filePathToIndex` mapping changes, so pending scrolls wait for the
   rebuilt list before executing.
 
@@ -151,7 +151,7 @@ requests.
   container or any parent is hidden.
 - The composed `isScrollContainerReady` flag requires both logical visibility and physical dimensions.
 - Both panes use TanStack Virtual `scrollMargin` to align row math with pane chrome. The list pane also uses
-  `scrollPaddingStart`, and both panes can use `scrollPaddingEnd` for bottom overlays.
+  `scrollPaddingStart`, and both panes can use `scrollPaddingEnd` for overlays that cover the bottom of the scroller.
 - In the list pane, mobile taps on the pane header call `handleScrollToTop`, which performs a smooth
   `scrollTo({ top: 0 })`.
 
@@ -182,11 +182,14 @@ spacers).
 
 ### List Pane Scrolling
 
-`useListPaneScroll` manages article lists, pinned groups, spacers, and date headers.
+`useListPaneScroll` manages file lists, pinned groups, spacers, and date headers.
 
 - **Virtualizer setup**: Height estimation mirrors `FileItem` logic, looking up preview availability synchronously and
-  respecting compact mode. `scrollMargin` and `scrollPaddingStart`/`scrollPaddingEnd` keep scroll math aligned with
-  overlay chrome and the mobile bottom toolbar.
+  respecting compact mode. The hook supports `scrollMargin` and `scrollPaddingStart`; the current list pane passes
+  `scrollMargin: 0` and uses `scrollPaddingEnd` for the iOS floating toolbar. Calendar overlay changes trigger a
+  follow-up `scrollToIndexSafely` outside the hook.
+- **Safe viewport adjustment**: `scrollToIndexSafely` runs `scrollToIndex`, then `ensureIndexNotCovered` corrects sticky
+  group-header overlap at the top and bottom-overlay overlap when `scrollPaddingEnd` is non-zero.
 - **Priority queue**: `setPending` wraps `rankListPending`, replacing lower-ranked requests.
 - **Selected file tracking**: `selectedFilePathRef` avoids executing stale config scrolls for files that are no longer
   selected.
@@ -200,11 +203,11 @@ spacers).
   when the pane is hidden and execute once the list becomes ready.
 - **Reveal operations**: Reveal flows queue a `reveal` pending scroll. Startup reveals override alignment to `'center'`.
 - **Mobile drawer**: The `notebook-navigator-visible` event queues a visibility-change scroll when a file is selected.
-- **Settings and search**: Appearance changes and descendant toggles queue `list-structure-change` entries. Search
-  filters queue a `top` scroll when the selected file drops out of the filtered list, respecting mobile suppression
-  flags.
+- **Settings and search**: Appearance changes and descendant toggles queue `list-structure-change` entries against the
+  current index version when `revealFileOnListChanges` is enabled and a file is selected. Search filters queue a `top`
+  scroll when the selected file drops out of the filtered list, respecting mobile suppression flags.
 - **Height estimate updates**: The hook refreshes virtualizer size estimates when row-height inputs change and when the in-memory
-  database reports preview, feature image, tag, property, or word count updates.
+  database reports preview, feature image, tag, property, word count, or character count updates.
 
 ## Common Scenarios
 
@@ -227,8 +230,9 @@ spacers).
 
 1. Navigation line height or indentation updates trigger `rowVirtualizer.measure()` followed by a deferred selection
    scroll when auto-scroll is allowed.
-2. List appearance or descendant toggles queue a `list-structure-change` scroll with `minIndexVersion = current + 1`
-   when `revealFileOnListChanges` is enabled and a file is selected. Disabling descendants can queue a `top` scroll
+2. List appearance or descendant toggles queue a `list-structure-change` scroll with `minIndexVersion = current`
+   because layout-only changes can keep the same path/index map. This happens when `revealFileOnListChanges` is enabled
+   and a file is selected. Disabling descendants can queue a `top` scroll
    when no file is selected or `revealFileOnListChanges` is disabled.
 3. Reorders within the same folder/tag/property context update `indexVersion` and enqueue a `list-structure-change` scroll so the
    selected file remains visible.
@@ -286,7 +290,7 @@ export function rankListPending(p?: { type: 'file' | 'top'; reason?: ListScrollI
 
 - **Navigation pane**: `selection` centers on mobile and uses `auto` on desktop. `visibilityToggle`, `external`, and
   `mobile-visibility` use `auto`. `startup` defaults to `center` and `reveal` maps to `auto` in `getNavAlign`.
-- **List pane**: `folder-navigation` centers on mobile, others use `auto`. Startup reveals override to `center` after
+- **List pane**: `folder-navigation` centers on mobile, others use `auto`. Startup reveals override to `center` at
   execution.
 
 ### Safe Viewport
@@ -294,6 +298,8 @@ export function rankListPending(p?: { type: 'file' | 'top'; reason?: ListScrollI
 - Both panes pass scroll insets to TanStack Virtual so row offsets and `scrollToIndex` align with pane chrome.
 - Navigation runs a post-scroll adjustment step (`ensureIndexNotCovered`) that corrects bottom overlap after
   `scrollToIndex`, retrying for a few animation frames while virtualization settles.
+- The list pane runs the same adjustment pattern, correcting sticky group-header overlap at the top and
+  `scrollPaddingEnd` overlap at the bottom.
 
 ### Stabilization Mechanisms
 
@@ -321,7 +327,8 @@ export function rankListPending(p?: { type: 'file' | 'top'; reason?: ListScrollI
 
 **Scroll lands on wrong item**
 
-- Confirm `minIndexVersion` is set to `indexVersionRef.current + 1` when a rebuild is pending.
+- Confirm `minIndexVersion` is set to `indexVersionRef.current + 1` when a future index-map rebuild is pending, and to
+  the current version for layout-only changes that do not change the index map.
 - Ensure the path resolves through `getNavigationIndex` or `getSelectionIndex`.
 
 **Scroll does not execute**

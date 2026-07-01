@@ -1,6 +1,6 @@
 # Notebook Navigator Rendering Architecture
 
-Updated: March 23, 2026
+Updated: July 1, 2026
 
 ## Table of Contents
 
@@ -21,8 +21,9 @@ mounted with `createRoot` and wrapped in `React.StrictMode`.
 
 The main navigator UI renders `NavigationPane` and `ListPane` in dual-pane and single-pane layouts, and can also mount
 an inline `Calendar` panel in single-pane mode when the left-sidebar calendar placement is configured below the panes.
-Both panes combine pane-level chrome with a virtualized scroll region for rows. Both panes use `@tanstack/react-virtual`
-to mount only the rows required for the viewport plus overscan.
+During normal browsing and searching, both panes combine pane-level chrome with a virtualized scroll region for rows.
+Both panes use `@tanstack/react-virtual` to mount only the rows required for the viewport plus overscan. The list pane
+temporarily swaps the virtualized list for `ManualSortListContent` while manual-sort edit mode is active.
 
 The calendar right-sidebar view renders `CalendarRightSidebar`, which hosts `Calendar` in sidebar mode and forwards
 date-filter actions to the main navigator view.
@@ -65,7 +66,7 @@ Expensive data shaping lives outside component bodies. Examples:
   colours, and tracks virtual folders, banners, pinned shortcuts, and section ordering.
 - `useNavigationRootReorder` exposes drag-and-drop reorder state and render helpers for root folders, tags, properties, and section
   headers.
-- `useListPaneData` assembles list pane items (pinned files, top spacer, date headers, search metadata, hidden item
+- `useListPaneData` assembles list pane items (pinned files, spacers, group headers, search metadata, hidden item
   flags) and keeps lookup maps for virtualized scrolling and multi-selection.
 - `useListPaneAppearance`, `useListPaneTitle`, `useListActions`, `useNavigationPaneKeyboard`, `useListPaneKeyboard`,
   `useNavigatorReveal`, and `useNavigatorEventHandlers` encapsulate behavior that would otherwise live inside
@@ -156,7 +157,8 @@ graph TD
     CH --> SI["SearchInput"];
     CH --> LTA["ListPaneTitleArea"];
     LPR --> PANEL["List pane panel"];
-    PANEL --> LPL["ListPaneVirtualContent"];
+    PANEL -->|normal mode| LPL["ListPaneVirtualContent"];
+    PANEL -->|manual sort edit| MSL["ManualSortListContent"];
     LPR --> LTBI["ListToolbar iOS / bottom toolbar"];
     LPR --> CAL["Calendar overlay"];
 ```
@@ -322,11 +324,13 @@ graph TD
 
 **Location**: `src/components/ListPane.tsx`
 
-- Consumes data and behavior from `useListPaneData`, `useListPaneScroll`, `useListPaneKeyboard`,
-  `useListPaneAppearance`, `useMultiSelection`, `useContextMenu`, and `useListPaneSelectionCoordinator`.
+- Consumes data and behavior from `useListPaneData`, `useListPaneSearch`, `useListPaneScroll`, `useListPaneKeyboard`,
+  `useListPaneAppearance`, `useContextMenu`, and `useListPaneSelectionCoordinator`.
 - Renders pane chrome outside the scroller (`SearchInput`, `ListPaneTitleArea`, mobile toolbars), plus empty states and
-  the virtual list with top spacer, date headers, file rows, and bottom spacer.
+  the virtual list with top spacer, group headers, header spacers, file rows, and bottom spacer.
 - Integrates Omnisearch results when configured, including excerpt matches and highlight metadata.
+- Replaces `ListPaneVirtualContent` with `ManualSortListContent` during manual-sort edit mode; the manual-sort surface
+  uses dnd-kit sortable rows and reuses `FileItem` rendering for file rows.
 - Computes pane-level row inputs once (appearance settings, hidden-tag visibility, file-icon needles, shortcut lookup,
   storage helpers) and passes them to virtual rows as stable props.
 - Attaches the list-pane context menu to the scroll container and lets delegated target resolution switch between empty
@@ -342,7 +346,8 @@ graph TD
 **Location**: `src/components/SearchInput.tsx`
 
 - Renders the list pane search field and dispatches `UIStateContext` focus updates for keyboard navigation.
-- Initializes `SearchTagInputSuggest` when tag suggestions are enabled and a tag tree service is available.
+- Initializes `SearchTagInputSuggest` and `SearchDateInputSuggest` when the internal filter-search provider is active,
+  and exposes the filter/Omnisearch provider toggle when Omnisearch is available.
 - Handles search keyboard shortcuts using the configured `settings.keyboardShortcuts`.
 
 ### ListPaneTitleArea
@@ -425,19 +430,22 @@ graph TD
 ```typescript
 const { items, pathToIndex, shortcutItems } = useNavigationPaneData({
   settings,
-  activeProfile,
-  isVisible: navigationVisible,
-  shortcutsExpanded,
-  recentNotesExpanded,
-  pinShortcuts,
+  isVisible,
+  sourceState: props.navigationSourceState,
+  treeSections: props.navigationTreeSections,
+  folderDecorationModel: props.folderDecorationModel,
+  navRainbowState: props.navRainbowState,
+  shortcutsExpanded: shortcuts.shortcutsExpanded,
+  recentNotesExpanded: shortcuts.recentNotesExpanded,
+  pinShortcuts: uiState.pinShortcuts && settings.showShortcuts,
   sectionOrder
 });
 
 const { rowVirtualizer, scrollContainerRefCallback, requestScroll } = useNavigationPaneScroll({
   items,
   pathToIndex,
-  isVisible: navigationVisible,
-  activeShortcutKey,
+  isVisible,
+  activeShortcutKey: shortcuts.activeShortcutKey,
   scrollMargin: navigationScrollMargin,
   scrollPaddingEnd
 });
@@ -445,50 +453,64 @@ const { rowVirtualizer, scrollContainerRefCallback, requestScroll } = useNavigat
 
 ### List Pane Virtualization
 
-- `useListPaneData` emits `ListPaneItem[]` composed of top/bottom spacers, date headers, and file items with pinned and
-  hidden flags plus lookup maps (`filePathToIndex`, `fileIndexMap`).
+- `useListPaneData` emits `ListPaneItem[]` composed of top/bottom spacers, header spacers, group headers (`pinned`,
+  `date`, `folder`, `section`, and `manual-sort-custom`), and file items with pinned and hidden flags plus lookup maps
+  (`filePathToIndex`, `fileIndexMap`).
 - `useListPaneScroll` feeds `listItems` into `useVirtualizer`, calculating heights with `getListPaneMeasurements`,
   preview availability (`hasPreview`), search metadata, and appearance settings. The current implementation uses
   `scrollMargin: 0`; the calendar overlay is handled by a follow-up `scrollToIndex` when its height changes.
-- The hook maintains a single pending scroll request with ranked priorities: `top`, `list-structure-change`,
-  `visibility-change`, `folder-navigation`, then `reveal`. It executes the selected request after the index version
-  matches the expected rebuild.
+- The hook maintains a single pending scroll request with ranked priorities, from lowest to highest: `top`,
+  `list-structure-change`, `visibility-change`, `folder-navigation`, then `reveal`. It executes the selected request
+  after the index version matches the expected rebuild.
 - `ListPane` delegates virtual row rendering to `ListPaneVirtualContent`, which switches on `item.type` and passes
-  search metadata and pane-owned shared row props to `FileItem`; headers are inline
-  `<div className="nn-date-group-header">` nodes, matching the measurement logic.
+  search metadata and pane-owned shared row props to `FileItem`; group headers render through `ListPaneGroupHeader`,
+  matching the measurement logic used by `useListPaneScroll`.
 - `ListPaneVirtualContent` tracks hovered file path at the scroller level and `ListPane` suppresses quick-action hover
   panels while the virtualizer reports active scrolling.
 - List row wrappers position from `virtualItem.start`; the current list pane passes `scrollMargin: 0`, and calendar
   overlay alignment is handled by follow-up scroll correction.
+- Manual-sort edit mode disables list scroll virtualization (`enabled: false`) and renders `ManualSortListContent`
+  instead of `ListPaneVirtualContent`.
 
 ```typescript
 const { listItems, filePathToIndex, orderedFiles } = useListPaneData({
   selectionType,
   selectedFolder,
   selectedTag,
+  selectedProperty,
   settings,
   activeProfile,
+  groupBy: effectiveAppearanceSettings.groupBy,
+  pinnedGroupExpanded,
+  collapsedListGroups,
   searchProvider,
-  searchQuery: isSearchActive ? debouncedSearchQuery : undefined,
-  searchTokens: isSearchActive ? debouncedSearchTokens : undefined,
-  visibility: { includeDescendantNotes, showHiddenItems }
+  searchQuery: !isManualSortEditActive && isSearchActive ? debouncedSearchQuery : undefined,
+  searchTokens: !isManualSortEditActive && isSearchActive ? debouncedSearchTokens : undefined,
+  visibility: { includeDescendantNotes, showHiddenItems },
+  propertySortOrderOverride
 });
 
 const { rowVirtualizer, scrollContainerRefCallback, handleScrollToTop } = useListPaneScroll({
+  enabled: !isManualSortEditActive,
   listItems,
   filePathToIndex,
   selectedFile,
   selectedFolder,
   selectedTag,
+  selectedProperty,
   settings,
-  folderSettings: appearanceSettings,
+  folderSettings: effectiveAppearanceSettings,
   isVisible,
   selectionState,
   selectionDispatch,
-  searchQuery: isSearchActive ? debouncedSearchQuery : undefined,
+  searchQuery: !isManualSortEditActive && isSearchActive ? debouncedSearchQuery : undefined,
   suppressSearchTopScrollRef,
-  topSpacerHeight,
+  topSpacerHeight: effectiveTopSpacerHeight,
   includeDescendantNotes,
+  groupCollapseStateSignature,
+  visiblePropertyKeys: visibleListPropertyKeys,
+  visiblePropertyKeySignature,
+  hiddenTagVisibility,
   scrollMargin: 0,
   scrollPaddingEnd
 });
@@ -504,10 +526,9 @@ hidden (mobile drawers, dual-pane toggles).
 
 ### 2. Derived Data Caches
 
-`useNavigationPaneData` and `useListPaneData` debounce vault-driven rebuilds with `debounce` from Obsidian, reuse `Map`
-instances for lookup tables, and return shortcut/selection metadata so `React.memo` components receive stable props.
-`StorageContext` batches diff calculations, content provider queues, and tag/property tree rebuilds so UI components only react
-to finalized updates.
+The navigation and list data hooks memoize derived arrays and lookup maps, while refresh hooks debounce bursty vault,
+metadata, and content-cache updates with `debounce` from Obsidian. `StorageContext` batches diff calculations, content
+provider queues, and tag/property tree rebuilds so UI components only react to finalized updates.
 
 ### 3. Memoized Components
 

@@ -1,6 +1,6 @@
 # Startup Optimization Log
 
-This file tracks startup-loading experiments for issue #1269 and related user reports. Each experiment should be measured with `node scripts/benchmark-startup.mjs --samples=25` unless noted otherwise.
+This file tracks startup-loading experiments for issue #1269 and related user reports. Each experiment should be measured with `node scripts/benchmark-startup.mjs --samples=25` unless noted otherwise. Experiment rows are point-in-time measurements from the optimization branch; the verification section records the current checkout separately.
 
 ## Method
 
@@ -50,7 +50,7 @@ This file tracks startup-loading experiments for issue #1269 and related user re
 | recent-notes-default-settings-import | Import `DEFAULT_SETTINGS` in `RecentNotesService` from `settings/defaultSettings`, then retest a local numeric fallback with no settings import | 4,313,183 | 1,158,621 | en 7.22ms; zh-CN 7.63ms | en 8.79ms; zh-CN 9.55ms | Reverted | Both variants removed the heavyweight settings barrel path from `RecentNotesService`, but measured evaluation regressed versus the retained startup patch. |
 | direct-non-english-locale-utf8 | For non-English locales, load the complete selected locale directly instead of loading English first and merging | 4,312,998 | 1,158,584 | en 7.22ms; zh-CN 7.36ms | en 8.91ms; zh-CN 8.86ms | Reverted | Simplified Chinese improved, but English regressed under UTF-8 output. |
 | startup-string-subsets | Add startup-only command/ribbon/date strings and make full i18n lazy; tested one all-language table and separate per-locale subset modules | 4,371,279 | 1,174,047 | en 7.60ms; zh-CN 7.67ms | en 9.36ms; zh-CN 9.51ms | Reverted | TypeScript and lint passed, but both variants regressed. The subset duplication increased bundle parse pressure more than it reduced locale initialization work. |
-| build-charset-ascii | Build production bundle with esbuild `charset: 'ascii'` instead of `utf8` | 5,398,464 | 1,211,366 | en 5.01ms; zh-CN 5.37ms | en 6.70ms; zh-CN 7.02ms | Reverted | Startup timing improved in the local harness, but raw `main.js` exceeded the Obsidian Sync 5MB file limit because non-ASCII locale strings were escaped. |
+| build-charset-ascii | Build production bundle with esbuild `charset: 'ascii'` instead of `utf8` | 5,398,464 | 1,211,366 | en 5.01ms; zh-CN 5.37ms | en 6.70ms; zh-CN 7.02ms | Reverted | Startup timing improved in the local harness, but raw `main.js` exceeded the Obsidian Sync Standard 5MB file limit because non-ASCII locale strings were escaped. |
 | direct-non-english-locale-ascii | Re-test complete-locale direct loading after ASCII output; remove full English initialization for non-English startup | 5,398,260 | 1,211,338 | en 4.96ms; zh-CN 4.88ms | en 6.51ms; zh-CN 6.47ms | Keep | 200-sample final run. Existing `check-unused-strings` locale shape validation proves translated locale files match English keys, so full fallback merging is not needed at startup. |
 | esbuild-secondary-options-ascii | Test `platform`, `mainFields`, `conditions`, `keepNames`, minifier sub-options, and `legalComments: 'none'` after switching to ASCII output | 5,398,464 | 1,211,366 | en 4.52-4.91ms | en 5.56-6.35ms | Not applied | None clearly beat the ASCII baseline in the same 75-sample run. Several options increased bundle size or worsened p95. |
 | build-targets-ascii | Re-test `es2020`, `es2023`, `es2024`, `esnext`, and `chrome139` after switching to ASCII output | 5,398,539 | 1,211,484 | en 5.10ms; zh-CN 5.47ms | en 6.72ms; zh-CN 7.45ms | Not applied | `es2020` was the closest challenger in a 250-sample run, but it increased size and worsened Chinese p95 versus retained `es2022`; newer targets and `chrome139` were noisy without a clear win. |
@@ -78,7 +78,7 @@ This file tracks startup-loading experiments for issue #1269 and related user re
 | lazy-folder-note-utilities | Lazy-load `utils/folderNotes` from startup services with cached dynamic imports | 5,400,028 | 1,211,940 | en 4.32ms; zh-CN 4.36ms; onload en 4.89ms; onload zh-CN 4.90ms | en 5.70ms; zh-CN 5.87ms; onload en 6.41ms; onload zh-CN 6.43ms | Reworked | Focused tests and TypeScript passed, but the async wrapper added 1,320 raw bytes/346 gzip bytes and made previously synchronous service paths asynchronous. Replaced with a synchronous lookup split. |
 | folder-note-lookup-split | Move folder-note detection and lookup helpers into lightweight `folderNoteLookup` and keep full creation/opening helpers in `folderNotes` | 5,398,791 | 1,211,618 | en 4.29ms; zh-CN 4.35ms; onload en 4.88ms; onload zh-CN 4.87ms | en 5.63ms; zh-CN 5.95ms; onload en 6.62ms; onload zh-CN 6.55ms | Keep | Startup services, folder metadata, and file finding now import sync detection helpers without loading folder-note creation/opening UI dependencies. A trace run dropped startup initializers from 120 to 117 and removed `folderNotes`, `FolderNoteTypeModal`, and `openFileInContext` from default startup. |
 | lazy-file-move-modals-light | Lazy-load only `FolderSuggestModal` and `MoveFileConflictModal` from `FileMoveService` move workflows | 5,399,073 | 1,211,717 | en 4.36ms; zh-CN 4.37ms; onload en 4.93ms | en 5.83ms; zh-CN 5.70ms; onload en 6.66ms | Reverted | Trace dropped startup initializers from 117 to 114, but wrapper code grew the bundle by 282 raw bytes/99 gzip bytes and regressed measured medians versus `folder-note-lookup-split`. |
-| sync-size-cap-utf8-final | Keep the startup reductions but return production output to UTF-8 so `main.js` stays under the Obsidian Sync file limit | 4,313,535 | 1,158,903 | en 6.55ms; zh-CN 6.57ms; onload en 7.12ms; onload zh-CN 7.09ms | en 8.04ms; zh-CN 8.07ms; onload en 9.08ms; onload zh-CN 8.83ms | Keep | UTF-8 gives up the ASCII parse-time gain, but it cuts about 1.08MB from raw `main.js` and keeps the distributable plugin below the 5MB Sync limit. |
+| sync-size-cap-utf8-final | Keep the startup reductions but return production output to UTF-8 so `main.js` stays under the Obsidian Sync Standard file limit | 4,313,535 | 1,158,903 | en 6.55ms; zh-CN 6.57ms; onload en 7.12ms; onload zh-CN 7.09ms | en 8.04ms; zh-CN 8.07ms; onload en 9.08ms; onload zh-CN 8.83ms | Keep | UTF-8 gives up the ASCII parse-time gain, but it cuts about 1.08MB from raw `main.js` and keeps the distributable plugin below the 5MB Sync Standard limit. |
 
 ## Candidate Areas
 
@@ -90,7 +90,9 @@ This file tracks startup-loading experiments for issue #1269 and related user re
 - External icon provider startup dependencies.
 - Build/minification settings.
 
-## Final Verification
+## Verification
+
+Original final verification after the retained optimization patch set:
 
 - `./scripts/build.sh`: passed with `✅ No warnings`.
 - `npx tsc --noEmit --pretty false`: passed.
@@ -102,5 +104,15 @@ This file tracks startup-loading experiments for issue #1269 and related user re
 - Final kept patch set, mocked onload benchmark, `en`: 7.12ms median, 9.08ms p95.
 - Final kept patch set, mocked onload benchmark, `zh-CN`: 7.09ms median, 8.83ms p95.
 - Final kept patch set initializer trace: 117 startup initializers.
-- Final build output: `main.js` is 4,313,668 bytes, below the Obsidian Sync 5MB file limit.
-- Baseline comparison: English startup evaluation median improved from 10.90ms to 6.55ms; Chinese startup now avoids initializing English first.
+- Final build output: `main.js` is 4,313,668 bytes, below the Obsidian Sync Standard 5MB file limit.
+- Baseline comparison: English startup evaluation median improved from 10.90ms to 6.55ms; Chinese startup avoids initializing English first.
+
+Current verification on 2026-07-01:
+
+- `node scripts/benchmark-startup.mjs --samples=150 --language=en`: 4,365,115 bundle bytes, 1,174,271 gzip bytes, 3.36ms median require, 5.94ms p95 require.
+- `node scripts/benchmark-startup.mjs --samples=150 --language=zh-CN`: 4,365,115 bundle bytes, 1,174,271 gzip bytes, 3.37ms median require, 5.74ms p95 require.
+- `node scripts/benchmark-startup.mjs --samples=150 --mode=onload --language=en`: 4.14ms median, 6.77ms p95.
+- `node scripts/benchmark-startup.mjs --samples=150 --mode=onload --language=zh-CN`: 4.00ms median, 6.91ms p95.
+- Current initializer trace: 119 startup initializers for `en` and `zh-CN`.
+- Current `main.js` on disk: 4,365,248 bytes, below the Obsidian Sync Standard 5MB file limit. The benchmark bundle is 4,365,115 bytes because it excludes the generated esbuild banner.
+- Current baseline comparison: English startup evaluation median improved from 10.90ms to 3.36ms; Chinese startup avoids initializing English first.

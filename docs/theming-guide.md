@@ -1,6 +1,6 @@
 # Notebook Navigator Theming Guide
 
-Updated: June 4, 2026
+Updated: July 1, 2026
 
 ## Table of Contents
 
@@ -332,6 +332,7 @@ body {
   --nn-theme-calendar-day-today-color: #ffffff;
   --nn-theme-calendar-day-today-bg: #4a78c8;
   --nn-theme-calendar-day-active-border-color: rgba(169, 183, 198, 0.5);
+  --nn-theme-calendar-day-active-border-width: 2px;
 
   /* Navigation items */
   --nn-theme-navitem-chevron-color: #6e6e6e;
@@ -539,8 +540,8 @@ To support both light and dark modes, define your variables under `.theme-light`
 
 ### User Custom Colors Override
 
-When users set custom colors (right-click → "Change icon" or "Change color"), their choices automatically override your
-theme through inline styles.
+When users set custom colors or backgrounds (right-click → "Change icon", "Change color", or "Change background"),
+their choices automatically override your theme through inline styles and row-level CSS custom properties.
 
 ## Style Settings Support
 

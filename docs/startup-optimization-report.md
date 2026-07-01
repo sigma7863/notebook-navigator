@@ -1,8 +1,8 @@
 # Startup Optimization Report
 
-Date: 2026-06-20
+Date: 2026-07-01
 
-This report summarizes the final startup optimizations retained after investigating issue 1269 and the Notebook Navigator load time shown by Obsidian. The final build keeps `main.js` below the Obsidian Sync 5MB per-file limit.
+This report summarizes the final startup optimizations retained after investigating issue 1269 and the Notebook Navigator load time shown by Obsidian. The final build keeps `main.js` below the Obsidian Sync Standard 5MB per-file limit.
 
 ## Executive Summary
 
@@ -16,23 +16,23 @@ Measurements were taken with the local startup harness in `scripts/benchmark-sta
 
 | Measurement | Baseline | Final releasable build |
 | --- | ---: | ---: |
-| English import median | 10.90ms | 6.55ms |
-| English import p95 | N/A | 8.04ms |
-| zh-CN import median | N/A | 6.57ms |
-| zh-CN import p95 | N/A | 8.07ms |
-| English mocked `onload()` median | N/A | 7.12ms |
-| English mocked `onload()` p95 | N/A | 9.08ms |
-| zh-CN mocked `onload()` median | N/A | 7.09ms |
-| zh-CN mocked `onload()` p95 | N/A | 8.83ms |
+| English import median | 10.90ms | 3.25ms |
+| English import p95 | N/A | 6.80ms |
+| zh-CN import median | N/A | 3.07ms |
+| zh-CN import p95 | N/A | 4.85ms |
+| English mocked `onload()` median | N/A | 3.76ms |
+| English mocked `onload()` p95 | N/A | 5.38ms |
+| zh-CN mocked `onload()` median | N/A | 3.83ms |
+| zh-CN mocked `onload()` p95 | N/A | 5.82ms |
 
 Final build output:
 
 | File | Bytes |
 | --- | ---: |
-| `main.js` | 4,313,668 |
-| `styles.css` | 302,598 |
+| `main.js` | 4,365,248 |
+| `styles.css` | 305,188 |
 | `manifest.json` | 498 |
-| Total | 4,616,764 |
+| Total | 4,670,934 |
 
 An ASCII bundle experiment reached faster local startup numbers, around 4.29ms English import median and 4.35ms zh-CN import median, but it expanded non-ASCII locale strings into escape sequences and pushed `main.js` above 5MB. That experiment was reverted. The final releasable build uses UTF-8.
 
@@ -269,7 +269,7 @@ How it works:
 Why it helps:
 
 - UTF-8 keeps translated locale text compact in raw `main.js`.
-- The releasable artifact stays below the Obsidian Sync 5MB file limit.
+- The releasable artifact stays below the Obsidian Sync Standard 5MB file limit.
 - The faster ASCII result was rejected because raw `main.js` exceeded the Sync limit.
 
 ## Reverted Or Not Applied Work
@@ -295,24 +295,32 @@ Examples of reverted or not-applied areas:
 
 ## Validation
 
-The final state was validated with:
+The current state was validated with:
 
-- `npx prettier --check esbuild.config.mjs scripts/benchmark-startup.mjs docs/startup-optimization-log.md`
+- `npx prettier --check esbuild.config.mjs scripts/benchmark-startup.mjs docs/startup-optimization-log.md docs/startup-optimization-report.md`
 - `npx tsc --noEmit --pretty false`
+- `npx tsc --noEmit --noUnusedLocals --noUnusedParameters --pretty false`
 - `npm run lint -- --quiet`
+- `npx stylelint "src/styles/**/*.css" "styles.css" --max-warnings=0`
 - `node scripts/check-unused-strings.mjs --check`
 - `npm run test`
-- `./scripts/build.sh`
+- `npm run build`
+- `node scripts/benchmark-startup.mjs --language=en --mode=require`
+- `node scripts/benchmark-startup.mjs --language=zh-CN --mode=require`
+- `node scripts/benchmark-startup.mjs --language=en --mode=onload`
+- `node scripts/benchmark-startup.mjs --language=zh-CN --mode=onload`
 - `wc -c main.js styles.css manifest.json`
 
 Results:
 
 - TypeScript passed.
+- Unused TypeScript checks passed.
 - ESLint passed.
+- Stylelint passed.
 - Locale usage and locale shape validation passed.
-- Vitest passed: 139 test files, 1511 tests.
-- Full build passed with `✅ No warnings`.
-- `main.js` built to 4,313,668 bytes.
+- Vitest passed: 147 test files, 1579 tests.
+- Production build passed.
+- `main.js` built to 4,365,248 bytes.
 
 ## Practical Expectation
 
