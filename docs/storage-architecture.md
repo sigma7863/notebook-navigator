@@ -102,6 +102,7 @@ graph TB
   main store in batches.
 - `IndexedDBStorage.init()` also checks local version markers (`STORAGE_KEYS.databaseSchemaVersionKey`, `STORAGE_KEYS.databaseContentVersionKey`) and clears all stores when a rebuild is required (missing markers, schema downgrade, or content version mismatch).
 - Preview text and feature image blobs are not hydrated on startup; they are loaded on demand and cached in bounded LRUs.
+- File stat updates and forced regeneration use patch-only upserts so provider-owned fields remain visible until regenerated.
 - `Plugin.onunload()` calls `shutdownDatabase()` to close the connection and clear in-memory caches.
 
 **Implementation**: `src/storage/IndexedDBStorage.ts`, `src/storage/indexeddb/fileData.ts`, `src/storage/fileOperations.ts`
@@ -411,9 +412,10 @@ export interface IconAssetRecord {
 3. StorageContext updates IndexedDB through two paths:
    - `create` / `delete` / `rename`: runs `calculateFileDiff()`, adds/removes records, and preserves cached data across
      renames by seeding the new path with the previous record and moving preview/blob keys.
-   - `modify`: updates the file record immediately with `recordFileChanges([file], ...)`, preserves provider-owned
+   - `modify`: batches modified files, writes current mtimes with `recordFileChanges(files, ...)`, preserves provider-owned
      fields, and queues regeneration for stale derived content.
-4. For metadata cache changes that do not produce a vault `modify` event, StorageContext can reset provider processed mtimes (`markFilesForRegeneration()`) to force reprocessing against the updated metadata cache.
+4. Metadata cache `changed` events are also batched; when they do not produce a vault `modify` event, StorageContext can reset
+   selected provider processed mtimes (`markFilesForRegeneration()`) to force reprocessing against the updated metadata cache.
 5. Content providers queue affected files for regeneration as needed (with `useMetadataCacheQueue` gating metadata-dependent types).
 6. Providers write derived content through `IndexedDBStorage`, which updates the in-memory cache and emits change events for UI consumers.
 7. Tag and property trees are rebuilt when affected data or visibility rules change.
@@ -436,7 +438,8 @@ export interface IconAssetRecord {
 path) runs an exclusive rebuild sequence:
 
 1. Stops background work: vault sync timers, tag rebuild debouncers, metadata waits, and content provider queues.
-2. Clears IndexedDB stores (`IndexedDBStorage.clearDatabase()` / `IndexedDBStorage.clear()`), which also resets the in-memory caches.
+2. Clears IndexedDB stores (`IndexedDBStorage.clearDatabase()` / `IndexedDBStorage.clear()`), which also resets the in-memory file,
+   preview, and blob caches.
 3. Resets tag/property tree state and marks storage as not ready.
 4. If there is rebuild work to track (`enabledTypes.length > 0` and `total > 0`), persists rebuild notice state in local
    storage (`STORAGE_KEYS.cacheRebuildNoticeKey`, `source: 'rebuild'`) so a rebuild notice can be restored after a restart.

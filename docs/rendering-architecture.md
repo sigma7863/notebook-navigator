@@ -36,6 +36,10 @@ Context providers isolate concerns such as settings, UX preferences, recent data
 selection state, and pane layout. Derived data and behaviors live in dedicated hooks, leaving components to focus on
 presentation and wiring.
 
+`NotebookNavigatorComponent` also builds shared navigation source state and decoration models before rendering the panes.
+That keeps folder/tag/property ordering, folder colours, navigation rainbow state, and file tag/property pill colours in
+sync between `NavigationPane`, `ListPane`, manual-sort rows, and file rows.
+
 ## Core Principles
 
 ### 1. Virtualized Panes
@@ -64,6 +68,9 @@ Expensive data shaping lives outside component bodies. Examples:
 
 - `useNavigationPaneData` builds the combined folder/tag/property/shortcut tree, computes note counts, resolves icons and
   colours, and tracks virtual folders, banners, pinned shortcuts, and section ordering.
+- `useFolderDecorationState`, `useNavigationPaneSourceState`, `useNavigationPaneTreeSections`, and
+  `useFileItemPillDecorationState` assemble the shared folder/tag/property source trees, root ordering, visibility
+  filters, and rainbow/metadata decoration models consumed by both panes.
 - `useNavigationRootReorder` exposes drag-and-drop reorder state and render helpers for root folders, tags, properties, and section
   headers.
 - `useListPaneData` assembles list pane items (pinned files, spacers, group headers, search metadata, hidden item
@@ -221,6 +228,8 @@ graph TD
 **Location**: `src/components/NotebookNavigatorComponent.tsx`
 
 - Wires selection, settings, services, shortcuts, UX preferences, and storage into pane components.
+- Precomputes navigation source state, tree sections, folder decoration, and file pill decoration/order models so both
+  panes render from the same sorted and filtered folder/tag/property model.
 - Manages pane sizing and drag handles via `useResizablePane`, propagating resize props to `ListPane`.
 - Shares a root container ref with both panes for keyboard handling and focus tracking.
 - Runs `useDragAndDrop`, `useDragNavigationPaneActivation`, `useMobileSwipeNavigation`, `useNavigatorReveal`,
@@ -331,8 +340,8 @@ graph TD
 - Integrates Omnisearch results when configured, including excerpt matches and highlight metadata.
 - Replaces `ListPaneVirtualContent` with `ManualSortListContent` during manual-sort edit mode; the manual-sort surface
   uses dnd-kit sortable rows and reuses `FileItem` rendering for file rows.
-- Computes pane-level row inputs once (appearance settings, hidden-tag visibility, file-icon needles, shortcut lookup,
-  storage helpers) and passes them to virtual rows as stable props.
+- Bundles pane-level row inputs once (appearance settings, hidden-tag visibility, file-icon needles, shortcut lookup,
+  storage helpers, and shared decoration models) and passes them to virtual and manual-sort rows as stable props.
 - Attaches the list-pane context menu to the scroll container and lets delegated target resolution switch between empty
   space actions and file menus.
 - Maintains drop-zone attributes for drag-and-drop moves and exposes scroll handlers for reveal operations and search
@@ -365,6 +374,8 @@ graph TD
 - Reads pane-owned shared inputs from props and keeps row-local subscriptions limited to cached file content.
 - Subscribes to content updates from `IndexedDBStorage` to refresh preview text, tags, feature image status, custom
   property values, and word counts.
+- Receives `regenerateFeatureImageForFile` through the pane-owned storage helpers so stale or failed feature-image rows
+  can request background regeneration without reaching through context during render.
 - Provides quick actions (reveal, pin/unpin, open in new tab) on desktop hover and handles drag-and-drop metadata for
   file moves.
 - Uses `createHiddenTagVisibility` to filter/style tag pills based on hidden tag rules and “show hidden items”.
@@ -546,6 +557,10 @@ in flight.
 Navigation item height, indentation, and font sizes are written to CSS custom properties once per settings change,
 keeping render output pure. `useNavigatorScale` applies global scaling for the navigator wrapper rather than
 recalculating layout inside virtualized items.
+
+Runtime styles are authored in `src/styles/index.css` and `src/styles/sections/*`, then built into the generated
+`styles.css` bundle by `scripts/build-styles.mjs`. Rendering components target the generated classes at runtime; source
+style changes belong in the section files.
 
 ## Data Flow
 

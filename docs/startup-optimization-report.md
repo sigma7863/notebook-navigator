@@ -12,18 +12,18 @@ The final retained work reduces default startup module initialization, moves fea
 
 ## Final Measured Result
 
-Measurements were taken with the local startup harness in `scripts/benchmark-startup.mjs`. The harness measures `main.js` import/evaluation and a mocked `onload()` path. It does not fully reproduce Electron, Obsidian internals, or vault-specific behavior, so the Obsidian plugin-list number still needs validation inside Obsidian.
+Measurements were taken with the local startup harness in `scripts/benchmark-startup.mjs` using 150-sample runs. The harness measures `main.js` import/evaluation and a mocked `onload()` path. It does not fully reproduce Electron, Obsidian internals, or vault-specific behavior, so the Obsidian plugin-list number still needs validation inside Obsidian.
 
 | Measurement | Baseline | Final releasable build |
 | --- | ---: | ---: |
-| English import median | 10.90ms | 3.25ms |
-| English import p95 | N/A | 6.80ms |
-| zh-CN import median | N/A | 3.07ms |
-| zh-CN import p95 | N/A | 4.85ms |
-| English mocked `onload()` median | N/A | 3.76ms |
-| English mocked `onload()` p95 | N/A | 5.38ms |
-| zh-CN mocked `onload()` median | N/A | 3.83ms |
-| zh-CN mocked `onload()` p95 | N/A | 5.82ms |
+| English import median | 10.90ms | 3.15ms |
+| English import p95 | 14.18ms | 5.80ms |
+| zh-CN import median | N/A | 2.99ms |
+| zh-CN import p95 | N/A | 4.90ms |
+| English mocked `onload()` median | N/A | 3.61ms |
+| English mocked `onload()` p95 | N/A | 6.04ms |
+| zh-CN mocked `onload()` median | N/A | 3.72ms |
+| zh-CN mocked `onload()` p95 | N/A | 6.17ms |
 
 Final build output:
 
@@ -34,7 +34,7 @@ Final build output:
 | `manifest.json` | 498 |
 | Total | 4,670,934 |
 
-An ASCII bundle experiment reached faster local startup numbers, around 4.29ms English import median and 4.35ms zh-CN import median, but it expanded non-ASCII locale strings into escape sequences and pushed `main.js` above 5MB. That experiment was reverted. The final releasable build uses UTF-8.
+An earlier ASCII bundle experiment measured around 4.29ms English import median and 4.35ms zh-CN import median, but it expanded non-ASCII locale strings into escape sequences and pushed `main.js` above 5MB. That experiment was reverted. The final releasable build uses UTF-8.
 
 ## Why This Worked
 
@@ -47,7 +47,7 @@ The final approach reduced default startup work in four ways:
 - Background cache work no longer starts during early database initialization.
 - Optional external icon infrastructure starts only when the user has enabled or manages those icon packs.
 
-The retained initializer trace dropped from the previous retained 120 startup initializers to 117. More importantly, the trace removed specific heavy default-startup chains such as full folder-note UI/opening helpers.
+The current initializer trace records 119 startup initializers for both English and zh-CN. More importantly, the retained startup path keeps specific heavy default-startup chains such as full folder-note UI/opening helpers out of default startup.
 
 Several lazy-loading experiments were reverted. Some reduced initializer count but added wrapper code, grew `main.js`, or made parse/evaluation slower. Only changes with clear measured benefit or necessary release constraints were retained.
 
@@ -305,10 +305,10 @@ The current state was validated with:
 - `node scripts/check-unused-strings.mjs --check`
 - `npm run test`
 - `npm run build`
-- `node scripts/benchmark-startup.mjs --language=en --mode=require`
-- `node scripts/benchmark-startup.mjs --language=zh-CN --mode=require`
-- `node scripts/benchmark-startup.mjs --language=en --mode=onload`
-- `node scripts/benchmark-startup.mjs --language=zh-CN --mode=onload`
+- `node scripts/benchmark-startup.mjs --samples=150 --language=en --mode=require`
+- `node scripts/benchmark-startup.mjs --samples=150 --language=zh-CN --mode=require`
+- `node scripts/benchmark-startup.mjs --samples=150 --language=en --mode=onload`
+- `node scripts/benchmark-startup.mjs --samples=150 --language=zh-CN --mode=onload`
 - `wc -c main.js styles.css manifest.json`
 
 Results:
@@ -320,7 +320,8 @@ Results:
 - Locale usage and locale shape validation passed.
 - Vitest passed: 147 test files, 1579 tests.
 - Production build passed.
-- `main.js` built to 4,365,248 bytes.
+- Startup benchmark bundle built to 4,365,115 bytes and 1,174,271 gzip bytes.
+- On-disk `main.js` built to 4,365,248 bytes; the difference from the benchmark bundle is the generated esbuild banner.
 
 ## Practical Expectation
 

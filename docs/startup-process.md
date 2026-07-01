@@ -102,7 +102,7 @@ show progress.
 **Trigger**: Obsidian calls Plugin.onload() when enabling the plugin
 
 1. Obsidian calls `Plugin.onload()`.
-2. Initialize vault-scoped localStorage (`localStorage.init`) before any database work.
+2. Initialize vault-scoped localStorage (`localStorage.init`) and startup diagnostics (`DebugLoggingService`) before any database work.
 3. Register the plugin icon with Obsidian (`addIcon(...)`).
 4. Initialize IndexedDB early via `initializeDatabase(appId, ...)`.
    - Starts `db.init()` (schema check + `MemoryFileCache` hydration) asynchronously before views mount.
@@ -116,7 +116,7 @@ show progress.
 6. Sync local mirrors, load per-device UX preferences, and normalize settings.
    - Resolve sync-mode local mirrors from vault-scoped localStorage.
    - Load UX preferences from vault-scoped localStorage.
-   - Normalize tag and property settings.
+   - Normalize tag, property, and navigation separator settings.
 7. Handle first-launch setup when no saved data exists.
    - Clear plugin localStorage keys (preserving IndexedDB version markers).
    - Re-seed per-device localStorage mirrors for sync-mode settings and UX preferences.
@@ -124,7 +124,7 @@ show progress.
    - Persist the current localStorage version (`LOCALSTORAGE_VERSION`).
 8. Initialize recent data and UX tracking.
    - `RecentDataManager` loads persisted recent notes and icons.
-   - `RecentNotesService` starts recording file-open history.
+   - `RecentNotesService` is created; `registerWorkspaceEvents` wires file-open tracking later in startup.
 9. Construct core services and controllers:
    - `WorkspaceCoordinator` and `HomepageController` manage view activation and homepage flow.
    - `FolderNoteSidebarService` manages the right-sidebar companion leaf for folder notes.
@@ -137,16 +137,18 @@ show progress.
      `NOTEBOOK_NAVIGATOR_CALENDAR_VIEW` (`NotebookNavigatorCalendarView`), and
      `NOTEBOOK_NAVIGATOR_FOLDER_NOTE_SIDEBAR_VIEW` (`FolderNoteSidebarPlaceholderView`).
    - `registerNavigatorCommands` registers command palette metadata and lazy-loads command handlers on first use.
-   - `registerWorkspaceEvents` adds editor context menu actions, the ribbon icon, recent-note tracking, and
-     rename/delete handlers.
+   - `registerWorkspaceEvents` adds editor/file-menu reveal actions, the ribbon icon, recent-note tracking,
+     hidden-folder rename/delete sync, vault-icon asset notifications, and file/folder rename/delete handlers.
 11. Wait for `workspace.onLayoutReady()`.
    - `HomepageController.handleWorkspaceReady()` activates the view on first launch and opens the configured homepage target when it resolves.
    - `FolderNoteSidebarService.handleWorkspaceReady()` synchronizes the folder-note companion leaf when right-sidebar
      folder notes are active.
    - On first launch, the Welcome modal is opened after the workspace is ready.
+   - Consumes the pending PDF-processing diagnostic and opens an Info modal if the previous session ended mid-thumbnail.
    - Triggers Style Settings parsing, version notice checks, and optional release polling.
    - `applyCalendarPlacementView({ force: true, reveal: false })` syncs the calendar right-sidebar leaf with the
-     effective calendar placement and detaches restored right-sidebar calendar leaves when the calendar feature is disabled.
+     effective calendar placement and detaches restored right-sidebar calendar leaves when placement is not
+     `right-sidebar` or the calendar feature is disabled.
 
 ### Phase 2: View Creation
 
@@ -437,7 +439,7 @@ The plugin uses debouncers in a few specific places where Obsidian emits bursty 
 2. `initiateShutdown()` sets the `isUnloading` flag and flushes shutdown-critical work:
    - Flush pending recent-data persists.
    - Clear queued command operations.
-   - Stop content processing in mounted navigator and calendar leaves.
+   - Stop content processing in mounted navigator leaves and unmount mounted calendar React roots.
    - Call `shutdownDatabase()` to close IndexedDB and clear in-memory caches.
 3. `preferencesController.dispose()` then disposes `RecentDataManager` and clears recent-data / UX listeners.
 4. Clear listener maps to avoid callbacks during teardown:

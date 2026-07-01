@@ -33,6 +33,7 @@ Updated: July 1, 2026
   - [Observability](#observability)
   - [Common Issues](#common-issues)
   - [Key Debugging Points](#key-debugging-points)
+- [Related Tests](#related-tests)
 - [See Also](#see-also)
 
 ## Overview
@@ -46,6 +47,7 @@ Primary implementation:
 - `src/hooks/useListPaneScroll.ts`
 - Support modules: `src/types/scroll.ts`
 - Navigation-specific index resolution: `src/utils/navigationIndex.ts`
+- Related tests: `tests/hooks/useListPaneScroll.test.ts`
 
 ## The Problem
 
@@ -163,6 +165,8 @@ spacers).
 - **Virtualizer setup**: Item height estimates follow navigation settings and mobile overrides. `scrollMargin` aligns
   virtualization math and `scrollToIndex` below the unpinned banner, and `scrollPaddingEnd` is used when bottom
   overlays need extra space.
+- **Root reorder mode**: `NavigationPaneContent` swaps the virtualized tree for `NavigationRootReorderPanel`, disables
+  keyboard item maps, and scrolls the scroller to top when root reorder mode opens.
 - **Safe viewport adjustment**: `scrollToIndexSafely` runs `scrollToIndex`, then `ensureIndexNotCovered` applies a
   bottom-overlap correction when `scrollPaddingEnd` is non-zero. Top alignment is handled by `scrollMargin`.
 - **Selection handling**: The hook watches folder/tag/property selection, pane focus, and visibility. It suppresses auto-scroll
@@ -188,6 +192,9 @@ spacers).
   respecting compact mode. The hook supports `scrollMargin` and `scrollPaddingStart`; the current list pane passes
   `scrollMargin: 0` and uses `scrollPaddingEnd` for the iOS floating toolbar. Calendar overlay changes trigger a
   follow-up `scrollToIndexSafely` outside the hook.
+- **Manual sort edit mode**: `ListPane` passes `enabled: false` and renders `ManualSortListContent` instead of
+  `ListPaneVirtualContent`, so the list virtualizer and list keyboard scroll handling are inactive during manual-sort
+  edits.
 - **Safe viewport adjustment**: `scrollToIndexSafely` runs `scrollToIndex`, then `ensureIndexNotCovered` corrects sticky
   group-header overlap at the top and bottom-overlay overlap when `scrollPaddingEnd` is non-zero.
 - **Priority queue**: `setPending` wraps `rankListPending`, replacing lower-ranked requests.
@@ -197,17 +204,23 @@ spacers).
   header exists directly above it; otherwise it returns the file index.
 - **Context tracking**: `contextIndexVersionRef` maintains the last version seen per folder/tag/property context. When the index
   advances within a folder, tag, or property context (pin/unpin, reorder, delete), the hook queues a `list-structure-change` scroll (when
-  `revealFileOnListChanges` is enabled) so the selected file remains visible.
+  `revealFileOnListChanges` is enabled) so the selected file remains visible. Group collapse changes can advance the
+  index version but skip this preservation scroll.
 - **Folder navigation**: When the list context changes or `isFolderNavigation` is true, the hook clears stale pending
   work, then sets a pending request (file or top) and clears the navigation flag. Pending entries can be queued even
   when the pane is hidden and execute once the list becomes ready.
 - **Reveal operations**: Reveal flows queue a `reveal` pending scroll. Startup reveals override alignment to `'center'`.
 - **Mobile drawer**: The `notebook-navigator-visible` event queues a visibility-change scroll when a file is selected.
-- **Settings and search**: Appearance changes and descendant toggles queue `list-structure-change` entries against the
-  current index version when `revealFileOnListChanges` is enabled and a file is selected. Search filters queue a `top`
-  scroll when the selected file drops out of the filtered list, respecting mobile suppression flags.
-- **Height estimate updates**: The hook refreshes virtualizer size estimates when row-height inputs change and when the in-memory
-  database reports preview, feature image, tag, property, word count, or character count updates.
+- **Settings and search**: Appearance, grouping, sort, sticky-header, descendant, visible-property, and selected-pill
+  changes participate in the scroll preservation signature. Matching changes queue `list-structure-change` entries
+  against the current index version when `revealFileOnListChanges` is enabled and a file is selected. Search filters
+  queue a `top` scroll when the selected file drops out of the filtered list, respecting mobile suppression flags.
+- **Direct safe-scroll consumers**: `useListPaneKeyboard`, `useListPaneSelectionCoordinator`, inline rename, property
+  keyboard reordering, and calendar overlay correction call `scrollToIndexSafely` directly after resolving current
+  indices. These paths bypass the pending queue but still use sticky-header and bottom-overlay correction.
+- **Height estimate updates**: The hook refreshes virtualizer size estimates when row-height inputs change, when storage
+  becomes ready after cold boot, and when the in-memory database reports preview, feature image, tag, property, word
+  count, or character count updates.
 
 ## Common Scenarios
 
@@ -230,12 +243,12 @@ spacers).
 
 1. Navigation line height or indentation updates trigger `rowVirtualizer.measure()` followed by a deferred selection
    scroll when auto-scroll is allowed.
-2. List appearance or descendant toggles queue a `list-structure-change` scroll with `minIndexVersion = current`
-   because layout-only changes can keep the same path/index map. This happens when `revealFileOnListChanges` is enabled
-   and a file is selected. Disabling descendants can queue a `top` scroll
-   when no file is selected or `revealFileOnListChanges` is disabled.
+2. List appearance, grouping, sort, sticky-header, descendant, visible-property, or selected-pill changes queue a
+   `list-structure-change` scroll with `minIndexVersion = current` because layout-only changes can keep the same
+   path/index map. This happens when `revealFileOnListChanges` is enabled and a file is selected. Disabling descendants
+   can queue a `top` scroll when no file is selected or `revealFileOnListChanges` is disabled.
 3. Reorders within the same folder/tag/property context update `indexVersion` and enqueue a `list-structure-change` scroll so the
-   selected file remains visible.
+   selected file remains visible. Group collapse state changes are ignored by this preservation path.
 
 ### Reveal Operations
 
@@ -285,6 +298,8 @@ export function rankListPending(p?: { type: 'file' | 'top'; reason?: ListScrollI
 ```
 
 `setPending` compares these ranks and only replaces the current request when the new one is equal or higher.
+`requestPendingScroll` first tries to execute a higher-priority queued request before accepting a lower-priority new
+request.
 
 ### Alignment Policies
 
@@ -348,6 +363,11 @@ export function rankListPending(p?: { type: 'file' | 'top'; reason?: ListScrollI
 2. Log path-to-index resolution results to confirm indices match expectations.
 3. Log pending intent, required version, and alignment when the execution effect runs.
 4. Log priority comparisons inside `setPending` to see why a request was replaced or kept.
+
+## Related Tests
+
+- `tests/hooks/useListPaneScroll.test.ts` covers row-height-affecting content changes, row-height input resolution, and
+  coalesced animation-frame remeasurement.
 
 ## See Also
 

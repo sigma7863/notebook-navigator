@@ -354,6 +354,7 @@ queue integration.
 - File and folder creation, rename, deletion, duplication.
 - Folder note conversion with conflict handling.
 - Tag/property-driven note creation and property assignment.
+- Manual sort placement for newly created notes in folder, tag, and property contexts.
 - Batch file moves with modal workflows and selection updates.
 - Canvas/base drawing creation and reveal helpers.
 - Command queue tracking for deletes and moves.
@@ -411,6 +412,7 @@ moveFolderWithModal(
   | { status: 'cancelled' }
   | { status: 'error'; error: unknown }
 >
+moveFolderToTarget(folder: TFolder, targetFolder: TFolder): Promise<MoveFolderResult>
 
 convertFileToFolderNote(file: TFile, settings: NotebookNavigatorSettings): Promise<void>
 setFileAsFolderNote(file: TFile, settings: NotebookNavigatorSettings): Promise<void>
@@ -432,6 +434,12 @@ createCanvas(parent: TFolder): Promise<TFile | null>
 createBase(parent: TFolder): Promise<TFile | null>
 createNewDrawing(parent: TFolder, type?: 'excalidraw' | 'tldraw'): Promise<TFile | null>
 applyPropertyNodeToFiles(propertyNodeId: string, files: readonly TFile[]): Promise<ApplyPropertyNodeResult>
+setManualSortNewFileContextProvider(provider: (() => ManualSortNewFilePlacementContext | null) | null): () => void
+getManualSortNewFileContextForTarget(
+  targetType: ManualSortNewFilePlacementContext['targetType'],
+  targetKey: string,
+  options?: { waitForSelectionUpdate?: boolean }
+): Promise<ManualSortNewFilePlacementContext | null>
 
 openVersionHistory(file: TFile): Promise<void>
 getRevealInSystemExplorerText(): string
@@ -647,6 +655,7 @@ syncToSelectedFolder(folder: TFolder | null): Promise<void>
 
 ```typescript
 resolveHomepageFile(): TFile | null
+canOpenHomepage(): boolean
 handleWorkspaceReady(options: { shouldActivateOnStartup: boolean }): Promise<void>
 open(trigger: 'startup' | 'command'): Promise<boolean>
 ```
@@ -812,6 +821,7 @@ removeTagFromFiles(tag: string, files: TFile[]): Promise<number>
 clearAllTagsFromFiles(files: TFile[]): Promise<number>
 getTagsFromFiles(files: TFile[]): string[]
 promptRenameTag(tagPath: string): Promise<void>
+renameTag(tagPath: string, newTagPath: string): Promise<boolean>
 promoteTagToRoot(sourceTagPath: string): Promise<void>
 renameTagByDrag(sourceTagPath: string, targetTagPath: string): Promise<void>
 promptDeleteTag(tagPath: string): Promise<void>
@@ -835,6 +845,7 @@ Facade for property key rename/delete workflows across the vault.
 addPropertyKeyRenameListener(listener: (payload: PropertyKeyRenameEventPayload) => void): () => void
 addPropertyKeyDeleteListener(listener: (payload: PropertyKeyDeleteEventPayload) => void): () => void
 promptRenamePropertyKey(normalizedKey: string): Promise<void>
+renamePropertyKey(normalizedKey: string, newKey: string): Promise<boolean>
 promptDeletePropertyKey(normalizedKey: string): Promise<void>
 ```
 
@@ -925,13 +936,25 @@ clearPendingNotice(): void
 **Key Methods and Helpers:**
 
 ```typescript
+// Instance methods
 initialize(): void
 dispose(): void
 isEnabled(): boolean
 isActive(): boolean
+getLogPath(): string
 setEnabled(enabled: boolean): void
+recordStartupEvent(event: string, details?: Record<string, unknown>): void
+recordStorageReady(details: Record<string, unknown>): void
+recordUserVisible(details?: Record<string, unknown>): void
+finishStartupReport(reason: string, details?: Record<string, unknown>): void
+logReport(title: string, details: Record<string, unknown>): void
+recordContentProviderBatch(summary: ContentProviderBatchSummary): void
+flush(): Promise<void>
+
+// Module helpers
 recordStartupDiagnostic(event: string, details?: Record<string, unknown>): void
 finishStartupDiagnostics(details: Record<string, unknown>): void
+recordStartupUserVisible(details?: Record<string, unknown>): void
 recordDebugReport(title: string, details: Record<string, unknown>): void
 recordContentProviderBatch(summary: ContentProviderBatchSummary): void
 ```

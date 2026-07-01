@@ -2,6 +2,8 @@
 
 Icon font files and metadata for external icon providers.
 
+The Obsidian plugin icon is separate from these assets. Edit the top-level `icon.svg` and run `npm run build:icons` to regenerate `src/constants/notebookNavigatorIcon.ts`. The plugin registers `NOTEBOOK_NAVIGATOR_ICON_ID` (`notebook-navigator`) with Obsidian's `addIcon(...)`; `manifest.json` does not define a separate icon field.
+
 ## Usage
 
 From this directory:
@@ -30,19 +32,19 @@ From this directory:
   - `shared.ts` - Shared utilities and types
   - `update-icon-packs.ts` - Main update script
 - `[pack-name]/` - Downloaded icon assets for each pack
-  - Current font file (.woff/.woff2)
+  - Current top-level font file (.woff/.woff2)
   - Current metadata JSON
   - `latest.json` - Published version manifest
-  - Versioned subdirectories with archived asset copies
+  - Optional versioned subdirectories with archived asset copies
 
 ## Supported Icon Packs
 
-- Bootstrap Icons
-- FontAwesome
-- Google Material Icons
-- Phosphor Icons
-- RPG-Awesome
-- Simple Icons
+- `bootstrap-icons` - Bootstrap Icons
+- `fontawesome` - Font Awesome solid icons (`fontawesome-solid` provider)
+- `material-icons` - Google Material Icons
+- `phosphor` - Phosphor Icons
+- `rpg-awesome` - RPG-Awesome
+- `simple-icons` - Simple Icons
 
 ## Configuration
 

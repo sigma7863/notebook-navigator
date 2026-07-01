@@ -100,6 +100,7 @@ The dedicated stores are cleared alongside the main file store during a full reb
   - `useCacheRebuildNotice`: shows and updates the rebuild progress notice
 - `IndexedDBStorage` (`src/storage/IndexedDBStorage.ts`) persists file records and emits `onContentChange` notifications.
 - `MemoryFileCache` (`src/storage/MemoryFileCache.ts`) mirrors file records (and small caches like preview text) for synchronous reads.
+- `MetadataService` (`src/services/MetadataService.ts`) and its sub-services manage settings-backed appearances, pinned notes, and separators; frontmatter-backed file/folder-note style writes patch cached `metadata` through `IndexedDBStorage.updateFileMetadata()`.
 - `ContentProviderRegistry` (`src/services/content/ContentProviderRegistry.ts`) runs provider batches and coordinates settings changes.
 - Content providers (`src/services/content/*`):
   - `MarkdownPipelineContentProvider` (`markdownPipeline`): preview, word/character counts, task counters, property pills, markdown feature images
@@ -140,6 +141,7 @@ The metadata pipeline is driven by a mix of manual actions, vault events, metada
   - `modify`: record the new mtime and queue derived content for that file (`useStorageVaultSync`)
 - Obsidian metadata cache: `metadataCache.on('changed', file)` can trigger a regeneration pass even when vault mtimes did not update in the expected order (`markFilesForRegeneration()` resets provider processed mtimes and a re-queue follows).
 - Settings changes: `ContentProviderRegistry.handleSettingsChange()` can stop providers, clear affected content, and re-queue regeneration (`useStorageSettingsSync`).
+- Metadata service writes: `FileMetadataService` and `FolderNoteMetadataAdapter` can update markdown frontmatter through `app.fileManager.processFrontMatter(...)`, then patch the cached `metadata` object through `IndexedDBStorage.updateFileMetadata()` so file and folder-note style changes emit `onContentChange` before the later metadata-cache regeneration pass.
 - Manual rebuild: Settings → Notebook Navigator → Advanced → Rebuild cache, or the `notebook-navigator:rebuild-cache` command.
 
 ## Vault sync

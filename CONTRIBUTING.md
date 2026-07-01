@@ -20,6 +20,6 @@ Security issues follow a separate process. See [SECURITY.md](SECURITY.md).
 
 ## Pull Requests
 
-Pull requests from outside contributors are not accepted. They are closed automatically without review.
+Pull requests are not accepted. They are closed automatically without review.
 
-With the emergence of agentic coding, code submitted from outside cannot be quality-controlled to the standard the project maintains, so all code stays under the maintainer's single design and release process. Contribute ideas as feature requests instead — bug reports and feature requests through GitHub issues are the supported way to influence the project.
+Notebook Navigator is maintained by a single developer. Bug reports and feature requests through GitHub issues are the supported way to influence the project.

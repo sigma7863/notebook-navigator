@@ -27,8 +27,10 @@ The Notebook Navigator plugin exposes a public API for other plugins and scripts
 
 ### Accessing the API
 
-The Notebook Navigator API is available at runtime through the Obsidian app object. Here's a practical example using
-Templater:
+The Notebook Navigator API is available at runtime through the Obsidian app object. The plugin manifest id is
+`notebook-navigator`; the current manifest requires Obsidian `1.11.0` or newer and sets `isDesktopOnly` to `false`.
+
+Here's a practical example using Templater:
 
 ```javascript
 <%* // Templater script to pin the current file in Notebook Navigator
@@ -230,6 +232,7 @@ for (const [path, context] of pinned) {
 
 When calling `reveal(file)`:
 
+- **Accepts either a `TFile` or a file path string**
 - **Opens the Notebook Navigator view** if it is not already open
 - **Switches to the file's parent folder** in the navigation pane
 - **Expands parent folders** as needed to make the folder visible

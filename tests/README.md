@@ -17,8 +17,8 @@ npm run test -- tests/api/NotebookNavigatorAPI.test.ts
 npx vitest run --coverage
 ```
 
-`./scripts/build.sh` also runs the automated tests after linting, style checks, TypeScript checks, Knip,
-and Prettier.
+After generating icon constants, `./scripts/build.sh` runs linting, style checks, TypeScript checks,
+unused-import and Knip dead-code checks, Prettier, and automated tests before the production build.
 
 ### Suite Layout
 
@@ -31,12 +31,13 @@ and Prettier.
   `tests/styles` check UI helper behavior and configuration invariants.
 - `tests/utils` contains focused tests for shared utility functions.
 - `tests/scripts` checks maintenance script assumptions.
+- Root-level `.test.ts` files cover cross-cutting filter search and property tree builder behavior.
 
 ### Maintenance
 
 - Keep new automated tests in `.test.ts` files under the matching domain directory.
-- Use `tests/stubs/obsidian.ts` and helpers such as `tests/utils/createTestTFile.ts` when tests need
-  Obsidian objects.
+- Use `tests/stubs/obsidian.ts` and helpers such as `tests/utils/createTestTFile.ts` and
+  `tests/utils/pathMetadata.ts` when tests need Obsidian objects or path-derived file metadata.
 - Mock browser, vault, Electron, and Capacitor behavior explicitly; Vitest does not run inside Obsidian.
 - Update `tests/api/PublicApiDefinitionConsistency.test.ts` and `tests/api-test-suite.js` when the
   public API surface changes.

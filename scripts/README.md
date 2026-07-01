@@ -27,13 +27,14 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build.ps1
 - Runs unit tests
 - Builds the plugin using esbuild
 - **Aborts before bundling or deployment if ANY errors or warnings are found**
-- Calls `build-local.sh` or `build-local.ps1` if available (for local deployment to Obsidian vault)
+- Calls an optional local deployment script after a successful build (`build.sh` runs `build-local.sh`; `build.ps1` prefers `build-local.ps1` and falls back to `build-local.sh` when Bash is available)
 
 **Requirements:**
 
 - The build MUST complete with zero errors and zero warnings
 - The build summary must show "✅ No warnings"
 - Any lint, type-check, test, or warning failure will abort the deployment
+- Node.js `>=24.0.0` is required by `package.json`
 
 ## build-icons.mjs
 
@@ -156,10 +157,10 @@ Custom local deployment script (ignored by git and not committed to the reposito
 **Purpose:**
 
 - Deploy built plugin to your local Obsidian vault
-- Automatically called by `build.sh` or `build.ps1` if present
-- `build-local.sh` is used on macOS/Linux
-- `build-local.ps1` is used on Windows
-- Add to `.gitignore` to keep vault paths private
+- Automatically called after a successful `build.sh` or `build.ps1` run if present
+- `build-local.sh` is used by `build.sh` on macOS/Linux and as the `build.ps1` fallback when Bash is available
+- `build-local.ps1` is preferred by `build.ps1` on Windows
+- Already ignored by `.gitignore` to keep vault paths private
 
 **Example:**
 
