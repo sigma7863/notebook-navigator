@@ -1097,6 +1097,20 @@ export function Calendar({
         [clearHoverTooltip, displayLocale, handleDateFilterModifiedClick, onNavigationAction]
     );
 
+    const handleCalendarNoteMiddleMouseDown = useCallback(
+        (event: React.MouseEvent<HTMLElement>): boolean => {
+            if (event.button !== 1) {
+                return false;
+            }
+
+            event.preventDefault();
+            event.stopPropagation();
+            clearHoverTooltip();
+            return true;
+        },
+        [clearHoverTooltip]
+    );
+
     const onVaultChange = useCallback(() => {
         scheduleVaultVersionUpdate();
     }, [scheduleVaultVersionUpdate]);
@@ -1422,6 +1436,10 @@ export function Calendar({
 
     const handleHeaderPeriodClick = useCallback(
         (event: React.MouseEvent<HTMLElement>, kind: HeaderPeriodKind) => {
+            if (event.button === 1) {
+                return;
+            }
+
             if (!cursorDate) {
                 return;
             }
@@ -1439,6 +1457,23 @@ export function Calendar({
             openOrCreateCustomCalendarNote(kind, periodDate, existingFile);
         },
         [cursorDate, displayLocale, getHeaderPeriodState, handleDateFilterModifiedClick, openOrCreateCustomCalendarNote]
+    );
+
+    const handleHeaderPeriodMouseDown = useCallback(
+        (event: React.MouseEvent<HTMLElement>, kind: HeaderPeriodKind) => {
+            if (!handleCalendarNoteMiddleMouseDown(event) || !cursorDate) {
+                return;
+            }
+
+            const periodDate = cursorDate.clone().locale(displayLocale);
+            const { existingFile, canCreate } = getHeaderPeriodState(kind);
+            if (!canCreate) {
+                return;
+            }
+
+            openOrCreateCustomCalendarNote(kind, periodDate, existingFile, { context: 'tab' });
+        },
+        [cursorDate, displayLocale, getHeaderPeriodState, handleCalendarNoteMiddleMouseDown, openOrCreateCustomCalendarNote]
     );
 
     const handleHeaderPeriodContextMenu = useCallback(
@@ -1469,6 +1504,10 @@ export function Calendar({
 
     const handleYearPanelPeriodClick = useCallback(
         (event: React.MouseEvent<HTMLElement>) => {
+            if (event.button === 1) {
+                return;
+            }
+
             if (!yearPanelDate) {
                 return;
             }
@@ -1484,6 +1523,21 @@ export function Calendar({
             openOrCreateCustomCalendarNote('year', yearPanelDate, yearPanelPeriodNoteFile);
         },
         [handleDateFilterModifiedClick, openOrCreateCustomCalendarNote, yearNotesEnabled, yearPanelDate, yearPanelPeriodNoteFile]
+    );
+
+    const handleYearPanelPeriodMouseDown = useCallback(
+        (event: React.MouseEvent<HTMLElement>) => {
+            if (!handleCalendarNoteMiddleMouseDown(event) || !yearPanelDate) {
+                return;
+            }
+
+            if (!yearNotesEnabled) {
+                return;
+            }
+
+            openOrCreateCustomCalendarNote('year', yearPanelDate, yearPanelPeriodNoteFile, { context: 'tab' });
+        },
+        [handleCalendarNoteMiddleMouseDown, openOrCreateCustomCalendarNote, yearNotesEnabled, yearPanelDate, yearPanelPeriodNoteFile]
     );
 
     const handleYearPanelPeriodContextMenu = useCallback(
@@ -1594,6 +1648,10 @@ export function Calendar({
 
     const handleWeekClick = useCallback(
         (event: React.MouseEvent<HTMLElement>, week: CalendarWeek, weekNoteFile: TFile | null) => {
+            if (event.button === 1) {
+                return;
+            }
+
             const weekStart = week.days[0]?.date;
             if (!weekStart) {
                 return;
@@ -1611,6 +1669,26 @@ export function Calendar({
             openOrCreateCustomCalendarNote('week', weekDate, weekNoteFile);
         },
         [displayLocale, handleDateFilterModifiedClick, openOrCreateCustomCalendarNote, weekNotesEnabled]
+    );
+
+    const handleWeekMouseDown = useCallback(
+        (event: React.MouseEvent<HTMLElement>, week: CalendarWeek, weekNoteFile: TFile | null) => {
+            if (!handleCalendarNoteMiddleMouseDown(event)) {
+                return;
+            }
+
+            const weekStart = week.days[0]?.date;
+            if (!weekStart) {
+                return;
+            }
+
+            if (!weekNotesEnabled) {
+                return;
+            }
+
+            openOrCreateCustomCalendarNote('week', weekStart.clone().locale(displayLocale), weekNoteFile, { context: 'tab' });
+        },
+        [displayLocale, handleCalendarNoteMiddleMouseDown, openOrCreateCustomCalendarNote, weekNotesEnabled]
     );
 
     const handleWeekLabelClick = useCallback(
@@ -1644,6 +1722,10 @@ export function Calendar({
 
     const handleDayClick = useCallback(
         (event: React.MouseEvent<HTMLButtonElement>, day: CalendarWeek['days'][number]) => {
+            if (event.button === 1) {
+                return;
+            }
+
             if (handleDateFilterModifiedClick(event, 'day', day.date)) {
                 return;
             }
@@ -1651,6 +1733,17 @@ export function Calendar({
             openOrCreateDailyNote(day.date, day.file);
         },
         [handleDateFilterModifiedClick, openOrCreateDailyNote]
+    );
+
+    const handleDayMouseDown = useCallback(
+        (event: React.MouseEvent<HTMLButtonElement>, day: CalendarWeek['days'][number]) => {
+            if (!handleCalendarNoteMiddleMouseDown(event)) {
+                return;
+            }
+
+            openOrCreateDailyNote(day.date, day.file, { context: 'tab' });
+        },
+        [handleCalendarNoteMiddleMouseDown, openOrCreateDailyNote]
     );
 
     const handleDayContextMenu = useCallback(
@@ -1731,6 +1824,7 @@ export function Calendar({
                     onToday={handleToday}
                     onOpenHelp={openCalendarHelp}
                     onPeriodClick={handleHeaderPeriodClick}
+                    onPeriodMouseDown={handleHeaderPeriodMouseDown}
                     onPeriodContextMenu={handleHeaderPeriodContextMenu}
                 />
 
@@ -1757,8 +1851,10 @@ export function Calendar({
                     onShowTooltip={handleShowTooltip}
                     onHideTooltip={handleHideTooltip}
                     onDayClick={handleDayClick}
+                    onDayMouseDown={handleDayMouseDown}
                     onDayContextMenu={handleDayContextMenu}
                     onWeekClick={handleWeekClick}
+                    onWeekMouseDown={handleWeekMouseDown}
                     onWeekLabelClick={handleWeekLabelClick}
                     onWeekContextMenu={handleWeekContextMenu}
                 />
@@ -1776,6 +1872,7 @@ export function Calendar({
                     highlightedMonthImageUrls={highlightedMonthImageUrls}
                     onNavigateYear={handleNavigateYear}
                     onYearPeriodClick={handleYearPanelPeriodClick}
+                    onYearPeriodMouseDown={handleYearPanelPeriodMouseDown}
                     onYearPeriodContextMenu={handleYearPanelPeriodContextMenu}
                     onSelectYearMonth={handleSelectYearMonth}
                 />

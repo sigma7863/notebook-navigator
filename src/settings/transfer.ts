@@ -35,7 +35,28 @@ const NON_TRANSFERABLE_SETTING_KEYS = new Set([
     'propertyFields'
 ]);
 
-export const SETTINGS_TRANSFER_FILENAME = 'notebook-navigator-settings.json';
+function padTimestampPart(value: number): string {
+    return value.toString().padStart(2, '0');
+}
+
+function formatSettingsTransferTimestamp(date: Date): string {
+    const year = date.getFullYear();
+    const month = padTimestampPart(date.getMonth() + 1);
+    const day = padTimestampPart(date.getDate());
+    const hours = padTimestampPart(date.getHours());
+    const minutes = padTimestampPart(date.getMinutes());
+    const seconds = padTimestampPart(date.getSeconds());
+
+    return `${year}${month}${day}-${hours}${minutes}${seconds}`;
+}
+
+export function createSettingsTransferBaseName(date = new Date()): string {
+    return `notebook-navigator-settings_${formatSettingsTransferTimestamp(date)}`;
+}
+
+export function createSettingsTransferFilename(date = new Date()): string {
+    return `${createSettingsTransferBaseName(date)}.json`;
+}
 
 function createImportBaseSettings(currentSettings: NotebookNavigatorSettings): Record<string, unknown> {
     const nextSettings = structuredClone(DEFAULT_SETTINGS) as unknown as Record<string, unknown>;

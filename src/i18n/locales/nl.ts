@@ -1594,6 +1594,12 @@ export const STRINGS_NL = {
                     editorDesc: 'Plak of bewerk JSON hieronder. Niet-opgenomen instellingen worden teruggezet naar de standaardwaarden.',
                     placeholder: '{\n  "folderSortOrder": "alpha-desc"\n}',
                     confirmButtonText: 'Importeren',
+                    confirmTitle: 'Instellingen importeren?',
+                    confirmMessage: 'Bij importeren worden de huidige Notebook Navigator-instellingen vervangen.',
+                    backupToggleName: 'Huidige instellingen vóór importeren opslaan in de kluisroot',
+                    backupToggleDesc: 'Maakt een JSON-bestand met tijdstempel in de kluisroot.',
+                    successWithBackupNotice: 'Instellingen geïmporteerd. Vorige instellingen opgeslagen in {path}.',
+                    backupError: 'Kan huidige instellingen niet opslaan: {message}',
                     successNotice: 'Instellingen geïmporteerd.',
                     errorNotice: 'Importeren van instellingen mislukt: {message}',
                     fileReadError: 'Kan bestand niet lezen: {message}'

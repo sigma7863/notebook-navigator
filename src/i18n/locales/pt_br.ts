@@ -1595,6 +1595,12 @@ export const STRINGS_PT_BR = {
                     editorDesc: 'Cole ou edite o JSON abaixo. As configurações não incluídas são redefinidas para os valores padrão.',
                     placeholder: '{\n  "folderSortOrder": "alpha-desc"\n}',
                     confirmButtonText: 'Importar',
+                    confirmTitle: 'Importar configurações?',
+                    confirmMessage: 'A importação substitui as configurações atuais do Notebook Navigator.',
+                    backupToggleName: 'Salvar as configurações atuais na raiz do cofre antes de importar',
+                    backupToggleDesc: 'Cria um arquivo JSON com carimbo de data/hora na raiz do cofre.',
+                    successWithBackupNotice: 'Configurações importadas. As configurações anteriores foram salvas em {path}.',
+                    backupError: 'Não foi possível salvar as configurações atuais: {message}',
                     successNotice: 'Configurações importadas.',
                     errorNotice: 'Falha ao importar configurações: {message}',
                     fileReadError: 'Não foi possível ler o arquivo: {message}'

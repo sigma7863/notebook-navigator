@@ -1594,6 +1594,12 @@ export const STRINGS_ES = {
                         'Pega o edita el JSON a continuación. Los ajustes no incluidos se restablecen a los valores predeterminados.',
                     placeholder: '{\n  "folderSortOrder": "alpha-desc"\n}',
                     confirmButtonText: 'Importar',
+                    confirmTitle: '¿Importar ajustes?',
+                    confirmMessage: 'La importación reemplaza los ajustes actuales de Notebook Navigator.',
+                    backupToggleName: 'Guardar los ajustes actuales en la raíz de la bóveda antes de importar',
+                    backupToggleDesc: 'Crea un archivo JSON con marca de tiempo en la raíz de la bóveda.',
+                    successWithBackupNotice: 'Ajustes importados. Los ajustes anteriores se guardaron en {path}.',
+                    backupError: 'No se pudieron guardar los ajustes actuales: {message}',
                     successNotice: 'Ajustes importados.',
                     errorNotice: 'Error al importar los ajustes: {message}',
                     fileReadError: 'No se pudo leer el archivo: {message}'

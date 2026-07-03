@@ -1593,6 +1593,12 @@ export const STRINGS_VI = {
                     editorDesc: 'Dán hoặc chỉnh sửa JSON bên dưới. Các cài đặt không được bao gồm sẽ được đặt lại về mặc định.',
                     placeholder: '{\n  "folderSortOrder": "alpha-desc"\n}',
                     confirmButtonText: 'Nhập',
+                    confirmTitle: 'Nhập cài đặt?',
+                    confirmMessage: 'Việc nhập sẽ thay thế cài đặt Notebook Navigator hiện tại.',
+                    backupToggleName: 'Lưu cài đặt hiện tại vào thư mục gốc của kho trước khi nhập',
+                    backupToggleDesc: 'Tạo tệp JSON có dấu thời gian trong thư mục gốc của kho.',
+                    successWithBackupNotice: 'Đã nhập cài đặt. Cài đặt trước đó đã được lưu vào {path}.',
+                    backupError: 'Không thể lưu cài đặt hiện tại: {message}',
                     successNotice: 'Đã nhập cài đặt.',
                     errorNotice: 'Nhập cài đặt thất bại: {message}',
                     fileReadError: 'Không thể đọc tệp: {message}'

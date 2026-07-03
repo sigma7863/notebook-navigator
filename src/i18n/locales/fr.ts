@@ -1598,6 +1598,12 @@ export const STRINGS_FR = {
                         'Collez ou modifiez le JSON ci-dessous. Les paramètres non inclus sont réinitialisés aux valeurs par défaut.',
                     placeholder: '{\n  "folderSortOrder": "alpha-desc"\n}',
                     confirmButtonText: 'Importer',
+                    confirmTitle: 'Importer les paramètres ?',
+                    confirmMessage: 'L’importation remplace les paramètres actuels de Notebook Navigator.',
+                    backupToggleName: 'Enregistrer les paramètres actuels à la racine du coffre avant l’importation',
+                    backupToggleDesc: 'Crée un fichier JSON horodaté à la racine du coffre.',
+                    successWithBackupNotice: 'Paramètres importés. Paramètres précédents enregistrés dans {path}.',
+                    backupError: 'Impossible d’enregistrer les paramètres actuels : {message}',
                     successNotice: 'Paramètres importés.',
                     errorNotice: "Échec de l'importation des paramètres : {message}",
                     fileReadError: 'Impossible de lire le fichier : {message}'

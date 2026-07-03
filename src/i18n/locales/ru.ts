@@ -1589,6 +1589,12 @@ export const STRINGS_RU = {
                     editorDesc: 'Вставьте или отредактируйте JSON ниже. Не включённые настройки сбрасываются к значениям по умолчанию.',
                     placeholder: '{\n  "folderSortOrder": "alpha-desc"\n}',
                     confirmButtonText: 'Импортировать',
+                    confirmTitle: 'Импортировать настройки?',
+                    confirmMessage: 'Импорт заменит текущие настройки Notebook Navigator.',
+                    backupToggleName: 'Сохранить текущие настройки в корне хранилища перед импортом',
+                    backupToggleDesc: 'Создаёт JSON-файл с временной меткой в корне хранилища.',
+                    successWithBackupNotice: 'Настройки импортированы. Предыдущие настройки сохранены в {path}.',
+                    backupError: 'Не удалось сохранить текущие настройки: {message}',
                     successNotice: 'Настройки импортированы.',
                     errorNotice: 'Не удалось импортировать настройки: {message}',
                     fileReadError: 'Не удалось прочитать файл: {message}'

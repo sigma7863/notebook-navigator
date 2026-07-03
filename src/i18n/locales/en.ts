@@ -1585,7 +1585,13 @@ export const STRINGS_EN = {
                     editorDesc: 'Paste or edit JSON below. Settings not included are reset to defaults.',
                     placeholder: '{\n  "folderSortOrder": "alpha-desc"\n}',
                     confirmButtonText: 'Import',
+                    confirmTitle: 'Import settings?',
+                    confirmMessage: 'Importing replaces your current Notebook Navigator settings.',
+                    backupToggleName: 'Save current settings to the vault root before importing',
+                    backupToggleDesc: 'Creates a timestamped JSON file in the vault root.',
                     successNotice: 'Settings imported.',
+                    successWithBackupNotice: 'Settings imported. Previous settings saved to {path}.',
+                    backupError: 'Could not save current settings: {message}',
                     errorNotice: 'Failed to import settings: {message}',
                     fileReadError: 'Could not read file: {message}'
                 },

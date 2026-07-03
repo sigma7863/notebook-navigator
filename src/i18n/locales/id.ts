@@ -1592,6 +1592,12 @@ export const STRINGS_ID = {
                     editorDesc: 'Tempel atau edit JSON di bawah. Pengaturan yang tidak disertakan akan diatur ulang ke default.',
                     placeholder: '{\n  "folderSortOrder": "alpha-desc"\n}',
                     confirmButtonText: 'Impor',
+                    confirmTitle: 'Impor pengaturan?',
+                    confirmMessage: 'Mengimpor akan mengganti pengaturan Notebook Navigator saat ini.',
+                    backupToggleName: 'Simpan pengaturan saat ini di root vault sebelum mengimpor',
+                    backupToggleDesc: 'Membuat file JSON bertimestamp di root vault.',
+                    successWithBackupNotice: 'Pengaturan diimpor. Pengaturan sebelumnya disimpan ke {path}.',
+                    backupError: 'Tidak dapat menyimpan pengaturan saat ini: {message}',
                     successNotice: 'Pengaturan diimpor.',
                     errorNotice: 'Gagal mengimpor pengaturan: {message}',
                     fileReadError: 'Tidak dapat membaca file: {message}'

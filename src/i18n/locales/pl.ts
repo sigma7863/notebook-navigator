@@ -1595,6 +1595,12 @@ export const STRINGS_PL = {
                     editorDesc: 'Wklej lub edytuj JSON poniżej. Nieuwzględnione ustawienia zostaną zresetowane do wartości domyślnych.',
                     placeholder: '{\n  "folderSortOrder": "alpha-desc"\n}',
                     confirmButtonText: 'Importuj',
+                    confirmTitle: 'Zaimportować ustawienia?',
+                    confirmMessage: 'Importowanie zastąpi bieżące ustawienia Notebook Navigator.',
+                    backupToggleName: 'Zapisz bieżące ustawienia w katalogu głównym sejfu przed importem',
+                    backupToggleDesc: 'Tworzy plik JSON ze znacznikiem czasu w katalogu głównym sejfu.',
+                    successWithBackupNotice: 'Ustawienia zaimportowane. Poprzednie ustawienia zapisano w {path}.',
+                    backupError: 'Nie można zapisać bieżących ustawień: {message}',
                     successNotice: 'Ustawienia zaimportowane.',
                     errorNotice: 'Nie udało się zaimportować ustawień: {message}',
                     fileReadError: 'Nie można odczytać pliku: {message}'

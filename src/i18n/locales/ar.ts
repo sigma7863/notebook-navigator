@@ -1586,6 +1586,12 @@ export const STRINGS_AR = {
                     editorDesc: 'الصق أو عدّل JSON أدناه. الإعدادات غير المضمنة تُعاد إلى القيم الافتراضية.',
                     placeholder: '{\n  "folderSortOrder": "alpha-desc"\n}',
                     confirmButtonText: 'استيراد',
+                    confirmTitle: 'استيراد الإعدادات؟',
+                    confirmMessage: 'سيؤدي الاستيراد إلى استبدال إعدادات Notebook Navigator الحالية.',
+                    backupToggleName: 'حفظ الإعدادات الحالية في جذر الخزنة قبل الاستيراد',
+                    backupToggleDesc: 'ينشئ ملف JSON مختومًا بالوقت في جذر الخزنة.',
+                    successWithBackupNotice: 'تم استيراد الإعدادات. حُفظت الإعدادات السابقة في {path}.',
+                    backupError: 'تعذّر حفظ الإعدادات الحالية: {message}',
                     successNotice: 'تم استيراد الإعدادات.',
                     errorNotice: 'فشل استيراد الإعدادات: {message}',
                     fileReadError: 'تعذّر قراءة الملف: {message}'

@@ -1585,6 +1585,12 @@ export const STRINGS_TH = {
                     editorDesc: 'วางหรือแก้ไข JSON ด้านล่าง การตั้งค่าที่ไม่ได้รวมไว้จะถูกรีเซ็ตเป็นค่าเริ่มต้น',
                     placeholder: '{\n  "folderSortOrder": "alpha-desc"\n}',
                     confirmButtonText: 'นำเข้า',
+                    confirmTitle: 'นำเข้าการตั้งค่าหรือไม่?',
+                    confirmMessage: 'การนำเข้าจะแทนที่การตั้งค่า Notebook Navigator ปัจจุบัน',
+                    backupToggleName: 'บันทึกการตั้งค่าปัจจุบันไว้ในรูทห้องนิรภัยก่อนนำเข้า',
+                    backupToggleDesc: 'สร้างไฟล์ JSON ที่มีเวลาประทับในรูทห้องนิรภัย',
+                    successWithBackupNotice: 'นำเข้าการตั้งค่าแล้ว บันทึกการตั้งค่าก่อนหน้าไว้ที่ {path}',
+                    backupError: 'ไม่สามารถบันทึกการตั้งค่าปัจจุบันได้: {message}',
                     successNotice: 'นำเข้าการตั้งค่าแล้ว',
                     errorNotice: 'นำเข้าการตั้งค่าล้มเหลว: {message}',
                     fileReadError: 'ไม่สามารถอ่านไฟล์ได้: {message}'

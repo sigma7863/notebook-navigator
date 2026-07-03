@@ -1588,6 +1588,12 @@ export const STRINGS_KO = {
                     editorDesc: '아래에 JSON을 붙여넣거나 편집하세요. 포함되지 않은 설정은 기본값으로 초기화됩니다.',
                     placeholder: '{\n  "folderSortOrder": "alpha-desc"\n}',
                     confirmButtonText: '가져오기',
+                    confirmTitle: '설정을 가져오시겠습니까?',
+                    confirmMessage: '가져오면 현재 Notebook Navigator 설정이 대체됩니다.',
+                    backupToggleName: '가져오기 전에 현재 설정을 보관소 루트에 저장',
+                    backupToggleDesc: '보관소 루트에 타임스탬프가 있는 JSON 파일을 만듭니다.',
+                    successWithBackupNotice: '설정을 가져왔습니다. 이전 설정은 {path}에 저장되었습니다.',
+                    backupError: '현재 설정을 저장할 수 없습니다: {message}',
                     successNotice: '설정을 가져왔습니다.',
                     errorNotice: '설정 가져오기에 실패했습니다: {message}',
                     fileReadError: '파일을 읽을 수 없습니다: {message}'

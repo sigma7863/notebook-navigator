@@ -1589,6 +1589,12 @@ export const STRINGS_UK = {
                     editorDesc: 'Вставте або відредагуйте JSON нижче. Не включені налаштування скидаються до значень за замовчуванням.',
                     placeholder: '{\n  "folderSortOrder": "alpha-desc"\n}',
                     confirmButtonText: 'Імпортувати',
+                    confirmTitle: 'Імпортувати налаштування?',
+                    confirmMessage: 'Імпорт замінить поточні налаштування Notebook Navigator.',
+                    backupToggleName: 'Зберегти поточні налаштування в корені сховища перед імпортом',
+                    backupToggleDesc: 'Створює JSON-файл із часовою позначкою в корені сховища.',
+                    successWithBackupNotice: 'Налаштування імпортовано. Попередні налаштування збережено в {path}.',
+                    backupError: 'Не вдалося зберегти поточні налаштування: {message}',
                     successNotice: 'Налаштування імпортовано.',
                     errorNotice: 'Не вдалося імпортувати налаштування: {message}',
                     fileReadError: 'Не вдалося прочитати файл: {message}'

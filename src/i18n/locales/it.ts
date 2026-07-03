@@ -1590,6 +1590,12 @@ export const STRINGS_IT = {
                         'Incolla o modifica il JSON qui sotto. Le impostazioni non incluse vengono ripristinate ai valori predefiniti.',
                     placeholder: '{\n  "folderSortOrder": "alpha-desc"\n}',
                     confirmButtonText: 'Importa',
+                    confirmTitle: 'Importare le impostazioni?',
+                    confirmMessage: 'L’importazione sostituisce le impostazioni correnti di Notebook Navigator.',
+                    backupToggleName: 'Salva le impostazioni correnti nella radice del vault prima di importare',
+                    backupToggleDesc: 'Crea un file JSON con timestamp nella radice del vault.',
+                    successWithBackupNotice: 'Impostazioni importate. Le impostazioni precedenti sono state salvate in {path}.',
+                    backupError: 'Impossibile salvare le impostazioni correnti: {message}',
                     successNotice: 'Impostazioni importate.',
                     errorNotice: 'Impossibile importare le impostazioni: {message}',
                     fileReadError: 'Impossibile leggere il file: {message}'

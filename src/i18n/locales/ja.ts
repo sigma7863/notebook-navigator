@@ -1590,6 +1590,12 @@ export const STRINGS_JA = {
                     editorDesc: '下にJSONを貼り付けまたは編集してください。含まれていない設定はデフォルトにリセットされます。',
                     placeholder: '{\n  "folderSortOrder": "alpha-desc"\n}',
                     confirmButtonText: 'インポート',
+                    confirmTitle: '設定をインポートしますか？',
+                    confirmMessage: 'インポートすると、現在の Notebook Navigator 設定が置き換えられます。',
+                    backupToggleName: 'インポート前に現在の設定をボールトのルートに保存',
+                    backupToggleDesc: 'ボールトのルートにタイムスタンプ付きの JSON ファイルを作成します。',
+                    successWithBackupNotice: '設定がインポートされました。以前の設定は {path} に保存されました。',
+                    backupError: '現在の設定を保存できませんでした: {message}',
                     successNotice: '設定がインポートされました。',
                     errorNotice: '設定のインポートに失敗しました: {message}',
                     fileReadError: 'ファイルを読み込めませんでした: {message}'

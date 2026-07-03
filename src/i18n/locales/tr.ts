@@ -1590,6 +1590,12 @@ export const STRINGS_TR = {
                     editorDesc: 'Aşağıya JSON yapıştırın veya düzenleyin. Dahil edilmeyen ayarlar varsayılan değerlere sıfırlanır.',
                     placeholder: '{\n  "folderSortOrder": "alpha-desc"\n}',
                     confirmButtonText: 'İçe aktar',
+                    confirmTitle: 'Ayarlar içe aktarılsın mı?',
+                    confirmMessage: 'İçe aktarma, mevcut Notebook Navigator ayarlarını değiştirir.',
+                    backupToggleName: 'İçe aktarmadan önce mevcut ayarları kasa köküne kaydet',
+                    backupToggleDesc: 'Kasa kökünde zaman damgalı bir JSON dosyası oluşturur.',
+                    successWithBackupNotice: 'Ayarlar içe aktarıldı. Önceki ayarlar {path} konumuna kaydedildi.',
+                    backupError: 'Mevcut ayarlar kaydedilemedi: {message}',
                     successNotice: 'Ayarlar içe aktarıldı.',
                     errorNotice: 'Ayarlar içe aktarılamadı: {message}',
                     fileReadError: 'Dosya okunamadı: {message}'

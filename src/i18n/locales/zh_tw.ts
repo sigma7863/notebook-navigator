@@ -1577,6 +1577,12 @@ export const STRINGS_ZH_TW = {
                     editorDesc: '在下方貼上或編輯 JSON。未包含的設定將重設為預設值。',
                     placeholder: '{\n  "folderSortOrder": "alpha-desc"\n}',
                     confirmButtonText: '匯入',
+                    confirmTitle: '匯入設定？',
+                    confirmMessage: '匯入會取代目前的 Notebook Navigator 設定。',
+                    backupToggleName: '匯入前將目前設定儲存到保險庫根目錄',
+                    backupToggleDesc: '在保險庫根目錄中建立含時間戳的 JSON 檔案。',
+                    successWithBackupNotice: '設定已匯入。先前的設定已儲存到 {path}。',
+                    backupError: '無法儲存目前設定: {message}',
                     successNotice: '設定已匯入。',
                     errorNotice: '匯入設定失敗: {message}',
                     fileReadError: '無法讀取檔案: {message}'

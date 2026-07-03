@@ -1592,6 +1592,12 @@ export const STRINGS_FA = {
                     editorDesc: 'JSON را در زیر جای‌گذاری یا ویرایش کنید. تنظیمات شامل‌نشده به مقدار پیش‌فرض بازنشانی می‌شوند.',
                     placeholder: '{\n  "folderSortOrder": "alpha-desc"\n}',
                     confirmButtonText: 'وارد کردن',
+                    confirmTitle: 'تنظیمات وارد شوند؟',
+                    confirmMessage: 'وارد کردن، تنظیمات فعلی Notebook Navigator را جایگزین می‌کند.',
+                    backupToggleName: 'ذخیره تنظیمات فعلی در ریشه خزانه قبل از وارد کردن',
+                    backupToggleDesc: 'یک فایل JSON زمان‌دار در ریشه خزانه ایجاد می‌کند.',
+                    successWithBackupNotice: 'تنظیمات وارد شد. تنظیمات قبلی در {path} ذخیره شد.',
+                    backupError: 'ذخیره تنظیمات فعلی ممکن نبود: {message}',
                     successNotice: 'تنظیمات وارد شد.',
                     errorNotice: 'وارد کردن تنظیمات ناموفق بود: {message}',
                     fileReadError: 'خواندن فایل ممکن نبود: {message}'

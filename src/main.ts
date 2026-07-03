@@ -83,8 +83,9 @@ import {
     recordStartupUserVisible,
     setDebugLoggingService
 } from './services/diagnostics/DebugLoggingService';
-import { applyModifiedSettingsTransfer, createModifiedSettingsTransfer } from './settings/transfer';
+import { applyModifiedSettingsTransfer, createModifiedSettingsTransfer, createSettingsTransferBaseName } from './settings/transfer';
 import { DEFAULT_SETTINGS } from './settings/defaultSettings';
+import { buildFilePathInFolder, generateUniqueFilename } from './utils/fileCreationUtils';
 
 interface ObsidianSettingsModal {
     open(): void;
@@ -1201,6 +1202,14 @@ export default class NotebookNavigatorPlugin extends Plugin implements ISettings
 
     public createSettingsTransferJson(): string {
         return JSON.stringify(createModifiedSettingsTransfer(this.settings), null, 2);
+    }
+
+    public async saveSettingsTransferBackupToVaultRoot(): Promise<string> {
+        const baseName = createSettingsTransferBaseName();
+        const uniqueBaseName = generateUniqueFilename('', baseName, 'json', this.app);
+        const filename = buildFilePathInFolder('', uniqueBaseName, 'json');
+        const created = await this.app.vault.create(filename, this.createSettingsTransferJson());
+        return created.path;
     }
 
     public async importSettingsTransfer(transferData: unknown): Promise<void> {

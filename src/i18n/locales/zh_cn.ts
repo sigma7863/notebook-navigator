@@ -1577,6 +1577,12 @@ export const STRINGS_ZH_CN = {
                     editorDesc: '在下方粘贴或编辑 JSON。未包含的设置将重置为默认值。',
                     placeholder: '{\n  "folderSortOrder": "alpha-desc"\n}',
                     confirmButtonText: '导入',
+                    confirmTitle: '导入设置？',
+                    confirmMessage: '导入会替换当前的 Notebook Navigator 设置。',
+                    backupToggleName: '导入前将当前设置保存到仓库根目录',
+                    backupToggleDesc: '在仓库根目录中创建带时间戳的 JSON 文件。',
+                    successWithBackupNotice: '设置已导入。之前的设置已保存到 {path}。',
+                    backupError: '无法保存当前设置: {message}',
                     successNotice: '设置已导入。',
                     errorNotice: '导入设置失败: {message}',
                     fileReadError: '无法读取文件: {message}'

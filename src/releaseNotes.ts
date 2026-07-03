@@ -94,6 +94,10 @@ const RELEASE_NOTES: ReleaseNote[] = [
         version: '3.2.3',
         date: '2026-07-06',
         showOnUpdate: false,
+        improved: [
+            '**Settings.** Importing settings now shows a confirmation dialog with an option to save current settings to a timestamped file in the vault root. Exported settings files use timestamped filenames.',
+            '**Calendar.** Middle-click on day cells, week numbers, month, quarter and year headers, and the year panel opens the calendar note in a new tab, creating it if needed.'
+        ],
         fixed: [
             '**Drag and drop.** Fixed drag and drop not working on some Windows PCs where the system did not expose drag data during the drag operation.'
         ]

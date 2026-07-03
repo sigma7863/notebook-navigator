@@ -47,8 +47,10 @@ interface CalendarGridProps {
     onShowTooltip: (element: HTMLElement, tooltipData: CalendarHoverTooltipData) => void;
     onHideTooltip: (element: HTMLElement) => void;
     onDayClick: (event: React.MouseEvent<HTMLButtonElement>, day: CalendarDay) => void;
+    onDayMouseDown: (event: React.MouseEvent<HTMLButtonElement>, day: CalendarDay) => void;
     onDayContextMenu: (event: React.MouseEvent<HTMLButtonElement>, day: CalendarDay, canCreate: boolean) => void;
     onWeekClick: (event: React.MouseEvent<HTMLElement>, week: CalendarWeek, weekNoteFile: TFile | null) => void;
+    onWeekMouseDown: (event: React.MouseEvent<HTMLElement>, week: CalendarWeek, weekNoteFile: TFile | null) => void;
     onWeekLabelClick: (event: React.MouseEvent<HTMLElement>, week: CalendarWeek) => void;
     onWeekContextMenu: (event: React.MouseEvent<HTMLElement>, week: CalendarWeek, weekNoteFile: TFile | null) => void;
 }
@@ -76,8 +78,10 @@ export const CalendarGrid = React.memo(function CalendarGrid({
     onShowTooltip,
     onHideTooltip,
     onDayClick,
+    onDayMouseDown,
     onDayContextMenu,
     onWeekClick,
+    onWeekMouseDown,
     onWeekLabelClick,
     onWeekContextMenu
 }: CalendarGridProps) {
@@ -120,6 +124,7 @@ export const CalendarGrid = React.memo(function CalendarGrid({
                                             ]
                                                 .filter(Boolean)
                                                 .join(' ')}
+                                            onMouseDown={event => onWeekMouseDown(event, week, weekNoteFile)}
                                             onClick={event => onWeekClick(event, week, weekNoteFile)}
                                             onContextMenu={event => onWeekContextMenu(event, week, weekNoteFile)}
                                         >
@@ -233,6 +238,7 @@ export const CalendarGrid = React.memo(function CalendarGrid({
                                             showUnfinishedTaskIndicator={hasUnfinishedTasks}
                                             onShowTooltip={onShowTooltip}
                                             onHideTooltip={onHideTooltip}
+                                            onMouseDown={event => onDayMouseDown(event, day)}
                                             onClick={event => onDayClick(event, day)}
                                             onContextMenu={event => onDayContextMenu(event, day, canCreateDayNotes)}
                                         />

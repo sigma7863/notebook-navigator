@@ -18,7 +18,21 @@
 
 import { describe, expect, it } from 'vitest';
 import { DEFAULT_SETTINGS } from '../../src/settings/defaultSettings';
-import { applyModifiedSettingsTransfer, createModifiedSettingsTransfer } from '../../src/settings/transfer';
+import {
+    applyModifiedSettingsTransfer,
+    createModifiedSettingsTransfer,
+    createSettingsTransferBaseName,
+    createSettingsTransferFilename
+} from '../../src/settings/transfer';
+
+describe('createSettingsTransferFilename', () => {
+    it('formats settings transfer filenames with a sortable local timestamp', () => {
+        const date = new Date(2026, 6, 3, 14, 22, 33);
+
+        expect(createSettingsTransferBaseName(date)).toBe('notebook-navigator-settings_20260703-142233');
+        expect(createSettingsTransferFilename(date)).toBe('notebook-navigator-settings_20260703-142233.json');
+    });
+});
 
 describe('createModifiedSettingsTransfer', () => {
     it('returns an empty object when settings match defaults', () => {

@@ -1593,6 +1593,12 @@ export const STRINGS_PT = {
                     editorDesc: 'Cole ou edite o JSON abaixo. As definições não incluídas são repostas nos valores predefinidos.',
                     placeholder: '{\n  "folderSortOrder": "alpha-desc"\n}',
                     confirmButtonText: 'Importar',
+                    confirmTitle: 'Importar definições?',
+                    confirmMessage: 'A importação substitui as definições atuais do Notebook Navigator.',
+                    backupToggleName: 'Guardar as definições atuais na raiz do cofre antes de importar',
+                    backupToggleDesc: 'Cria um ficheiro JSON com carimbo de data/hora na raiz do cofre.',
+                    successWithBackupNotice: 'Definições importadas. As definições anteriores foram guardadas em {path}.',
+                    backupError: 'Não foi possível guardar as definições atuais: {message}',
                     successNotice: 'Definições importadas.',
                     errorNotice: 'Falha ao importar definições: {message}',
                     fileReadError: 'Não foi possível ler o ficheiro: {message}'

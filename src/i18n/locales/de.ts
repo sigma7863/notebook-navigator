@@ -1596,6 +1596,12 @@ export const STRINGS_DE = {
                         'JSON unten einfügen oder bearbeiten. Nicht enthaltene Einstellungen werden auf Standardwerte zurückgesetzt.',
                     placeholder: '{\n  "folderSortOrder": "alpha-desc"\n}',
                     confirmButtonText: 'Importieren',
+                    confirmTitle: 'Einstellungen importieren?',
+                    confirmMessage: 'Beim Importieren werden Ihre aktuellen Notebook Navigator-Einstellungen ersetzt.',
+                    backupToggleName: 'Aktuelle Einstellungen vor dem Importieren im Stammordner des Tresors speichern',
+                    backupToggleDesc: 'Erstellt eine JSON-Datei mit Zeitstempel im Stammordner des Tresors.',
+                    successWithBackupNotice: 'Einstellungen importiert. Vorherige Einstellungen wurden unter {path} gespeichert.',
+                    backupError: 'Aktuelle Einstellungen konnten nicht gespeichert werden: {message}',
                     successNotice: 'Einstellungen importiert.',
                     errorNotice: 'Einstellungen konnten nicht importiert werden: {message}',
                     fileReadError: 'Datei konnte nicht gelesen werden: {message}'
