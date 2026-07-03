@@ -91,6 +91,14 @@ export interface ReleaseNote {
  */
 const RELEASE_NOTES: ReleaseNote[] = [
     {
+        version: '3.2.3',
+        date: '2026-07-06',
+        showOnUpdate: false,
+        fixed: [
+            '**Drag and drop.** Fixed drag and drop not working on some Windows PCs where the system did not expose drag data during the drag operation.'
+        ]
+    },
+    {
         version: '3.2.2',
         date: '2026-06-30',
         showOnUpdate: false,
