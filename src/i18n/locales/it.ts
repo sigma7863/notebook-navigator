@@ -975,6 +975,7 @@ export const STRINGS_IT = {
                 vaultConfiguration: 'Configurazione vault',
                 templates: 'Modelli',
                 behavior: 'Comportamento',
+                startup: 'Avvio',
                 keyboardNavigation: 'Navigazione da tastiera',
                 mouseButtons: 'Pulsanti del mouse',
                 view: 'Aspetto',
@@ -1297,7 +1298,7 @@ export const STRINGS_IT = {
             },
             startView: {
                 name: "Vista predefinita all'avvio",
-                desc: "Scegli quale pannello visualizzare all'apertura di Notebook Navigator. Il pannello navigazione mostra scorciatoie, file recenti e albero cartelle. Il pannello lista mostra subito l'elenco file.",
+                desc: "Scegli quale pannello è attivo all'apertura di Notebook Navigator. Il layout a pannello singolo mostra prima questo pannello; il layout a doppio pannello gli assegna il focus della tastiera.",
                 options: {
                     navigation: 'Pannello navigazione',
                     files: 'Pannello lista'

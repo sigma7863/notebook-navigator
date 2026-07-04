@@ -976,6 +976,7 @@ export const STRINGS_KO = {
                 vaultConfiguration: '보관소 설정',
                 templates: '템플릿',
                 behavior: '동작',
+                startup: '시작',
                 keyboardNavigation: '키보드 탐색',
                 mouseButtons: '마우스 버튼',
                 view: '모양',
@@ -1298,7 +1299,7 @@ export const STRINGS_KO = {
             },
             startView: {
                 name: '기본 시작 보기',
-                desc: 'Notebook Navigator를 열 때 표시할 창을 선택하세요. 탐색 창은 바로가기, 최근 파일, 폴더 구조를 표시합니다. 목록 창은 파일 목록을 표시합니다.',
+                desc: 'Notebook Navigator를 열 때 활성화되는 창을 선택하세요. 단일 창 레이아웃에서는 이 창이 먼저 표시되고, 이중 창 레이아웃에서는 이 창에 키보드 포커스가 이동합니다.',
                 options: {
                     navigation: '탐색 창',
                     files: '목록 창'

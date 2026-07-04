@@ -980,6 +980,7 @@ export const STRINGS_VI = {
                 vaultConfiguration: 'Thiết lập vault',
                 templates: 'Mẫu',
                 behavior: 'Hành vi',
+                startup: 'Khởi động',
                 keyboardNavigation: 'Điều hướng bằng bàn phím',
                 mouseButtons: 'Nút chuột',
                 view: 'Giao diện',
@@ -1302,7 +1303,7 @@ export const STRINGS_VI = {
             },
             startView: {
                 name: 'Chế độ xem khởi động mặc định',
-                desc: 'Chọn ngăn hiển thị khi mở Notebook Navigator. Ngăn điều hướng hiện lối tắt, tệp gần đây và cây thư mục. Ngăn danh sách hiện danh sách tệp ngay.',
+                desc: 'Chọn ngăn hoạt động khi mở Notebook Navigator. Bố cục một ngăn hiển thị ngăn này trước; bố cục hai ngăn chuyển tiêu điểm bàn phím vào ngăn này.',
                 options: {
                     navigation: 'Ngăn điều hướng',
                     files: 'Ngăn danh sách'

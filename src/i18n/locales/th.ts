@@ -972,6 +972,7 @@ export const STRINGS_TH = {
                 vaultConfiguration: 'การตั้งค่าห้องนิรภัย',
                 templates: 'เทมเพลต',
                 behavior: 'พฤติกรรม',
+                startup: 'การเริ่มต้น',
                 keyboardNavigation: 'การนำทางด้วยแป้นพิมพ์',
                 mouseButtons: 'ปุ่มเมาส์',
                 view: 'ลักษณะ',
@@ -1294,7 +1295,7 @@ export const STRINGS_TH = {
             },
             startView: {
                 name: 'มุมมองเริ่มต้นเมื่อเริ่มงาน',
-                desc: 'เลือกแผงที่จะแสดงเมื่อเปิด Notebook Navigator แผงนำทางแสดงทางลัด ไฟล์ล่าสุด และต้นไม้โฟลเดอร์ แผงรายการแสดงรายการไฟล์ทันที',
+                desc: 'เลือกแผงที่ใช้งานเมื่อเปิด Notebook Navigator เลย์เอาต์แผงเดียวจะแสดงแผงนี้ก่อน ส่วนเลย์เอาต์สองแผงจะให้โฟกัสแป้นพิมพ์กับแผงนี้',
                 options: {
                     navigation: 'แผงนำทาง',
                     files: 'แผงรายการ'

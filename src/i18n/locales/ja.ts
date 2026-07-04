@@ -978,6 +978,7 @@ export const STRINGS_JA = {
                 vaultConfiguration: '保管庫のセットアップ',
                 templates: 'テンプレート',
                 behavior: '動作',
+                startup: '起動',
                 keyboardNavigation: 'キーボード操作',
                 mouseButtons: 'マウスボタン',
                 view: '外観',
@@ -1300,7 +1301,7 @@ export const STRINGS_JA = {
             },
             startView: {
                 name: 'デフォルト起動ビュー',
-                desc: 'Notebook Navigator を開いたときに表示するペインを選択します。ナビゲーションペインはショートカット、最近のファイル、フォルダ構造を表示します。リストペインはファイル一覧を表示します。',
+                desc: 'Notebook Navigator を開いたときにアクティブになるペインを選択します。シングルペインレイアウトではこのペインが最初に表示され、デュアルペインレイアウトではこのペインにキーボードフォーカスが移ります。',
                 options: {
                     navigation: 'ナビゲーションペイン',
                     files: 'リストペイン'

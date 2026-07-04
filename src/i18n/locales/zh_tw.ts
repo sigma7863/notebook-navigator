@@ -969,6 +969,7 @@ export const STRINGS_ZH_TW = {
                 vaultConfiguration: '保險庫設定',
                 templates: '範本',
                 behavior: '行為',
+                startup: '啟動',
                 keyboardNavigation: '鍵盤導覽',
                 mouseButtons: '滑鼠按鈕',
                 view: '外觀',
@@ -1288,7 +1289,7 @@ export const STRINGS_ZH_TW = {
             },
             startView: {
                 name: '預設啟動檢視',
-                desc: '選擇開啟 Notebook Navigator 時顯示的窗格。導覽窗格顯示捷徑、最近檔案和資料夾結構。列表窗格顯示檔案列表。',
+                desc: '選擇開啟 Notebook Navigator 時處於作用中的窗格。單窗格版面配置會優先顯示此窗格；雙窗格版面配置會將鍵盤焦點移至此窗格。',
                 options: {
                     navigation: '導覽窗格',
                     files: '列表窗格'

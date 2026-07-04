@@ -973,6 +973,7 @@ export const STRINGS_EN = {
                 vaultConfiguration: 'Vault setup',
                 templates: 'Templates',
                 behavior: 'Behavior',
+                startup: 'Startup',
                 keyboardNavigation: 'Keyboard navigation',
                 mouseButtons: 'Mouse buttons',
                 view: 'Appearance',
@@ -1295,7 +1296,7 @@ export const STRINGS_EN = {
             },
             startView: {
                 name: 'Default startup view',
-                desc: 'Choose which pane to display when opening Notebook Navigator. Navigation pane shows shortcuts, recent files, and folder tree. List pane shows file list immediately.',
+                desc: 'Choose which pane is active when Notebook Navigator opens. Single-pane layout shows this pane first; dual-pane layout gives it keyboard focus.',
                 options: {
                     navigation: 'Navigation pane',
                     files: 'List pane'

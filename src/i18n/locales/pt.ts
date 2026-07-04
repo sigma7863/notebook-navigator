@@ -979,6 +979,7 @@ export const STRINGS_PT = {
                 vaultConfiguration: 'Configuração do cofre',
                 templates: 'Modelos',
                 behavior: 'Comportamento',
+                startup: 'Arranque',
                 keyboardNavigation: 'Navegação por teclado',
                 mouseButtons: 'Botões do rato',
                 view: 'Aparência',
@@ -1301,7 +1302,7 @@ export const STRINGS_PT = {
             },
             startView: {
                 name: 'Vista de arranque predefinida',
-                desc: 'Escolha qual painel exibir ao abrir o Notebook Navigator. O painel de navegação mostra atalhos, ficheiros recentes e árvore de pastas. O painel de lista mostra a lista de ficheiros imediatamente.',
+                desc: 'Escolha qual painel fica ativo ao abrir o Notebook Navigator. O esquema de painel único mostra este painel primeiro; o esquema de painel duplo dá-lhe o foco do teclado.',
                 options: {
                     navigation: 'Painel de navegação',
                     files: 'Painel de lista'

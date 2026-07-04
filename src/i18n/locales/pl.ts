@@ -982,6 +982,7 @@ export const STRINGS_PL = {
                 vaultConfiguration: 'Konfiguracja sejfu',
                 templates: 'Szablony',
                 behavior: 'Zachowanie',
+                startup: 'Uruchamianie',
                 keyboardNavigation: 'Nawigacja klawiaturą',
                 mouseButtons: 'Przyciski myszy',
                 view: 'Wygląd',
@@ -1304,7 +1305,7 @@ export const STRINGS_PL = {
             },
             startView: {
                 name: 'Domyślny widok początkowy',
-                desc: 'Wybierz, który panel ma być widoczny po otwarciu Notebook Navigator. Panel nawigacji pokazuje skróty, ostatnie pliki i strukturę folderów. Panel listy od razu pokazuje listę plików.',
+                desc: 'Wybierz, który panel jest aktywny po otwarciu Notebook Navigator. Układ jednopanelowy pokazuje ten panel jako pierwszy; układ dwupanelowy przenosi na niego fokus klawiatury.',
                 options: {
                     navigation: 'Panel nawigacji',
                     files: 'Panel listy'

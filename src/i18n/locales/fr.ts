@@ -983,6 +983,7 @@ export const STRINGS_FR = {
                 vaultConfiguration: 'Configuration du coffre',
                 templates: 'Modèles',
                 behavior: 'Comportement',
+                startup: 'Démarrage',
                 keyboardNavigation: 'Navigation au clavier',
                 mouseButtons: 'Boutons de souris',
                 view: 'Apparence',
@@ -1305,7 +1306,7 @@ export const STRINGS_FR = {
             },
             startView: {
                 name: 'Vue de démarrage par défaut',
-                desc: "Choisissez le panneau affiché lors de l'ouverture de Notebook Navigator. Le panneau de navigation montre les raccourcis, les fichiers récents et la structure des dossiers. Le panneau de liste affiche immédiatement la liste des fichiers.",
+                desc: "Choisissez le panneau actif à l'ouverture de Notebook Navigator. La disposition à panneau unique affiche ce panneau en premier ; la disposition à double panneau lui donne le focus clavier.",
                 options: {
                     navigation: 'Panneau de navigation',
                     files: 'Panneau de liste'

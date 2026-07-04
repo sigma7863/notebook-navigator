@@ -980,6 +980,7 @@ export const STRINGS_ES = {
                 vaultConfiguration: 'Configuración de la bóveda',
                 templates: 'Plantillas',
                 behavior: 'Comportamiento',
+                startup: 'Inicio',
                 keyboardNavigation: 'Navegación con teclado',
                 mouseButtons: 'Botones del ratón',
                 view: 'Apariencia',
@@ -1302,7 +1303,7 @@ export const STRINGS_ES = {
             },
             startView: {
                 name: 'Vista de inicio predeterminada',
-                desc: 'Elige qué panel mostrar al abrir Notebook Navigator. El panel de navegación muestra los accesos directos, los archivos recientes y la estructura de carpetas. El panel de lista muestra la lista de archivos en pantalla.',
+                desc: 'Elige qué panel está activo al abrir Notebook Navigator. El diseño de panel único muestra este panel primero; el diseño de doble panel le da el foco del teclado.',
                 options: {
                     navigation: 'Panel de navegación',
                     files: 'Panel de lista'

@@ -979,6 +979,7 @@ export const STRINGS_ID = {
                 vaultConfiguration: 'Penyiapan vault',
                 templates: 'Templat',
                 behavior: 'Perilaku',
+                startup: 'Startup',
                 keyboardNavigation: 'Navigasi keyboard',
                 mouseButtons: 'Tombol mouse',
                 view: 'Tampilan',
@@ -1301,7 +1302,7 @@ export const STRINGS_ID = {
             },
             startView: {
                 name: 'Tampilan startup default',
-                desc: 'Pilih panel mana yang ditampilkan saat membuka Notebook Navigator. Panel navigasi menampilkan pintasan, file terbaru, dan pohon folder. Panel daftar menampilkan daftar file segera.',
+                desc: 'Pilih panel yang aktif saat Notebook Navigator dibuka. Tata letak panel tunggal menampilkan panel ini lebih dulu; tata letak panel ganda memberinya fokus keyboard.',
                 options: {
                     navigation: 'Panel navigasi',
                     files: 'Panel daftar'

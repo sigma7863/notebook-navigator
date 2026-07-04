@@ -979,6 +979,7 @@ export const STRINGS_FA = {
                 vaultConfiguration: 'پیکربندی خزانه',
                 templates: 'الگوها',
                 behavior: 'رفتار',
+                startup: 'راه‌اندازی',
                 keyboardNavigation: 'پیمایش با صفحه‌کلید',
                 mouseButtons: 'دکمه‌های ماوس',
                 view: 'ظاهر',
@@ -1301,7 +1302,7 @@ export const STRINGS_FA = {
             },
             startView: {
                 name: 'نمای پیش‌فرض شروع',
-                desc: 'پنلی که هنگام باز کردن Notebook Navigator نمایش داده می‌شود را انتخاب کنید. پنل ناوبری میانبرها، فایل‌های اخیر و درخت پوشه را نمایش می‌دهد. پنل لیست فوراً لیست فایل‌ها را نمایش می‌دهد.',
+                desc: 'پنل فعال هنگام باز شدن Notebook Navigator را انتخاب کنید. در چیدمان تک‌پنلی این پنل ابتدا نمایش داده می‌شود؛ در چیدمان دوپنلی فوکوس صفحه‌کلید به آن داده می‌شود.',
                 options: {
                     navigation: 'پنل ناوبری',
                     files: 'پنل لیست'

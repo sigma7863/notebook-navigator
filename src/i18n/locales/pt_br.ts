@@ -981,6 +981,7 @@ export const STRINGS_PT_BR = {
                 vaultConfiguration: 'Configuração do cofre',
                 templates: 'Modelos',
                 behavior: 'Comportamento',
+                startup: 'Inicialização',
                 keyboardNavigation: 'Navegação por teclado',
                 mouseButtons: 'Botões do mouse',
                 view: 'Aparência',
@@ -1303,7 +1304,7 @@ export const STRINGS_PT_BR = {
             },
             startView: {
                 name: 'Visualização inicial padrão',
-                desc: 'Escolha qual painel exibir ao abrir o Notebook Navigator. O painel de navegação mostra atalhos, arquivos recentes e árvore de pastas. O painel de lista mostra a lista de arquivos imediatamente.',
+                desc: 'Escolha qual painel fica ativo ao abrir o Notebook Navigator. O layout de painel único mostra este painel primeiro; o layout de painel duplo dá a ele o foco do teclado.',
                 options: {
                     navigation: 'Painel de navegação',
                     files: 'Painel de lista'

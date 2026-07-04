@@ -981,6 +981,7 @@ export const STRINGS_DE = {
                 vaultConfiguration: 'Tresor-Einrichtung',
                 templates: 'Vorlagen',
                 behavior: 'Verhalten',
+                startup: 'Start',
                 keyboardNavigation: 'Tastaturnavigation',
                 mouseButtons: 'Maustasten',
                 view: 'Darstellung',
@@ -1303,7 +1304,7 @@ export const STRINGS_DE = {
             },
             startView: {
                 name: 'Standard-Startansicht',
-                desc: 'Wählen Sie den Bereich, der beim Öffnen von Notebook Navigator angezeigt wird. Der Navigationsbereich zeigt Verknüpfungen, neueste Dateien und die Ordnerstruktur. Der Listenbereich zeigt die Dateiliste.',
+                desc: 'Wählen Sie den Bereich, der beim Öffnen von Notebook Navigator aktiv ist. In der einspaltigen Ansicht wird dieser Bereich zuerst angezeigt, in der zweispaltigen Ansicht erhält er den Tastaturfokus.',
                 options: {
                     navigation: 'Navigationsbereich',
                     files: 'Listenbereich'

@@ -981,6 +981,7 @@ export const STRINGS_NL = {
                 vaultConfiguration: 'Kluisinstelling',
                 templates: 'Sjablonen',
                 behavior: 'Gedrag',
+                startup: 'Opstarten',
                 keyboardNavigation: 'Toetsenbordnavigatie',
                 mouseButtons: 'Muisknoppen',
                 view: 'Uiterlijk',
@@ -1303,7 +1304,7 @@ export const STRINGS_NL = {
             },
             startView: {
                 name: 'Standaard opstartweergave',
-                desc: 'Kies welk paneel wordt weergegeven bij het openen van Notebook Navigator. Navigatiepaneel toont snelkoppelingen, recente bestanden en mappenstructuur. Lijstpaneel toont direct de bestandenlijst.',
+                desc: 'Kies welk paneel actief is bij het openen van Notebook Navigator. De enkelpaneelweergave toont dit paneel eerst; de dubbelpaneelweergave geeft het de toetsenbordfocus.',
                 options: {
                     navigation: 'Navigatiepaneel',
                     files: 'Lijstpaneel'

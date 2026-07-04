@@ -969,6 +969,7 @@ export const STRINGS_ZH_CN = {
                 vaultConfiguration: '仓库设置',
                 templates: '模板',
                 behavior: '行为',
+                startup: '启动',
                 keyboardNavigation: '键盘导航',
                 mouseButtons: '鼠标按钮',
                 view: '外观',
@@ -1288,7 +1289,7 @@ export const STRINGS_ZH_CN = {
             },
             startView: {
                 name: '默认启动视图',
-                desc: '选择打开 Notebook Navigator 时显示的窗格。导航窗格显示快捷方式、最近文件和文件夹结构。列表窗格显示文件列表。',
+                desc: '选择打开 Notebook Navigator 时处于活动状态的窗格。单窗格布局优先显示该窗格；双窗格布局将键盘焦点移至该窗格。',
                 options: {
                     navigation: '导航窗格',
                     files: '列表窗格'

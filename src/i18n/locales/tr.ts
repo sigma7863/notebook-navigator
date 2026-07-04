@@ -977,6 +977,7 @@ export const STRINGS_TR = {
                 vaultConfiguration: 'Kasa kurulumu',
                 templates: 'Şablonlar',
                 behavior: 'Davranış',
+                startup: 'Başlangıç',
                 keyboardNavigation: 'Klavye ile gezinme',
                 mouseButtons: 'Fare düğmeleri',
                 view: 'Görünüm',
@@ -1299,7 +1300,7 @@ export const STRINGS_TR = {
             },
             startView: {
                 name: 'Varsayılan başlangıç görünümü',
-                desc: "Notebook Navigator'ı açarken hangi bölmenin görüntüleneceğini seçin. Gezinme bölmesi kısayolları, son dosyaları ve klasör ağacını gösterir. Liste bölmesi dosya listesini hemen gösterir.",
+                desc: 'Notebook Navigator açıldığında hangi bölmenin etkin olacağını seçin. Tek bölmeli düzen önce bu bölmeyi gösterir; çift bölmeli düzen klavye odağını bu bölmeye verir.',
                 options: {
                     navigation: 'Gezinme bölmesi',
                     files: 'Liste bölmesi'
