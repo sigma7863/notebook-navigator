@@ -35,6 +35,8 @@ const NON_TRANSFERABLE_SETTING_KEYS = new Set([
     'propertyFields'
 ]);
 
+const SETTINGS_TRANSFER_PLUGIN_ID = 'notebook-navigator';
+
 function padTimestampPart(value: number): string {
     return value.toString().padStart(2, '0');
 }
@@ -122,6 +124,20 @@ function createTransferableSettingsSnapshot(settings: NotebookNavigatorSettings)
 
 function hasOwnKey(record: Record<string, unknown>, key: string): boolean {
     return Object.prototype.hasOwnProperty.call(record, key) === true;
+}
+
+function isTransferableSettingKey(key: string): boolean {
+    const defaultRecord = DEFAULT_SETTINGS as unknown as Record<string, unknown>;
+    return hasOwnKey(defaultRecord, key) && !NON_TRANSFERABLE_SETTING_KEYS.has(key);
+}
+
+function validateSettingsTransferDiff(transferSettings: Record<string, unknown>): void {
+    const transferKeys = Object.keys(transferSettings);
+    if (transferKeys.length === 0 || transferKeys.some(isTransferableSettingKey)) {
+        return;
+    }
+
+    throw new Error('Settings import must contain Notebook Navigator settings.');
 }
 
 function areEquivalentValues(left: unknown, right: unknown): boolean {
@@ -235,14 +251,41 @@ function mergeSettingsDiff(base: unknown, override: unknown): unknown {
     return typeof override === typeof base ? structuredClone(override) : structuredClone(base);
 }
 
-export function createModifiedSettingsTransfer(settings: NotebookNavigatorSettings): Record<string, unknown> {
-    // Export only the transferable settings that differ from defaults.
+export function createModifiedSettingsTransfer(settings: NotebookNavigatorSettings, pluginVersion: string): Record<string, unknown> {
+    // Export only the transferable settings that differ from defaults, wrapped in an
+    // envelope identifying the plugin and version that produced the export.
     // Import reconstructs the transferable settings state from this diff plus defaults.
     const currentSnapshot = createTransferableSettingsSnapshot(settings);
     const defaultSnapshot = createTransferableSettingsSnapshot(DEFAULT_SETTINGS);
     const diff = createSettingsDiff(defaultSnapshot, currentSnapshot);
 
-    return isRecord(diff) ? diff : {};
+    return {
+        plugin: SETTINGS_TRANSFER_PLUGIN_ID,
+        pluginVersion,
+        settings: isRecord(diff) ? diff : {}
+    };
+}
+
+// Unwraps the settings diff from an export envelope. Objects without a `plugin` key are
+// treated as bare diffs from exports created before the envelope format.
+function unwrapSettingsTransfer(transferData: Record<string, unknown>): Record<string, unknown> {
+    if (!hasOwnKey(transferData, 'plugin')) {
+        validateSettingsTransferDiff(transferData);
+        return transferData;
+    }
+
+    if (transferData.plugin !== SETTINGS_TRANSFER_PLUGIN_ID) {
+        throw new Error('Not a Notebook Navigator settings export.');
+    }
+
+    const transferSettings = transferData.settings;
+    if (!isRecord(transferSettings)) {
+        throw new Error('Settings import must contain a settings object.');
+    }
+
+    validateSettingsTransferDiff(transferSettings);
+
+    return transferSettings;
 }
 
 export function applyModifiedSettingsTransfer(
@@ -253,10 +296,12 @@ export function applyModifiedSettingsTransfer(
         throw new Error('Settings import must be a JSON object.');
     }
 
+    const transferSettings = unwrapSettingsTransfer(transferData);
+
     // Import is state restore, not patch merge.
     // Missing transferable keys are restored to their default values.
     const defaultSnapshot = createTransferableSettingsSnapshot(DEFAULT_SETTINGS);
-    const mergedSnapshot = mergeSettingsDiff(defaultSnapshot, transferData);
+    const mergedSnapshot = mergeSettingsDiff(defaultSnapshot, transferSettings);
     if (!isRecord(mergedSnapshot)) {
         throw new Error('Settings import must be a JSON object.');
     }

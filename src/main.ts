@@ -1201,7 +1201,7 @@ export default class NotebookNavigatorPlugin extends Plugin implements ISettings
     }
 
     public createSettingsTransferJson(): string {
-        return JSON.stringify(createModifiedSettingsTransfer(this.settings), null, 2);
+        return JSON.stringify(createModifiedSettingsTransfer(this.settings, this.manifest.version), null, 2);
     }
 
     public async saveSettingsTransferBackupToVaultRoot(): Promise<string> {
