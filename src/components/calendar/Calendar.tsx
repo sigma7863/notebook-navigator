@@ -373,7 +373,7 @@ export function Calendar({
             const hoverPreviewPath =
                 hoverTooltipState && hoverTooltipState.tooltipData.previewEnabled ? hoverTooltipState.tooltipData.previewPath : null;
             const shouldTrackFeatureImage = settings.calendarShowFeatureImage && visibleFeatureImagePaths.size > 0;
-            const shouldTrackTaskIndicator = visibleIndicatorPaths.size > 0;
+            const shouldTrackTaskIndicator = settings.calendarShowTasks && visibleIndicatorPaths.size > 0;
             const shouldTrackHoverPreview = Boolean(hoverPreviewPath);
 
             let hasFeatureImageChange = !shouldTrackFeatureImage;
@@ -423,7 +423,7 @@ export function Calendar({
                 setHoverTooltipPreviewVersion(v => v + 1);
             }
         });
-    }, [db, hoverTooltipStateRef, settings.calendarShowFeatureImage]);
+    }, [db, hoverTooltipStateRef, settings.calendarShowFeatureImage, settings.calendarShowTasks]);
 
     useEffect(() => {
         const frontmatterNameField = settings.frontmatterNameField.trim();
@@ -955,7 +955,7 @@ export function Calendar({
 
         const unfinishedTaskCounts = new Map<string, number>();
 
-        if (!db) {
+        if (!db || !settings.calendarShowTasks) {
             return unfinishedTaskCounts;
         }
 
@@ -966,7 +966,7 @@ export function Calendar({
         }
 
         return unfinishedTaskCounts;
-    }, [db, taskIndicatorVersion, weeks]);
+    }, [db, settings.calendarShowTasks, taskIndicatorVersion, weeks]);
 
     const showYearCalendar = isRightSidebar && settings.calendarShowYearCalendar;
     const renderedWeekRowCount = useMemo(() => {
@@ -1239,12 +1239,13 @@ export function Calendar({
             date: entry.date,
             fullLabel: entry.fullLabel,
             hasDailyNote: entry.hasDailyNote,
-            hasUnfinishedTasks: db ? entry.dayFiles.some(file => (db.getFile(file.path)?.taskUnfinished ?? 0) > 0) : false,
+            hasUnfinishedTasks:
+                db && settings.calendarShowTasks ? entry.dayFiles.some(file => (db.getFile(file.path)?.taskUnfinished ?? 0) > 0) : false,
             key: entry.key,
             monthIndex: entry.monthIndex,
             shortLabel: entry.shortLabel
         }));
-    }, [db, taskIndicatorVersion, yearMonthBaseEntries]);
+    }, [db, settings.calendarShowTasks, taskIndicatorVersion, yearMonthBaseEntries]);
 
     const highlightedMonthFilesByKey = useMemo(() => {
         const filesByKey = new Map<string, TFile>();
@@ -1586,7 +1587,7 @@ export function Calendar({
         // Force refresh when calendar task metadata changes so week number task indicators reflect the latest metadata.
         void taskIndicatorVersion;
 
-        if (!db) {
+        if (!db || !settings.calendarShowTasks) {
             return new Map<string, number>();
         }
 
@@ -1596,7 +1597,7 @@ export function Calendar({
         });
 
         return counts;
-    }, [db, taskIndicatorVersion, weekNoteFilesByKey]);
+    }, [db, settings.calendarShowTasks, taskIndicatorVersion, weekNoteFilesByKey]);
 
     const visibleCalendarNoteFiles = useMemo(() => {
         const files = new Map<string, TFile>();

@@ -397,6 +397,7 @@ export const DEFAULT_SETTINGS: NotebookNavigatorSettings = {
     calendarMonthHeadingFormat: 'full',
     calendarHighlightToday: true,
     calendarShowFeatureImage: true,
+    calendarShowTasks: true,
     calendarMonthHighlights: sanitizeRecord<string>(undefined),
     calendarShowWeekNumber: false,
     calendarShowQuarter: false,

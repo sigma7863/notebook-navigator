@@ -1480,6 +1480,10 @@ export const STRINGS_PT_BR = {
                 name: 'Mostrar imagem de destaque',
                 desc: 'Mostrar imagens de destaque das notas no calendário.'
             },
+            calendarShowTasks: {
+                name: 'Mostrar tarefas',
+                desc: 'Exibir um indicador em dias, semanas e meses com tarefas inacabadas.'
+            },
             calendarShowWeekNumber: {
                 name: 'Mostrar número da semana',
                 desc: 'Adicionar uma coluna com o número da semana.'

@@ -756,6 +756,7 @@ export interface NotebookNavigatorSettings {
     calendarMonthHeadingFormat: CalendarMonthHeadingFormat;
     calendarHighlightToday: boolean;
     calendarShowFeatureImage: boolean;
+    calendarShowTasks: boolean;
     calendarMonthHighlights: Record<string, string>;
     calendarShowWeekNumber: boolean;
     calendarShowQuarter: boolean;

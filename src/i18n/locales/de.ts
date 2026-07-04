@@ -1480,6 +1480,10 @@ export const STRINGS_DE = {
                 name: 'Feature-Bild anzeigen',
                 desc: 'Feature-Bilder für Notizen im Kalender anzeigen.'
             },
+            calendarShowTasks: {
+                name: 'Aufgaben anzeigen',
+                desc: 'Einen Indikator an Tagen, Wochen und Monaten mit unerledigten Aufgaben anzeigen.'
+            },
             calendarShowWeekNumber: {
                 name: 'Wochennummer anzeigen',
                 desc: 'Spalte mit der Wochennummer hinzufügen.'

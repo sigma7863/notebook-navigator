@@ -1480,6 +1480,10 @@ export const STRINGS_NL = {
                 name: 'Uitgelichte afbeelding tonen',
                 desc: 'Toon uitgelichte afbeeldingen voor notities in de kalender.'
             },
+            calendarShowTasks: {
+                name: 'Taken tonen',
+                desc: 'Een indicator weergeven op dagen, weken en maanden met onvoltooide taken.'
+            },
             calendarShowWeekNumber: {
                 name: 'Weeknummer tonen',
                 desc: 'Voeg een kolom toe met het weeknummer.'

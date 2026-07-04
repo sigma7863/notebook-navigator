@@ -1471,6 +1471,10 @@ export const STRINGS_EN = {
                 name: 'Show feature image',
                 desc: 'Display feature images for notes in the calendar.'
             },
+            calendarShowTasks: {
+                name: 'Show tasks',
+                desc: 'Display an indicator on days, weeks, and months with unfinished tasks.'
+            },
             calendarShowWeekNumber: {
                 name: 'Show week number',
                 desc: 'Add a column with the week number.'

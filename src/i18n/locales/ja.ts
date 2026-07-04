@@ -1476,6 +1476,10 @@ export const STRINGS_JA = {
                 name: 'アイキャッチ画像を表示',
                 desc: 'カレンダーでノートのアイキャッチ画像を表示します。'
             },
+            calendarShowTasks: {
+                name: 'タスクを表示',
+                desc: '未完了のタスクがある日、週、月にインジケーターを表示します。'
+            },
             calendarShowWeekNumber: {
                 name: '週番号を表示',
                 desc: '週番号の列を追加します。'

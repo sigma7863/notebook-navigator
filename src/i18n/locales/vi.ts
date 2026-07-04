@@ -1479,6 +1479,10 @@ export const STRINGS_VI = {
                 name: 'Hiển thị hình ảnh nổi bật',
                 desc: 'Hiển thị hình ảnh nổi bật của ghi chú trong lịch.'
             },
+            calendarShowTasks: {
+                name: 'Hiển thị nhiệm vụ',
+                desc: 'Hiển thị chỉ báo trên ngày, tuần và tháng có nhiệm vụ chưa hoàn thành.'
+            },
             calendarShowWeekNumber: {
                 name: 'Hiển thị số tuần',
                 desc: 'Thêm cột với số tuần.'

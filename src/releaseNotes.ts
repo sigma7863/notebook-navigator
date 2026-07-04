@@ -94,6 +94,9 @@ const RELEASE_NOTES: ReleaseNote[] = [
         version: '3.2.3',
         date: '2026-07-06',
         showOnUpdate: false,
+        new: [
+            '**Calendar.** New setting: ==Show tasks== in Calendar > Appearance. Displays an indicator on days, weeks, and months with unfinished tasks. Enabled by default.'
+        ],
         improved: [
             '**Settings.** Importing settings now shows a confirmation dialog with an option to save current settings to a timestamped file in the vault root. Exported settings files use timestamped filenames and record the plugin version. Import rejects JSON that is not a Notebook Navigator export or recognizable legacy settings diff.',
             '**Calendar.** Middle-click on day cells, week numbers, month, quarter and year headers, and the year panel opens the calendar note in a new tab, creating it if needed.'

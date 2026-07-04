@@ -1474,6 +1474,10 @@ export const STRINGS_IT = {
                 name: 'Mostra immagine in evidenza',
                 desc: 'Visualizza le immagini in evidenza delle note nel calendario.'
             },
+            calendarShowTasks: {
+                name: 'Mostra attività',
+                desc: 'Mostra un indicatore su giorni, settimane e mesi con attività incomplete.'
+            },
             calendarShowWeekNumber: {
                 name: 'Mostra numero settimana',
                 desc: 'Aggiungi una colonna con il numero della settimana.'

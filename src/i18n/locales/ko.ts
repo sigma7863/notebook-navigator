@@ -1474,6 +1474,10 @@ export const STRINGS_KO = {
                 name: '대표 이미지 표시',
                 desc: '캘린더에서 노트의 대표 이미지를 표시합니다.'
             },
+            calendarShowTasks: {
+                name: '작업 표시',
+                desc: '미완료 작업이 있는 일, 주, 월에 표시기를 표시합니다.'
+            },
             calendarShowWeekNumber: {
                 name: '주 번호 표시',
                 desc: '주 번호 열을 추가합니다.'

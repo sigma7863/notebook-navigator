@@ -1482,6 +1482,10 @@ export const STRINGS_FR = {
                 name: "Afficher l'image mise en avant",
                 desc: 'Afficher les images mises en avant des notes dans le calendrier.'
             },
+            calendarShowTasks: {
+                name: 'Afficher les tâches',
+                desc: 'Afficher un indicateur sur les jours, semaines et mois avec des tâches inachevées.'
+            },
             calendarShowWeekNumber: {
                 name: 'Afficher le numéro de semaine',
                 desc: 'Ajouter une colonne avec le numéro de semaine.'

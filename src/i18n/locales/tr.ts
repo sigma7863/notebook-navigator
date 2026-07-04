@@ -1476,6 +1476,10 @@ export const STRINGS_TR = {
                 name: 'Öne çıkan görseli göster',
                 desc: 'Takvimdeki notların öne çıkan görsellerini göster.'
             },
+            calendarShowTasks: {
+                name: 'Görevleri göster',
+                desc: 'Tamamlanmamış görevleri olan gün, hafta ve aylarda bir gösterge gösterir.'
+            },
             calendarShowWeekNumber: {
                 name: 'Hafta numarasını göster',
                 desc: 'Hafta numarasıyla bir sütun ekle.'
