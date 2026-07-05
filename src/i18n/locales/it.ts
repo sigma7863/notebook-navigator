@@ -350,6 +350,9 @@ export const STRINGS_IT = {
             changeBackground: 'Cambia sfondo',
             excludeFolder: 'Nascondi cartella',
             unhideFolder: 'Mostra cartella',
+            excludeFromDescendants: 'Nascondi dalle cartelle superiori',
+            includeInDescendants: 'Mostra nelle cartelle superiori',
+            hiddenFromParentsIndicator: 'Nascosta dagli elenchi delle cartelle superiori',
             moveFolder: 'Sposta cartella in...',
             renameFolder: 'Rinomina cartella',
             deleteFolder: 'Elimina cartella'
@@ -769,6 +772,8 @@ export const STRINGS_IT = {
         notices: {
             hideFolder: 'Cartella nascosta: {name}',
             showFolder: 'Cartella mostrata: {name}',
+            folderExcludedFromDescendants: 'Nascosta dagli elenchi delle cartelle superiori: {name}',
+            folderIncludedInDescendants: 'Mostrata negli elenchi delle cartelle superiori: {name}',
             mergeNotes: 'Unite {count} note in {name}'
         },
         notifications: {
@@ -1737,6 +1742,11 @@ export const STRINGS_IT = {
                 name: 'Nascondi cartelle (profilo vault)',
                 desc: 'Lista di cartelle da nascondere separate da virgola. Pattern nome: assets* (cartelle che iniziano con assets), *_temp (che finiscono con _temp). Pattern percorso: /archivio (solo archivio root), /res* (cartelle root che iniziano con res), /*/temp (cartelle temp un livello sotto), /progetti/* (tutte le cartelle in progetti).',
                 placeholder: 'modelli, assets*, /archivio, /res*'
+            },
+            descendantExcludedFolders: {
+                name: 'Escludi cartelle dalle note delle sottocartelle (profilo vault)',
+                desc: 'Lista di cartelle separate da virgola da ignorare quando vengono raccolte le note dalle sottocartelle. Le cartelle restano visibili e selezionandone una vengono comunque mostrate le sue note. Usa gli stessi pattern di Nascondi cartelle.',
+                placeholder: 'giornaliere, risorse, /archivio'
             },
             showFileDate: {
                 name: 'Mostra data',

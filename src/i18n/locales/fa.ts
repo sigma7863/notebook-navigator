@@ -350,6 +350,9 @@ export const STRINGS_FA = {
             changeBackground: 'تغییر پس‌زمینه',
             excludeFolder: 'مخفی کردن پوشه',
             unhideFolder: 'آشکار کردن پوشه',
+            excludeFromDescendants: 'مخفی کردن از پوشه‌های والد',
+            includeInDescendants: 'نمایش در پوشه‌های والد',
+            hiddenFromParentsIndicator: 'از فهرست‌های پوشه‌های والد مخفی شده است',
             moveFolder: 'انتقال پوشه به...',
             renameFolder: 'تغییر نام پوشه',
             deleteFolder: 'حذف پوشه'
@@ -773,6 +776,8 @@ export const STRINGS_FA = {
         notices: {
             hideFolder: 'پوشه مخفی شد: {name}',
             showFolder: 'پوشه نمایش داده شد: {name}',
+            folderExcludedFromDescendants: 'از فهرست‌های پوشه‌های والد مخفی شد: {name}',
+            folderIncludedInDescendants: 'در فهرست‌های پوشه‌های والد نمایش داده شد: {name}',
             mergeNotes: '{count} یادداشت در {name} ادغام شد'
         },
         notifications: {
@@ -1738,6 +1743,11 @@ export const STRINGS_FA = {
                 name: 'مخفی کردن پوشه‌ها (پروفایل خزانه)',
                 desc: 'لیست پوشه‌های جدا شده با کاما برای مخفی کردن. الگوهای نام: assets* (پوشه‌های شروع‌شده با assets)، *_temp (پایان‌یافته با _temp). الگوهای مسیر: /archive (فقط archive اصلی)، /res* (پوشه‌های اصلی شروع‌شده با res)، /*/temp (پوشه‌های temp یک سطح عمیق)، /projects/* (همه پوشه‌های داخل projects).',
                 placeholder: 'قالب‌ها، assets*، /archive، /res*'
+            },
+            descendantExcludedFolders: {
+                name: 'مستثنی کردن پوشه‌ها از یادداشت‌های زیرپوشه‌ها (نمایه خزانه)',
+                desc: 'فهرست پوشه‌های جداشده با کاما که هنگام جمع‌آوری یادداشت‌ها از زیرپوشه‌ها نادیده گرفته می‌شوند. پوشه‌ها همچنان قابل مشاهده می‌مانند و با انتخاب آن‌ها یادداشت‌هایشان نمایش داده می‌شود. از همان الگوهای مخفی کردن پوشه‌ها استفاده می‌کند.',
+                placeholder: 'روزانه، منابع، /archive'
             },
             showFileDate: {
                 name: 'نمایش تاریخ',

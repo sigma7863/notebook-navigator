@@ -22,7 +22,7 @@ import { strings } from '../../i18n';
 import { showNotice } from '../noticeUtils';
 import { executeCommand, getInternalPlugin, isFolderAncestor, isPluginInstalled } from '../../utils/typeGuards';
 import { getFolderNote, createFolderNote } from '../../utils/folderNotes';
-import { cleanupExclusionPatterns, isFolderInExcludedFolder } from '../../utils/fileFilters';
+import { cleanupExclusionPatterns, isFolderInExcludedFolder, shouldExcludeFolderFromDescendants } from '../../utils/fileFilters';
 import { ItemType } from '../../types';
 import { runAsyncAction } from '../async';
 import { addCopyPathSubmenu, setAsyncOnClick, tryCreateSubmenu } from './menuAsyncHelpers';
@@ -498,6 +498,53 @@ export function buildFolderMenu(params: FolderMenuBuilderParams): void {
                     await services.plugin.saveSettingsAndUpdate();
 
                     showNotice(strings.fileSystem.notices.hideFolder.replace('{name}', folderDisplayName), { variant: 'success' });
+                });
+            });
+        }
+
+        const descendantExcludedPatterns = activeProfile.descendantExcludedFolders;
+        const isExcludedFromDescendants =
+            descendantExcludedPatterns.length > 0 &&
+            shouldExcludeFolderFromDescendants(folder.name, descendantExcludedPatterns, folder.path);
+        // Exact-path patterns for this folder; the form the "hide from parents" action writes
+        const exactDescendantExcludedPatterns = descendantExcludedPatterns.filter(pattern => {
+            const trimmed = pattern.trim();
+            return (
+                trimmed.startsWith('/') && !trimmed.includes('*') && casefold(normalizeHiddenFolderPath(trimmed)) === normalizedFolderPath
+            );
+        });
+        const remainingDescendantExcludedPatterns = descendantExcludedPatterns.filter(
+            pattern => !exactDescendantExcludedPatterns.includes(pattern)
+        );
+        // Only offer "show in parents" when removing the exact-path patterns actually un-excludes the folder.
+        // Folders excluded through name or wildcard patterns are managed in settings, matching the hidden-folder menu.
+        const canRemoveDescendantExclusion =
+            exactDescendantExcludedPatterns.length > 0 &&
+            !shouldExcludeFolderFromDescendants(folder.name, remainingDescendantExcludedPatterns, folder.path);
+
+        if (canRemoveDescendantExclusion) {
+            menu.addItem((item: MenuItem) => {
+                setAsyncOnClick(item.setTitle(strings.contextMenu.folder.includeInDescendants).setIcon('lucide-list-plus'), async () => {
+                    activeProfile.descendantExcludedFolders = activeProfile.descendantExcludedFolders.filter(
+                        pattern => !exactDescendantExcludedPatterns.includes(pattern)
+                    );
+                    await services.plugin.saveSettingsAndUpdate();
+
+                    showNotice(strings.fileSystem.notices.folderIncludedInDescendants.replace('{name}', folderDisplayName), {
+                        variant: 'success'
+                    });
+                });
+            });
+        } else if (!isExcludedFromDescendants) {
+            menu.addItem((item: MenuItem) => {
+                setAsyncOnClick(item.setTitle(strings.contextMenu.folder.excludeFromDescendants).setIcon('lucide-list-minus'), async () => {
+                    const folderPath = folder.path.startsWith('/') ? folder.path : `/${folder.path}`;
+                    activeProfile.descendantExcludedFolders = Array.from(new Set([...activeProfile.descendantExcludedFolders, folderPath]));
+                    await services.plugin.saveSettingsAndUpdate();
+
+                    showNotice(strings.fileSystem.notices.folderExcludedFromDescendants.replace('{name}', folderDisplayName), {
+                        variant: 'success'
+                    });
                 });
             });
         }

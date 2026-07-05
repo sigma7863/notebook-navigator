@@ -351,6 +351,9 @@ export const STRINGS_ES = {
             changeBackground: 'Cambiar fondo',
             excludeFolder: 'Ocultar carpeta',
             unhideFolder: 'Mostrar carpeta',
+            excludeFromDescendants: 'Ocultar en carpetas superiores',
+            includeInDescendants: 'Mostrar en carpetas superiores',
+            hiddenFromParentsIndicator: 'Oculta en listas de carpetas superiores',
             moveFolder: 'Mover carpeta a...',
             renameFolder: 'Renombrar carpeta',
             deleteFolder: 'Eliminar carpeta'
@@ -774,6 +777,8 @@ export const STRINGS_ES = {
         notices: {
             hideFolder: 'Carpeta oculta: {name}',
             showFolder: 'Carpeta mostrada: {name}',
+            folderExcludedFromDescendants: 'Oculta en listas de carpetas superiores: {name}',
+            folderIncludedInDescendants: 'Visible en listas de carpetas superiores: {name}',
             mergeNotes: 'Se combinaron {count} notas en {name}'
         },
         notifications: {
@@ -1709,6 +1714,11 @@ export const STRINGS_ES = {
                 name: 'Ocultar carpetas (perfil de bóveda)',
                 desc: 'Lista de carpetas a ocultar separadas por comas. Patrones de nombre: assets* (carpetas que comienzan con assets), *_temp (terminan con _temp). Patrones de ruta: /archive (solo archivo raíz), /res* (carpetas raíz que comienzan con res), /*/temp (carpetas temp un nivel abajo), /projects/* (todas las carpetas dentro de projects).',
                 placeholder: 'templates, assets*, /archive, /res*'
+            },
+            descendantExcludedFolders: {
+                name: 'Excluir carpetas de notas de subcarpetas (perfil de bóveda)',
+                desc: 'Lista de carpetas separadas por comas que se omiten al recopilar notas de subcarpetas. Las carpetas permanecen visibles, y al seleccionar una se siguen mostrando sus notas. Usa los mismos patrones que Ocultar carpetas.',
+                placeholder: 'diario, recursos, /archivo'
             },
             fileVisibility: {
                 name: 'Mostrar tipos de archivo (perfil de bóveda)',

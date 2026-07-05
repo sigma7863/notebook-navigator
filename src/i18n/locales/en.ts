@@ -350,6 +350,9 @@ export const STRINGS_EN = {
             changeBackground: 'Change background',
             excludeFolder: 'Hide folder',
             unhideFolder: 'Unhide folder',
+            excludeFromDescendants: 'Hide from parents',
+            includeInDescendants: 'Show in parents',
+            hiddenFromParentsIndicator: 'Hidden from parent folder lists',
             moveFolder: 'Move folder to...',
             renameFolder: 'Rename folder',
             deleteFolder: 'Delete folder'
@@ -767,6 +770,8 @@ export const STRINGS_EN = {
         notices: {
             hideFolder: 'Folder hidden: {name}',
             showFolder: 'Folder shown: {name}',
+            folderExcludedFromDescendants: 'Hidden from parent folder lists: {name}',
+            folderIncludedInDescendants: 'Shown in parent folder lists: {name}',
             mergeNotes: 'Merged {count} notes into {name}'
         },
         notifications: {
@@ -1731,6 +1736,11 @@ export const STRINGS_EN = {
                 name: 'Hide folders (vault profile)',
                 desc: 'Comma-separated list of folders to hide. Name patterns: assets* (folders starting with assets), *_temp (ending with _temp). Path patterns: /archive (root archive only), /res* (root folders starting with res), /*/temp (temp folders one level deep), /projects/* (all folders inside projects).',
                 placeholder: 'templates, assets*, /archive, /res*'
+            },
+            descendantExcludedFolders: {
+                name: 'Exclude folders from descendants (vault profile)',
+                desc: 'Comma-separated list of folders to omit when collecting notes from subfolders. Folders remain visible, and selecting one still shows its notes. Uses the same patterns as Hide folders.',
+                placeholder: 'daily, resources, /archive'
             },
             showFileDate: {
                 name: 'Show date',

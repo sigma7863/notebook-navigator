@@ -349,6 +349,9 @@ export const STRINGS_KO = {
             changeBackground: '배경색 변경',
             excludeFolder: '폴더 숨기기',
             unhideFolder: '폴더 표시',
+            excludeFromDescendants: '상위 폴더에서 숨기기',
+            includeInDescendants: '상위 폴더에서 표시',
+            hiddenFromParentsIndicator: '상위 폴더 목록에서 숨김',
             moveFolder: '폴더 이동...',
             renameFolder: '폴더 이름 변경',
             deleteFolder: '폴더 삭제'
@@ -770,6 +773,8 @@ export const STRINGS_KO = {
         notices: {
             hideFolder: '폴더 숨김: {name}',
             showFolder: '폴더 표시: {name}',
+            folderExcludedFromDescendants: '상위 폴더 목록에서 숨김: {name}',
+            folderIncludedInDescendants: '상위 폴더 목록에 표시됨: {name}',
             mergeNotes: '{count}개 노트를 {name}에 병합했습니다'
         },
         notifications: {
@@ -1734,6 +1739,11 @@ export const STRINGS_KO = {
                 name: '폴더 숨기기 (볼트 프로필)',
                 desc: '숨길 폴더의 쉼표로 구분된 목록입니다. 이름 패턴: assets* (assets로 시작하는 폴더), *_temp (_temp로 끝나는). 경로 패턴: /archive (루트 archive만), /res* (res로 시작하는 루트 폴더), /*/temp (한 레벨 깊이의 temp 폴더), /projects/* (projects 내부의 모든 폴더).',
                 placeholder: 'templates, assets*, /archive, /res*'
+            },
+            descendantExcludedFolders: {
+                name: '하위 폴더 노트에서 폴더 제외(볼트 프로필)',
+                desc: '하위 폴더에서 노트를 모을 때 제외할 폴더의 쉼표로 구분된 목록입니다. 폴더는 계속 표시되며, 선택하면 해당 노트가 계속 표시됩니다. 폴더 숨기기와 같은 패턴을 사용합니다.',
+                placeholder: '일지, 자료, /archive'
             },
             showFileDate: {
                 name: '날짜 표시',

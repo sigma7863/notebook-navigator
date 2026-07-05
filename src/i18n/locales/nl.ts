@@ -353,6 +353,9 @@ export const STRINGS_NL = {
             changeBackground: 'Achtergrond wijzigen',
             excludeFolder: 'Map verbergen',
             unhideFolder: 'Map zichtbaar maken',
+            excludeFromDescendants: 'Verbergen in bovenliggende mappen',
+            includeInDescendants: 'Weergeven in bovenliggende mappen',
+            hiddenFromParentsIndicator: 'Verborgen in lijsten van bovenliggende mappen',
             moveFolder: 'Map verplaatsen naar...',
             renameFolder: 'Map hernoemen',
             deleteFolder: 'Map verwijderen'
@@ -775,6 +778,8 @@ export const STRINGS_NL = {
         notices: {
             hideFolder: 'Map verborgen: {name}',
             showFolder: 'Map zichtbaar: {name}',
+            folderExcludedFromDescendants: 'Verborgen in lijsten van bovenliggende mappen: {name}',
+            folderIncludedInDescendants: 'Weergegeven in lijsten van bovenliggende mappen: {name}',
             mergeNotes: '{count} notities samengevoegd in {name}'
         },
         notifications: {
@@ -1741,6 +1746,11 @@ export const STRINGS_NL = {
                 name: 'Mappen verbergen (kluisprofiel)',
                 desc: 'Kommagescheiden lijst van te verbergen mappen. Naampatronen: assets* (mappen beginnend met assets), *_temp (eindigend met _temp). Padpatronen: /archive (alleen root archive), /res* (root mappen beginnend met res), /*/temp (temp mappen één niveau diep), /projects/* (alle mappen binnen projects).',
                 placeholder: 'templates, assets*, /archive, /res*'
+            },
+            descendantExcludedFolders: {
+                name: 'Mappen uitsluiten van notities uit submappen (kluisprofiel)',
+                desc: 'Kommagescheiden lijst met mappen die worden overgeslagen bij het verzamelen van notities uit submappen. Mappen blijven zichtbaar, en het selecteren van een map toont nog steeds de notities. Gebruikt dezelfde patronen als Mappen verbergen.',
+                placeholder: 'dagelijks, bronnen, /archief'
             },
             showFileDate: {
                 name: 'Datum tonen',

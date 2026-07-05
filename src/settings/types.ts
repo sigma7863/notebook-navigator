@@ -507,6 +507,7 @@ export interface VaultProfile {
     fileVisibility: FileVisibility;
     propertyKeys: VaultProfilePropertyKey[];
     hiddenFolders: string[];
+    descendantExcludedFolders: string[];
     hiddenTags: string[];
     hiddenFileNames: string[];
     hiddenFileTags: string[];

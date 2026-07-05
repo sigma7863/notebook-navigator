@@ -352,6 +352,9 @@ export const STRINGS_UK = {
             changeBackground: 'Змінити фон',
             excludeFolder: 'Сховати папку',
             unhideFolder: 'Показати папку',
+            excludeFromDescendants: 'Сховати в батьківських папках',
+            includeInDescendants: 'Показати в батьківських папках',
+            hiddenFromParentsIndicator: 'Сховано зі списків батьківських папок',
             moveFolder: 'Перемістити папку...',
             renameFolder: 'Перейменувати папку',
             deleteFolder: 'Видалити папку'
@@ -770,6 +773,8 @@ export const STRINGS_UK = {
         notices: {
             hideFolder: 'Папку сховано: {name}',
             showFolder: 'Папку показано: {name}',
+            folderExcludedFromDescendants: 'Сховано зі списків батьківських папок: {name}',
+            folderIncludedInDescendants: 'Показано у списках батьківських папок: {name}',
             mergeNotes: 'Об’єднано {count} нотаток у {name}'
         },
         notifications: {
@@ -1735,6 +1740,11 @@ export const STRINGS_UK = {
                 name: 'Приховати папки (профіль сховища)',
                 desc: 'Список папок для приховування, розділених комами. Шаблони назв: assets* (папки, що починаються з assets), *_temp (закінчуються на _temp). Шаблони шляхів: /archive (лише кореневий архів), /res* (кореневі папки, що починаються з res), /*/temp (папки temp на один рівень вглиб), /projects/* (всі папки всередині projects).',
                 placeholder: 'шаблони, assets*, /архів, /res*'
+            },
+            descendantExcludedFolders: {
+                name: 'Виключати папки з нотаток підпапок (профіль сховища)',
+                desc: 'Список папок, розділених комами, які пропускаються під час збирання нотаток із підпапок. Папки залишаються видимими, і вибір папки й надалі показує її нотатки. Використовує ті самі шаблони, що й Сховати папки.',
+                placeholder: 'щоденні, ресурси, /archive'
             },
             showFileDate: {
                 name: 'Показувати дату',

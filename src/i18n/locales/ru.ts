@@ -351,6 +351,9 @@ export const STRINGS_RU = {
             changeBackground: 'Изменить фон',
             excludeFolder: 'Скрыть папку',
             unhideFolder: 'Показать папку',
+            excludeFromDescendants: 'Скрыть в родительских папках',
+            includeInDescendants: 'Показать в родительских папках',
+            hiddenFromParentsIndicator: 'Скрыто из списков родительских папок',
             moveFolder: 'Переместить папку в...',
             renameFolder: 'Переименовать папку',
             deleteFolder: 'Удалить папку'
@@ -770,6 +773,8 @@ export const STRINGS_RU = {
         notices: {
             hideFolder: 'Папка скрыта: {name}',
             showFolder: 'Папка показана: {name}',
+            folderExcludedFromDescendants: 'Скрыто из списков родительских папок: {name}',
+            folderIncludedInDescendants: 'Показано в списках родительских папок: {name}',
             mergeNotes: 'Объединено {count} заметок в {name}'
         },
         notifications: {
@@ -1735,6 +1740,11 @@ export const STRINGS_RU = {
                 name: 'Скрыть папки (профиль хранилища)',
                 desc: 'Список папок через запятую для скрытия. Шаблоны имён: assets* (папки, начинающиеся с assets), *_temp (заканчивающиеся на _temp). Шаблоны путей: /archive (только корневой archive), /res* (корневые папки, начинающиеся с res), /*/temp (папки temp на один уровень вглубь), /projects/* (все папки внутри projects).',
                 placeholder: 'templates, assets*, /archive, /res*'
+            },
+            descendantExcludedFolders: {
+                name: 'Исключать папки из заметок подпапок (профиль хранилища)',
+                desc: 'Список папок через запятую, которые пропускаются при сборе заметок из подпапок. Папки остаются видимыми, и при выборе папки её заметки по-прежнему отображаются. Использует те же шаблоны, что и Скрыть папки.',
+                placeholder: 'ежедневные, ресурсы, /archive'
             },
             showFileDate: {
                 name: 'Показывать дату',

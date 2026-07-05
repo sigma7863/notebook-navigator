@@ -26,6 +26,7 @@ import { runAsyncAction } from '../../utils/async';
 import { resolveUXIcon } from '../../utils/uxIcons';
 import { getFolderNote } from '../../utils/folderNoteLookup';
 import { getExtensionSuffix, shouldShowExtensionSuffix } from '../../utils/fileTypeUtils';
+import { shouldExcludeFolderFromDescendants } from '../../utils/fileFilters';
 import { getPathBaseName } from '../../utils/pathUtils';
 import { buildFileTooltip, buildFolderTooltip } from '../../utils/navigationTooltipUtils';
 import { ShortcutItem } from '../ShortcutItem';
@@ -82,6 +83,12 @@ export function NavigationPaneShortcutRow({ item, context, adjacentFilledClassNa
             })();
             const folderCountInfo =
                 canInteract && folder && shortcutUiState.shouldShowShortcutCounts ? shortcuts.getFolderShortcutCount(folder) : undefined;
+            const isFolderHiddenFromParents = Boolean(
+                canInteract &&
+                folder &&
+                context.descendantExcludedFolders.length > 0 &&
+                shouldExcludeFolderFromDescendants(folder.name, context.descendantExcludedFolders, folder.path)
+            );
             const folderNote =
                 canInteract && folder && settings.enableFolderNotes && settings.enableFolderNoteLinks
                     ? getFolderNote(folder, settings)
@@ -120,6 +127,7 @@ export function NavigationPaneShortcutRow({ item, context, adjacentFilledClassNa
                 badge: shortcutUiState.shortcutNumberBadgesByKey.get(item.key),
                 tooltip,
                 forceShowCount: shortcutUiState.shouldShowShortcutCounts,
+                isHiddenFromParents: isFolderHiddenFromParents,
                 isExcluded: !isMissing ? item.isExcluded : undefined,
                 isDisabled: isMissing,
                 isMissing,

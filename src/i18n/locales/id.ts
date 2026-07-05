@@ -351,6 +351,9 @@ export const STRINGS_ID = {
             changeBackground: 'Ubah latar belakang',
             excludeFolder: 'Sembunyikan folder',
             unhideFolder: 'Tampilkan folder',
+            excludeFromDescendants: 'Sembunyikan dari folder induk',
+            includeInDescendants: 'Tampilkan di folder induk',
+            hiddenFromParentsIndicator: 'Disembunyikan dari daftar folder induk',
             moveFolder: 'Pindahkan folder ke...',
             renameFolder: 'Ubah nama folder',
             deleteFolder: 'Hapus folder'
@@ -773,6 +776,8 @@ export const STRINGS_ID = {
         notices: {
             hideFolder: 'Folder disembunyikan: {name}',
             showFolder: 'Folder ditampilkan: {name}',
+            folderExcludedFromDescendants: 'Disembunyikan dari daftar folder induk: {name}',
+            folderIncludedInDescendants: 'Ditampilkan di daftar folder induk: {name}',
             mergeNotes: 'Menggabungkan {count} catatan menjadi {name}'
         },
         notifications: {
@@ -1738,6 +1743,11 @@ export const STRINGS_ID = {
                 name: 'Sembunyikan folder (profil vault)',
                 desc: 'Daftar folder yang dipisahkan koma untuk disembunyikan. Pola nama: assets* (folder yang dimulai dengan assets), *_temp (diakhiri dengan _temp). Pola path: /arsip (arsip root saja), /res* (folder root yang dimulai dengan res), /*/temp (folder temp satu level ke dalam), /proyek/* (semua folder di dalam proyek).',
                 placeholder: 'template, assets*, /arsip, /res*'
+            },
+            descendantExcludedFolders: {
+                name: 'Kecualikan folder dari catatan subfolder (profil vault)',
+                desc: 'Daftar folder yang dipisahkan koma untuk dilewati saat mengumpulkan catatan dari subfolder. Folder tetap terlihat, dan memilih folder tetap menampilkan catatannya. Menggunakan pola yang sama seperti Sembunyikan folder.',
+                placeholder: 'harian, sumber-daya, /arsip'
             },
             showFileDate: {
                 name: 'Tampilkan tanggal',

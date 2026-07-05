@@ -351,6 +351,9 @@ export const STRINGS_TR = {
             changeBackground: 'Arka planı değiştir',
             excludeFolder: 'Klasörü gizle',
             unhideFolder: 'Klasörü göster',
+            excludeFromDescendants: 'Üst klasörlerde gizle',
+            includeInDescendants: 'Üst klasörlerde göster',
+            hiddenFromParentsIndicator: 'Üst klasör listelerinde gizli',
             moveFolder: 'Klasörü taşı...',
             renameFolder: 'Klasörü yeniden adlandır',
             deleteFolder: 'Klasörü sil'
@@ -771,6 +774,8 @@ export const STRINGS_TR = {
         notices: {
             hideFolder: 'Klasör gizlendi: {name}',
             showFolder: 'Klasör gösterildi: {name}',
+            folderExcludedFromDescendants: 'Üst klasör listelerinde gizli: {name}',
+            folderIncludedInDescendants: 'Üst klasör listelerinde gösteriliyor: {name}',
             mergeNotes: '{count} not {name} içine birleştirildi'
         },
         notifications: {
@@ -1736,6 +1741,11 @@ export const STRINGS_TR = {
                 name: 'Klasörleri gizle (kasa profili)',
                 desc: 'Virgülle ayrılmış gizlenecek klasörler listesi. Ad desenleri: assets* (assets ile başlayan klasörler), *_temp (_temp ile biten). Yol desenleri: /archive (yalnızca kök arşiv), /res* (res ile başlayan kök klasörler), /*/temp (bir seviye derinlikte temp klasörleri), /projects/* (projects içindeki tüm klasörler).',
                 placeholder: 'şablonlar, assets*, /arşiv, /res*'
+            },
+            descendantExcludedFolders: {
+                name: 'Klasörleri alt klasör notlarından hariç tut (kasa profili)',
+                desc: 'Alt klasörlerden notlar toplanırken atlanacak klasörlerin virgülle ayrılmış listesi. Klasörler görünür kalır ve birini seçmek yine notlarını gösterir. Klasörleri gizle ile aynı desenleri kullanır.',
+                placeholder: 'günlük, kaynaklar, /arşiv'
             },
             showFileDate: {
                 name: 'Tarihi göster',

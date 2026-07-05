@@ -350,6 +350,9 @@ export const STRINGS_TH = {
             changeBackground: 'เปลี่ยนพื้นหลัง',
             excludeFolder: 'ซ่อนโฟลเดอร์',
             unhideFolder: 'เลิกซ่อนโฟลเดอร์',
+            excludeFromDescendants: 'ซ่อนจากโฟลเดอร์แม่',
+            includeInDescendants: 'แสดงในโฟลเดอร์แม่',
+            hiddenFromParentsIndicator: 'ซ่อนจากรายการโฟลเดอร์แม่',
             moveFolder: 'ย้ายโฟลเดอร์ไปยัง...',
             renameFolder: 'เปลี่ยนชื่อโฟลเดอร์',
             deleteFolder: 'ลบโฟลเดอร์'
@@ -766,6 +769,8 @@ export const STRINGS_TH = {
         notices: {
             hideFolder: 'ซ่อนโฟลเดอร์แล้ว: {name}',
             showFolder: 'แสดงโฟลเดอร์แล้ว: {name}',
+            folderExcludedFromDescendants: 'ซ่อนจากรายการโฟลเดอร์แม่: {name}',
+            folderIncludedInDescendants: 'แสดงในรายการโฟลเดอร์แม่: {name}',
             mergeNotes: 'รวม {count} โน้ตเป็น {name} แล้ว'
         },
         notifications: {
@@ -1730,6 +1735,11 @@ export const STRINGS_TH = {
                 name: 'ซ่อนโฟลเดอร์ (โปรไฟล์ห้องนิรภัย)',
                 desc: 'รายการโฟลเดอร์คั่นด้วยเครื่องหมายจุลภาคที่จะซ่อน รูปแบบชื่อ: assets* (โฟลเดอร์ที่เริ่มด้วย assets), *_temp (ลงท้ายด้วย _temp) รูปแบบเส้นทาง: /archive (archive หลักเท่านั้น), /res* (โฟลเดอร์หลักที่เริ่มด้วย res), /*/temp (โฟลเดอร์ temp ลึกหนึ่งระดับ), /projects/* (โฟลเดอร์ทั้งหมดใน projects)',
                 placeholder: 'templates, assets*, /archive, /res*'
+            },
+            descendantExcludedFolders: {
+                name: 'ยกเว้นโฟลเดอร์จากโน้ตในโฟลเดอร์ย่อย (โปรไฟล์คลัง)',
+                desc: 'รายการโฟลเดอร์คั่นด้วยเครื่องหมายจุลภาคที่จะละเว้นเมื่อรวบรวมโน้ตจากโฟลเดอร์ย่อย โฟลเดอร์ยังคงมองเห็นได้ และเมื่อเลือกโฟลเดอร์นั้นจะยังแสดงโน้ตของโฟลเดอร์นั้น ใช้รูปแบบเดียวกับซ่อนโฟลเดอร์',
+                placeholder: 'รายวัน, ทรัพยากร, /archive'
             },
             showFileDate: {
                 name: 'แสดงวันที่',

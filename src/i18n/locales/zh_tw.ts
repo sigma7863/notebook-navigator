@@ -350,6 +350,9 @@ export const STRINGS_ZH_TW = {
             changeBackground: '變更背景',
             excludeFolder: '隱藏資料夾',
             unhideFolder: '顯示資料夾',
+            excludeFromDescendants: '在父資料夾中隱藏',
+            includeInDescendants: '在父資料夾中顯示',
+            hiddenFromParentsIndicator: '已從父資料夾列表中隱藏',
             moveFolder: '移動資料夾至...',
             renameFolder: '重新命名資料夾',
             deleteFolder: '刪除資料夾'
@@ -763,6 +766,8 @@ export const STRINGS_ZH_TW = {
         notices: {
             hideFolder: '已隱藏資料夾：{name}',
             showFolder: '已顯示資料夾：{name}',
+            folderExcludedFromDescendants: '已從父資料夾列表中隱藏：{name}',
+            folderIncludedInDescendants: '已在父資料夾列表中顯示：{name}',
             mergeNotes: '已將 {count} 則筆記合併到 {name}'
         },
         notifications: {
@@ -1690,6 +1695,11 @@ export const STRINGS_ZH_TW = {
                 name: '隱藏資料夾（保險庫設定檔）',
                 desc: '逗號分隔的要隱藏的資料夾列表。名稱模式：assets*（以 assets 開頭的資料夾），*_temp（以 _temp 結尾）。路徑模式：/archive（僅根目錄 archive），/res*（以 res 開頭的根資料夾），/*/temp（一級目錄下的 temp 資料夾），/projects/*（projects 內的所有資料夾）。',
                 placeholder: 'templates, assets*, /archive, /res*'
+            },
+            descendantExcludedFolders: {
+                name: '從子資料夾筆記中排除資料夾（保險庫設定檔）',
+                desc: '逗號分隔的資料夾列表，用於在收集子資料夾中的筆記時略過這些資料夾。資料夾仍會顯示，選取該資料夾時仍會顯示其中的筆記。使用與隱藏資料夾相同的模式。',
+                placeholder: '日記, 資源, /archive'
             },
             fileVisibility: {
                 name: '顯示檔案類型（保險庫設定檔）',

@@ -351,6 +351,9 @@ export const STRINGS_DE = {
             changeBackground: 'Hintergrund ändern',
             excludeFolder: 'Ordner verstecken',
             unhideFolder: 'Ordner einblenden',
+            excludeFromDescendants: 'In übergeordneten Ordnern ausblenden',
+            includeInDescendants: 'In übergeordneten Ordnern anzeigen',
+            hiddenFromParentsIndicator: 'Aus übergeordneten Ordnerlisten ausgeblendet',
             moveFolder: 'Ordner verschieben nach...',
             renameFolder: 'Ordner umbenennen',
             deleteFolder: 'Ordner löschen'
@@ -775,6 +778,8 @@ export const STRINGS_DE = {
         notices: {
             hideFolder: 'Ordner ausgeblendet: {name}',
             showFolder: 'Ordner eingeblendet: {name}',
+            folderExcludedFromDescendants: 'Aus übergeordneten Ordnerlisten ausgeblendet: {name}',
+            folderIncludedInDescendants: 'In übergeordneten Ordnerlisten angezeigt: {name}',
             mergeNotes: '{count} Notizen in {name} zusammengeführt'
         },
         notifications: {
@@ -1711,6 +1716,11 @@ export const STRINGS_DE = {
                 name: 'Ordner verstecken (Tresorprofil)',
                 desc: 'Kommagetrennte Liste von auszublendenden Ordnern. Namensmuster: assets* (Ordner die mit assets beginnen), *_temp (endet mit _temp). Pfadmuster: /archive (nur Wurzel-Archive), /res* (Wurzelordner die mit res beginnen), /*/temp (temp-Ordner eine Ebene tief), /projects/* (alle Ordner in projects).',
                 placeholder: 'templates, assets*, /archive, /res*'
+            },
+            descendantExcludedFolders: {
+                name: 'Ordner aus Unterordner-Notizen ausschließen (Tresorprofil)',
+                desc: 'Kommagetrennte Liste von Ordnern, die beim Sammeln von Notizen aus Unterordnern ausgelassen werden. Die Ordner bleiben sichtbar, und beim Auswählen eines Ordners werden seine Notizen weiterhin angezeigt. Verwendet dieselben Muster wie Ordner verstecken.',
+                placeholder: 'daily, ressourcen, /archive'
             },
             fileVisibility: {
                 name: 'Dateitypen anzeigen (Tresorprofil)',

@@ -352,6 +352,9 @@ export const STRINGS_FR = {
             changeBackground: 'Changer l’arrière-plan',
             excludeFolder: 'Masquer le dossier',
             unhideFolder: 'Afficher le dossier',
+            excludeFromDescendants: 'Masquer dans les dossiers parents',
+            includeInDescendants: 'Afficher dans les dossiers parents',
+            hiddenFromParentsIndicator: 'Masqué dans les listes des dossiers parents',
             moveFolder: 'Déplacer le dossier vers...',
             renameFolder: 'Renommer le dossier',
             deleteFolder: 'Supprimer le dossier'
@@ -776,6 +779,8 @@ export const STRINGS_FR = {
         notices: {
             hideFolder: 'Dossier masqué : {name}',
             showFolder: 'Dossier affiché : {name}',
+            folderExcludedFromDescendants: 'Masqué dans les listes des dossiers parents : {name}',
+            folderIncludedInDescendants: 'Affiché dans les listes des dossiers parents : {name}',
             mergeNotes: '{count} notes fusionnées dans {name}'
         },
         notifications: {
@@ -1713,6 +1718,11 @@ export const STRINGS_FR = {
                 name: 'Masquer les dossiers (profil du coffre)',
                 desc: 'Liste de dossiers à masquer séparés par des virgules. Modèles de nom : assets* (dossiers commençant par assets), *_temp (finissant par _temp). Modèles de chemin : /archive (archive racine uniquement), /res* (dossiers racine commençant par res), /*/temp (dossiers temp un niveau plus bas), /projects/* (tous les dossiers dans projects).',
                 placeholder: 'templates, assets*, /archive, /res*'
+            },
+            descendantExcludedFolders: {
+                name: 'Exclure des dossiers des notes de sous-dossiers (profil du coffre)',
+                desc: 'Liste de dossiers séparés par des virgules à ignorer lors de la collecte des notes des sous-dossiers. Les dossiers restent visibles, et leur sélection affiche toujours leurs notes. Utilise les mêmes modèles que Masquer les dossiers.',
+                placeholder: 'quotidien, ressources, /archive'
             },
             fileVisibility: {
                 name: 'Afficher les types de fichiers (profil du coffre)',

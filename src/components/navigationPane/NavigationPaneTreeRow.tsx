@@ -55,6 +55,7 @@ export function NavigationPaneTreeRow({
         tagCounts,
         propertyCounts,
         vaultChangeVersion,
+        descendantExcludedFolders,
         getSolidBackground,
         shortcuts,
         shortcutUiState,
@@ -92,6 +93,7 @@ export function NavigationPaneTreeRow({
                     adjacentFilledClassName={adjacentFilledClassName}
                     countInfo={countInfo}
                     excludedFolders={item.parsedExcludedFolders || []}
+                    descendantExcludedFolders={descendantExcludedFolders}
                     vaultChangeVersion={vaultChangeVersion}
                     disableNavigationSeparatorActions={shouldHideFolderSeparatorActions}
                     inlineRename={

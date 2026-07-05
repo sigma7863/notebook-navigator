@@ -350,6 +350,9 @@ export const STRINGS_JA = {
             changeBackground: '背景色を変更',
             excludeFolder: 'フォルダを非表示',
             unhideFolder: 'フォルダを表示',
+            excludeFromDescendants: '親フォルダで非表示',
+            includeInDescendants: '親フォルダで表示',
+            hiddenFromParentsIndicator: '親フォルダのリストから非表示',
             moveFolder: 'フォルダを移動先...',
             renameFolder: 'フォルダの名前を変更',
             deleteFolder: 'フォルダを削除'
@@ -772,6 +775,8 @@ export const STRINGS_JA = {
         notices: {
             hideFolder: 'フォルダを非表示: {name}',
             showFolder: 'フォルダを表示: {name}',
+            folderExcludedFromDescendants: '親フォルダのリストから非表示: {name}',
+            folderIncludedInDescendants: '親フォルダのリストに表示: {name}',
             mergeNotes: '{count} 個のノートを {name} に結合しました'
         },
         notifications: {
@@ -1704,6 +1709,11 @@ export const STRINGS_JA = {
                 name: 'フォルダを非表示 (ボルトプロファイル)',
                 desc: '非表示にするフォルダのカンマ区切りリスト。名前パターン: assets*（assetsで始まるフォルダ）、*_temp（_tempで終わる）。パスパターン: /archive（ルートのアーカイブのみ）、/res*（resで始まるルートフォルダ）、/*/temp（1階層下のtempフォルダ）、/projects/*（projects内のすべてのフォルダ）。',
                 placeholder: 'templates, assets*, /archive, /res*'
+            },
+            descendantExcludedFolders: {
+                name: 'サブフォルダのノートからフォルダを除外（保管庫プロファイル）',
+                desc: 'サブフォルダからノートを収集するときに除外するフォルダのカンマ区切りリスト。フォルダは表示されたままで、選択するとそのノートは引き続き表示されます。「フォルダを非表示」と同じパターンを使用します。',
+                placeholder: '日記, リソース, /archive'
             },
             fileVisibility: {
                 name: 'ファイルタイプを表示 (ボルトプロファイル)',

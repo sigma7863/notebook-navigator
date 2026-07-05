@@ -350,6 +350,9 @@ export const STRINGS_AR = {
             changeBackground: 'تغيير الخلفية',
             excludeFolder: 'إخفاء المجلد',
             unhideFolder: 'إظهار المجلد',
+            excludeFromDescendants: 'إخفاء من المجلدات الأصلية',
+            includeInDescendants: 'إظهار في المجلدات الأصلية',
+            hiddenFromParentsIndicator: 'مخفى من قوائم المجلدات الأصلية',
             moveFolder: 'نقل المجلد إلى...',
             renameFolder: 'إعادة تسمية المجلد',
             deleteFolder: 'حذف المجلد'
@@ -768,6 +771,8 @@ export const STRINGS_AR = {
         notices: {
             hideFolder: 'تم إخفاء المجلد: {name}',
             showFolder: 'تم إظهار المجلد: {name}',
+            folderExcludedFromDescendants: 'مخفى من قوائم المجلدات الأصلية: {name}',
+            folderIncludedInDescendants: 'ظاهر في قوائم المجلدات الأصلية: {name}',
             mergeNotes: 'تم دمج {count} ملاحظة في {name}'
         },
         notifications: {
@@ -1732,6 +1737,11 @@ export const STRINGS_AR = {
                 name: 'إخفاء المجلدات (ملف الخزنة)',
                 desc: 'قائمة مفصولة بفاصلة من المجلدات لإخفائها. أنماط الاسم: assets* (المجلدات التي تبدأ بـ assets)، *_temp (التي تنتهي بـ _temp). أنماط المسار: /archive (الأرشيف الجذري فقط)، /res* (المجلدات الجذرية التي تبدأ بـ res)، /*/temp (مجلدات temp بمستوى واحد)، /projects/* (جميع المجلدات داخل projects).',
                 placeholder: 'templates, assets*, /archive, /res*'
+            },
+            descendantExcludedFolders: {
+                name: 'استبعاد المجلدات من ملاحظات المجلدات الفرعية (ملف تعريف الخزنة)',
+                desc: 'قائمة مفصولة بفواصل للمجلدات التي يتم تجاهلها عند جمع الملاحظات من المجلدات الفرعية. تبقى المجلدات مرئية، ويظل تحديدها يعرض ملاحظاتها. تستخدم نفس أنماط إخفاء المجلدات.',
+                placeholder: 'يومي، موارد، /archive'
             },
             showFileDate: {
                 name: 'إظهار التاريخ',

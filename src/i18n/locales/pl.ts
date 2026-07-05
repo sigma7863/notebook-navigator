@@ -351,6 +351,9 @@ export const STRINGS_PL = {
             changeBackground: 'Zmień tło',
             excludeFolder: 'Ukryj folder',
             unhideFolder: 'Pokaż folder',
+            excludeFromDescendants: 'Ukryj w folderach nadrzędnych',
+            includeInDescendants: 'Pokaż w folderach nadrzędnych',
+            hiddenFromParentsIndicator: 'Ukryte na listach folderów nadrzędnych',
             moveFolder: 'Przenieś folder do...',
             renameFolder: 'Zmień nazwę folderu',
             deleteFolder: 'Usuń folder'
@@ -776,6 +779,8 @@ export const STRINGS_PL = {
         notices: {
             hideFolder: 'Ukryty folder: {name}',
             showFolder: 'Widoczny folder: {name}',
+            folderExcludedFromDescendants: 'Ukryte na listach folderów nadrzędnych: {name}',
+            folderIncludedInDescendants: 'Pokazane na listach folderów nadrzędnych: {name}',
             mergeNotes: 'Scalono {count} notatek w {name}'
         },
         notifications: {
@@ -1742,6 +1747,11 @@ export const STRINGS_PL = {
                 name: 'Ukryj foldery (profil sejfu)',
                 desc: 'Lista folderów rozdzielonych przecinkami. Wzory nazw: assets* (foldery zaczynające się od assets), *_temp (kończące się na _temp). Wzory ścieżek: /archive (folder nadrzędny o nazwie archive), /res* (folder nadrzędny o nazwie zaczynającej się od res), /*/temp (foldery podrzędne o nazwie temp), /projects/* (wszystkie foldery wewnątrz folderu projects).',
                 placeholder: 'templates, assets*, /archive, /res*'
+            },
+            descendantExcludedFolders: {
+                name: 'Wyklucz foldery z notatek z podfolderów (profil skarbca)',
+                desc: 'Lista folderów oddzielonych przecinkami, które mają być pomijane podczas zbierania notatek z podfolderów. Foldery pozostają widoczne, a wybranie folderu nadal pokazuje jego notatki. Używa tych samych wzorców co Ukryj foldery.',
+                placeholder: 'dzienne, zasoby, /archiwum'
             },
             showFileDate: {
                 name: 'Pokaż datę',

@@ -351,6 +351,9 @@ export const STRINGS_PT = {
             changeBackground: 'Alterar fundo',
             excludeFolder: 'Ocultar pasta',
             unhideFolder: 'Mostrar pasta',
+            excludeFromDescendants: 'Ocultar nas pastas principais',
+            includeInDescendants: 'Mostrar nas pastas principais',
+            hiddenFromParentsIndicator: 'Oculta nas listas das pastas principais',
             moveFolder: 'Mover pasta para...',
             renameFolder: 'Renomear pasta',
             deleteFolder: 'Eliminar pasta'
@@ -773,6 +776,8 @@ export const STRINGS_PT = {
         notices: {
             hideFolder: 'Pasta ocultada: {name}',
             showFolder: 'Pasta mostrada: {name}',
+            folderExcludedFromDescendants: 'Oculta nas listas das pastas principais: {name}',
+            folderIncludedInDescendants: 'Mostrada nas listas das pastas principais: {name}',
             mergeNotes: 'Unidas {count} notas em {name}'
         },
         notifications: {
@@ -1740,6 +1745,11 @@ export const STRINGS_PT = {
                 name: 'Ocultar pastas (perfil do cofre)',
                 desc: 'Lista de pastas a ocultar separadas por vírgulas. Padrões de nome: assets* (pastas começando com assets), *_temp (terminando com _temp). Padrões de caminho: /arquivo (apenas arquivo raiz), /res* (pastas raiz começando com res), /*/temp (pastas temp um nível abaixo), /projetos/* (todas as pastas dentro de projetos).',
                 placeholder: 'modelos, assets*, /arquivo, /res*'
+            },
+            descendantExcludedFolders: {
+                name: 'Excluir pastas das notas de subpastas (perfil do cofre)',
+                desc: 'Lista de pastas separadas por vírgulas a omitir ao recolher notas de subpastas. As pastas permanecem visíveis, e selecionar uma continua a mostrar as suas notas. Usa os mesmos padrões de Ocultar pastas.',
+                placeholder: 'diário, recursos, /arquivo'
             },
             showFileDate: {
                 name: 'Mostrar data',

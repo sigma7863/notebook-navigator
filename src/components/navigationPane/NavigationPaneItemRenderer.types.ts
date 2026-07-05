@@ -63,6 +63,7 @@ export interface NavigationPaneRowContext {
     vaultChangeVersion: number;
     fileVisibility: FileVisibility;
     hiddenFolders: string[];
+    descendantExcludedFolders: string[];
     getFileDisplayName: (file: TFile) => string;
     getFileTimestamps: (file: TFile) => { created: number; modified: number };
     getFileWordCount: (file: TFile) => number | null;

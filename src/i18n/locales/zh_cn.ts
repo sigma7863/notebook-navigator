@@ -350,6 +350,9 @@ export const STRINGS_ZH_CN = {
             changeBackground: '更改背景',
             excludeFolder: '隐藏文件夹',
             unhideFolder: '显示文件夹',
+            excludeFromDescendants: '在父文件夹中隐藏',
+            includeInDescendants: '在父文件夹中显示',
+            hiddenFromParentsIndicator: '已从父文件夹列表中隐藏',
             moveFolder: '移动文件夹到...',
             renameFolder: '重命名文件夹',
             deleteFolder: '删除文件夹'
@@ -763,6 +766,8 @@ export const STRINGS_ZH_CN = {
         notices: {
             hideFolder: '已隐藏文件夹：{name}',
             showFolder: '已显示文件夹：{name}',
+            folderExcludedFromDescendants: '已从父文件夹列表中隐藏：{name}',
+            folderIncludedInDescendants: '已在父文件夹列表中显示：{name}',
             mergeNotes: '已将 {count} 个笔记合并到 {name}'
         },
         notifications: {
@@ -1690,6 +1695,11 @@ export const STRINGS_ZH_CN = {
                 name: '隐藏文件夹 (库配置)',
                 desc: '逗号分隔的要隐藏的文件夹列表。名称模式：assets*（以assets开头的文件夹），*_temp（以_temp结尾）。路径模式：/archive（仅根目录archive），/res*（以res开头的根文件夹），/*/temp（一级目录下的temp文件夹），/projects/*（projects内的所有文件夹）。',
                 placeholder: 'templates, assets*, /archive, /res*'
+            },
+            descendantExcludedFolders: {
+                name: '从子文件夹笔记中排除文件夹（库配置）',
+                desc: '逗号分隔的文件夹列表，用于在收集子文件夹中的笔记时跳过这些文件夹。文件夹仍会显示，选择该文件夹时仍会显示其中的笔记。使用与隐藏文件夹相同的模式。',
+                placeholder: '日记, 资源, /archive'
             },
             fileVisibility: {
                 name: '显示文件类型 (库配置)',
