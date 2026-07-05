@@ -79,17 +79,7 @@ export interface ExtendedApp extends App {
  * Defines all possible value types that can be stored in the drag payload.
  */
 type DragManagerPayloadValue =
-    | string
-    | number
-    | boolean
-    | null
-    | undefined
-    | TFile
-    | TFile[]
-    | DragManagerPayload
-    | DragManagerPayload[]
-    | HTMLElement
-    | (() => void);
+    string | number | boolean | null | undefined | TFile | TFile[] | DragManagerPayload | DragManagerPayload[] | HTMLElement | (() => void);
 
 export interface DragManagerPayload {
     type?: 'file' | 'files' | 'link' | 'tag'; // Type of drag operation
@@ -232,5 +222,13 @@ declare global {
     interface Window {
         notebookNavigatorOpeningVersionHistory?: boolean;
         notebookNavigatorOpeningFolderNote?: boolean;
+        createEl<K extends keyof HTMLElementTagNameMap>(
+            tag: K,
+            o?: DomElementInfo | string,
+            callback?: (el: HTMLElementTagNameMap[K]) => void
+        ): HTMLElementTagNameMap[K];
+        createDiv(o?: DomElementInfo | string, callback?: (el: HTMLDivElement) => void): HTMLDivElement;
+        createSpan(o?: DomElementInfo | string, callback?: (el: HTMLSpanElement) => void): HTMLSpanElement;
+        createFragment(callback?: (el: DocumentFragment) => void): DocumentFragment;
     }
 }

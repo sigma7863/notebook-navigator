@@ -314,8 +314,8 @@ export function useDragAndDrop(containerRef: React.RefObject<HTMLElement | null>
 
     const showNativeMultiFileDragPreview = useCallback(
         (event: DragEvent, count: number): boolean => {
-            const ownerDocument = containerRef.current?.ownerDocument ?? activeDocument;
-            const badge = ownerDocument.createElement('div');
+            const ownerWindow = containerRef.current?.win ?? activeWindow;
+            const badge = ownerWindow.createDiv();
             badge.className = 'nn-drag-preview-badge';
             badge.textContent = `${count}`;
             return setNativeDragPreview(event, badge);
@@ -337,8 +337,8 @@ export function useDragAndDrop(containerRef: React.RefObject<HTMLElement | null>
                 return false;
             }
 
-            const ownerDocument = containerRef.current?.ownerDocument ?? activeDocument;
-            const iconWrapper = ownerDocument.createElement('div');
+            const ownerWindow = containerRef.current?.win ?? activeWindow;
+            const iconWrapper = ownerWindow.createDiv();
             iconWrapper.className = 'nn-drag-preview-icon';
             const resolvedIconColor = iconColor ?? '#ffffff';
             iconWrapper.style.color = resolvedIconColor;
