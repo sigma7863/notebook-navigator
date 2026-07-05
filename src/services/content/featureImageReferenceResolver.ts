@@ -23,9 +23,7 @@ import { getMatchingRecordValue } from '../../utils/recordUtils';
 import { getYoutubeVideoId } from '../../utils/youtubeUtils';
 
 export type FeatureImageReference =
-    | { kind: 'local'; file: TFile }
-    | { kind: 'external'; url: string }
-    | { kind: 'youtube'; videoId: string };
+    { kind: 'local'; file: TFile } | { kind: 'external'; url: string } | { kind: 'youtube'; videoId: string };
 
 type FrontmatterImageTarget = { kind: 'wiki' | 'md' | 'plain'; target: string };
 

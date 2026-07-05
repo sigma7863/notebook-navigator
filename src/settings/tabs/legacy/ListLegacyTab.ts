@@ -42,11 +42,7 @@ import {
 import { formatPixelSliderValue, renderSliderSetting } from '../SliderSetting';
 
 type QuickActionSettingKey =
-    | 'quickActionRevealInFolder'
-    | 'quickActionAddTag'
-    | 'quickActionAddToShortcuts'
-    | 'quickActionPinNote'
-    | 'quickActionOpenInNewTab';
+    'quickActionRevealInFolder' | 'quickActionAddTag' | 'quickActionAddToShortcuts' | 'quickActionPinNote' | 'quickActionOpenInNewTab';
 
 interface QuickActionToggleConfig {
     key: QuickActionSettingKey;
