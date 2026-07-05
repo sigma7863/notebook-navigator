@@ -228,11 +228,14 @@ export class IndexedDBStorage {
         if (this.isClosing) {
             return;
         }
-        if (this.db) {
-            return;
-        }
+        // Check the init promise before the connection handle: `openDatabase()` assigns `this.db` when the
+        // connection opens, before cache hydration finishes. Returning on `this.db` alone lets concurrent
+        // callers proceed against a not-yet-hydrated memory cache.
         if (this.initPromise) {
             return this.initPromise;
+        }
+        if (this.db) {
+            return;
         }
 
         this.initPromise = this.checkSchemaAndInit().catch(error => {
@@ -338,8 +341,9 @@ export class IndexedDBStorage {
 
         // Clear and rebuild content if either version changed
         if (needsRebuild) {
+            if (!this.db) throw new Error('Database not initialized');
             // Clear all data to force rebuild
-            await this.clear();
+            await this.clearStores(this.db);
             recordStartupDiagnostic('indexedDb.rebuildContent', { reasons: rebuildReasons });
         }
 
@@ -483,9 +487,16 @@ export class IndexedDBStorage {
     async clear(): Promise<void> {
         await this.init();
         if (!this.db) throw new Error('Database not initialized');
+        return this.clearStores(this.db);
+    }
 
+    /**
+     * Clear all object stores on an already-open connection.
+     * Called directly during `checkSchemaAndInit()` where awaiting `init()` would deadlock on the pending init promise.
+     */
+    private async clearStores(db: IDBDatabase): Promise<void> {
         // Clear stores in one transaction to keep the cache consistent.
-        const transaction = this.db.transaction([STORE_NAME, FEATURE_IMAGE_STORE_NAME, PREVIEW_STORE_NAME], 'readwrite');
+        const transaction = db.transaction([STORE_NAME, FEATURE_IMAGE_STORE_NAME, PREVIEW_STORE_NAME], 'readwrite');
         const store = transaction.objectStore(STORE_NAME);
         const blobStore = transaction.objectStore(FEATURE_IMAGE_STORE_NAME);
         const previewStore = transaction.objectStore(PREVIEW_STORE_NAME);
