@@ -241,6 +241,11 @@ export const LIMITS = {
          */
         previewTextCacheMaxEntriesDefault: 10_000,
         /**
+         * Maximum number of formatted date/time strings cached in memory.
+         * Keys include the format, timestamp, timezone offset, and UI language.
+         */
+        dateFormatCacheMaxEntries: 8192,
+        /**
          * Maximum number of previews loaded in a single batch when warming the preview cache.
          * Keeps IndexedDB transactions short and avoids long main-thread stalls.
          */

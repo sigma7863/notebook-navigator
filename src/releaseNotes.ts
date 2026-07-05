@@ -98,6 +98,7 @@ const RELEASE_NOTES: ReleaseNote[] = [
             '**Calendar.** New setting: ==Show tasks== in Calendar > Appearance. Displays an indicator on days, weeks, and months with unfinished tasks. Enabled by default.'
         ],
         improved: [
+            '**Performance.** Reduced list pane rendering work. List rows and pane headers now skip re-rendering when their content is unchanged, file rows mount with fewer React hooks, and formatted dates and date group labels are cached. React rendering work while scrolling is 15-25% lower, and building the file list when switching folders is about 60% faster.',
             '**Settings.** Importing settings now shows a confirmation dialog with an option to save current settings to a timestamped file in the vault root. Exported settings files use timestamped filenames and record the plugin version. Import rejects JSON that is not a Notebook Navigator export or recognizable legacy settings diff.',
             '**Calendar.** Middle-click on day cells, week numbers, month, quarter and year headers, and the year panel opens the calendar note in a new tab, creating it if needed.'
         ],
