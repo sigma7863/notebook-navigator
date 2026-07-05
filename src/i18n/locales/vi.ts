@@ -350,6 +350,9 @@ export const STRINGS_VI = {
             changeBackground: 'Đổi nền',
             excludeFolder: 'Ẩn thư mục',
             unhideFolder: 'Hiện thư mục',
+            excludeFromDescendants: 'Ẩn khỏi thư mục cha',
+            includeInDescendants: 'Hiện trong thư mục cha',
+            hiddenFromParentsIndicator: 'Đã ẩn khỏi danh sách thư mục cha',
             moveFolder: 'Di chuyển thư mục...',
             renameFolder: 'Đổi tên thư mục',
             deleteFolder: 'Xóa thư mục'
@@ -774,6 +777,8 @@ export const STRINGS_VI = {
         notices: {
             hideFolder: 'Đã ẩn thư mục: {name}',
             showFolder: 'Đã hiện thư mục: {name}',
+            folderExcludedFromDescendants: 'Đã ẩn khỏi danh sách thư mục cha: {name}',
+            folderIncludedInDescendants: 'Đã hiện trong danh sách thư mục cha: {name}',
             mergeNotes: 'Đã hợp nhất {count} ghi chú vào {name}'
         },
         notifications: {
@@ -980,6 +985,7 @@ export const STRINGS_VI = {
                 vaultConfiguration: 'Thiết lập vault',
                 templates: 'Mẫu',
                 behavior: 'Hành vi',
+                startup: 'Khởi động',
                 keyboardNavigation: 'Điều hướng bằng bàn phím',
                 mouseButtons: 'Nút chuột',
                 view: 'Giao diện',
@@ -1302,7 +1308,7 @@ export const STRINGS_VI = {
             },
             startView: {
                 name: 'Chế độ xem khởi động mặc định',
-                desc: 'Chọn ngăn hiển thị khi mở Notebook Navigator. Ngăn điều hướng hiện lối tắt, tệp gần đây và cây thư mục. Ngăn danh sách hiện danh sách tệp ngay.',
+                desc: 'Chọn ngăn hoạt động khi mở Notebook Navigator. Bố cục một ngăn hiển thị ngăn này trước; bố cục hai ngăn chuyển tiêu điểm bàn phím vào ngăn này.',
                 options: {
                     navigation: 'Ngăn điều hướng',
                     files: 'Ngăn danh sách'
@@ -1478,6 +1484,10 @@ export const STRINGS_VI = {
                 name: 'Hiển thị hình ảnh nổi bật',
                 desc: 'Hiển thị hình ảnh nổi bật của ghi chú trong lịch.'
             },
+            calendarShowTasks: {
+                name: 'Hiển thị nhiệm vụ',
+                desc: 'Hiển thị chỉ báo trên ngày, tuần và tháng có nhiệm vụ chưa hoàn thành.'
+            },
             calendarShowWeekNumber: {
                 name: 'Hiển thị số tuần',
                 desc: 'Thêm cột với số tuần.'
@@ -1593,6 +1603,12 @@ export const STRINGS_VI = {
                     editorDesc: 'Dán hoặc chỉnh sửa JSON bên dưới. Các cài đặt không được bao gồm sẽ được đặt lại về mặc định.',
                     placeholder: '{\n  "folderSortOrder": "alpha-desc"\n}',
                     confirmButtonText: 'Nhập',
+                    confirmTitle: 'Nhập cài đặt?',
+                    confirmMessage: 'Việc nhập sẽ thay thế cài đặt Notebook Navigator hiện tại.',
+                    backupToggleName: 'Lưu cài đặt hiện tại vào thư mục gốc của kho trước khi nhập',
+                    backupToggleDesc: 'Tạo tệp JSON có dấu thời gian trong thư mục gốc của kho.',
+                    successWithBackupNotice: 'Đã nhập cài đặt. Cài đặt trước đó đã được lưu vào {path}.',
+                    backupError: 'Không thể lưu cài đặt hiện tại: {message}',
                     successNotice: 'Đã nhập cài đặt.',
                     errorNotice: 'Nhập cài đặt thất bại: {message}',
                     fileReadError: 'Không thể đọc tệp: {message}'
@@ -1728,6 +1744,11 @@ export const STRINGS_VI = {
                 name: 'Ẩn thư mục (hồ sơ vault)',
                 desc: 'Danh sách thư mục cần ẩn phân cách bằng dấu phẩy. Mẫu tên: assets* (thư mục bắt đầu bằng assets), *_temp (kết thúc bằng _temp). Mẫu đường dẫn: /archive (chỉ archive gốc), /res* (thư mục gốc bắt đầu bằng res), /*/temp (thư mục temp ở độ sâu một cấp), /projects/* (tất cả thư mục trong projects).',
                 placeholder: 'mẫu, assets*, /lưu trữ, /res*'
+            },
+            descendantExcludedFolders: {
+                name: 'Loại trừ thư mục khỏi ghi chú thư mục con (hồ sơ kho)',
+                desc: 'Danh sách thư mục phân cách bằng dấu phẩy sẽ được bỏ qua khi thu thập ghi chú từ thư mục con. Các thư mục vẫn hiển thị, và khi chọn một thư mục thì ghi chú của thư mục đó vẫn được hiển thị. Dùng cùng mẫu với Ẩn thư mục.',
+                placeholder: 'hằng ngày, tài nguyên, /lưu trữ'
             },
             showFileDate: {
                 name: 'Hiện ngày',

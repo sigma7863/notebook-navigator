@@ -176,7 +176,8 @@ export function useListPaneData({
         }
         return selectedFolder.path;
     }, [selectionType, selectedFolder]);
-    const { hiddenFolders, hiddenFileProperties, hiddenFileNames, hiddenTags, hiddenFileTags, fileVisibility } = activeProfile;
+    const { hiddenFolders, descendantExcludedFolders, hiddenFileProperties, hiddenFileNames, hiddenTags, hiddenFileTags, fileVisibility } =
+        activeProfile;
     const hiddenFilePropertyMatcher = useMemo(
         () => createFrontmatterPropertyExclusionMatcher(hiddenFileProperties),
         [hiddenFileProperties]
@@ -235,6 +236,7 @@ export function useListPaneData({
         selectedProperty,
         activeProfile.profile.id,
         activeProfile.hiddenFolders,
+        descendantExcludedFolders,
         activeProfile.hiddenFileProperties,
         activeProfile.hiddenFileNames,
         activeProfile.hiddenTags,

@@ -350,6 +350,9 @@ export const STRINGS_IT = {
             changeBackground: 'Cambia sfondo',
             excludeFolder: 'Nascondi cartella',
             unhideFolder: 'Mostra cartella',
+            excludeFromDescendants: 'Nascondi dalle cartelle superiori',
+            includeInDescendants: 'Mostra nelle cartelle superiori',
+            hiddenFromParentsIndicator: 'Nascosta dagli elenchi delle cartelle superiori',
             moveFolder: 'Sposta cartella in...',
             renameFolder: 'Rinomina cartella',
             deleteFolder: 'Elimina cartella'
@@ -769,6 +772,8 @@ export const STRINGS_IT = {
         notices: {
             hideFolder: 'Cartella nascosta: {name}',
             showFolder: 'Cartella mostrata: {name}',
+            folderExcludedFromDescendants: 'Nascosta dagli elenchi delle cartelle superiori: {name}',
+            folderIncludedInDescendants: 'Mostrata negli elenchi delle cartelle superiori: {name}',
             mergeNotes: 'Unite {count} note in {name}'
         },
         notifications: {
@@ -975,6 +980,7 @@ export const STRINGS_IT = {
                 vaultConfiguration: 'Configurazione vault',
                 templates: 'Modelli',
                 behavior: 'Comportamento',
+                startup: 'Avvio',
                 keyboardNavigation: 'Navigazione da tastiera',
                 mouseButtons: 'Pulsanti del mouse',
                 view: 'Aspetto',
@@ -1297,7 +1303,7 @@ export const STRINGS_IT = {
             },
             startView: {
                 name: "Vista predefinita all'avvio",
-                desc: "Scegli quale pannello visualizzare all'apertura di Notebook Navigator. Il pannello navigazione mostra scorciatoie, file recenti e albero cartelle. Il pannello lista mostra subito l'elenco file.",
+                desc: "Scegli quale pannello è attivo all'apertura di Notebook Navigator. Il layout a pannello singolo mostra prima questo pannello; il layout a doppio pannello gli assegna il focus della tastiera.",
                 options: {
                     navigation: 'Pannello navigazione',
                     files: 'Pannello lista'
@@ -1473,6 +1479,10 @@ export const STRINGS_IT = {
                 name: 'Mostra immagine in evidenza',
                 desc: 'Visualizza le immagini in evidenza delle note nel calendario.'
             },
+            calendarShowTasks: {
+                name: 'Mostra attività',
+                desc: 'Mostra un indicatore su giorni, settimane e mesi con attività incomplete.'
+            },
             calendarShowWeekNumber: {
                 name: 'Mostra numero settimana',
                 desc: 'Aggiungi una colonna con il numero della settimana.'
@@ -1590,6 +1600,12 @@ export const STRINGS_IT = {
                         'Incolla o modifica il JSON qui sotto. Le impostazioni non incluse vengono ripristinate ai valori predefiniti.',
                     placeholder: '{\n  "folderSortOrder": "alpha-desc"\n}',
                     confirmButtonText: 'Importa',
+                    confirmTitle: 'Importare le impostazioni?',
+                    confirmMessage: 'L’importazione sostituisce le impostazioni correnti di Notebook Navigator.',
+                    backupToggleName: 'Salva le impostazioni correnti nella radice del vault prima di importare',
+                    backupToggleDesc: 'Crea un file JSON con timestamp nella radice del vault.',
+                    successWithBackupNotice: 'Impostazioni importate. Le impostazioni precedenti sono state salvate in {path}.',
+                    backupError: 'Impossibile salvare le impostazioni correnti: {message}',
                     successNotice: 'Impostazioni importate.',
                     errorNotice: 'Impossibile importare le impostazioni: {message}',
                     fileReadError: 'Impossibile leggere il file: {message}'
@@ -1726,6 +1742,11 @@ export const STRINGS_IT = {
                 name: 'Nascondi cartelle (profilo vault)',
                 desc: 'Lista di cartelle da nascondere separate da virgola. Pattern nome: assets* (cartelle che iniziano con assets), *_temp (che finiscono con _temp). Pattern percorso: /archivio (solo archivio root), /res* (cartelle root che iniziano con res), /*/temp (cartelle temp un livello sotto), /progetti/* (tutte le cartelle in progetti).',
                 placeholder: 'modelli, assets*, /archivio, /res*'
+            },
+            descendantExcludedFolders: {
+                name: 'Escludi cartelle dalle note delle sottocartelle (profilo vault)',
+                desc: 'Lista di cartelle separate da virgola da ignorare quando vengono raccolte le note dalle sottocartelle. Le cartelle restano visibili e selezionandone una vengono comunque mostrate le sue note. Usa gli stessi pattern di Nascondi cartelle.',
+                placeholder: 'giornaliere, risorse, /archivio'
             },
             showFileDate: {
                 name: 'Mostra data',

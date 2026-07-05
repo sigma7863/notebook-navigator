@@ -350,6 +350,9 @@ export const STRINGS_ZH_CN = {
             changeBackground: '更改背景',
             excludeFolder: '隐藏文件夹',
             unhideFolder: '显示文件夹',
+            excludeFromDescendants: '在父文件夹中隐藏',
+            includeInDescendants: '在父文件夹中显示',
+            hiddenFromParentsIndicator: '已从父文件夹列表中隐藏',
             moveFolder: '移动文件夹到...',
             renameFolder: '重命名文件夹',
             deleteFolder: '删除文件夹'
@@ -763,6 +766,8 @@ export const STRINGS_ZH_CN = {
         notices: {
             hideFolder: '已隐藏文件夹：{name}',
             showFolder: '已显示文件夹：{name}',
+            folderExcludedFromDescendants: '已从父文件夹列表中隐藏：{name}',
+            folderIncludedInDescendants: '已在父文件夹列表中显示：{name}',
             mergeNotes: '已将 {count} 个笔记合并到 {name}'
         },
         notifications: {
@@ -969,6 +974,7 @@ export const STRINGS_ZH_CN = {
                 vaultConfiguration: '仓库设置',
                 templates: '模板',
                 behavior: '行为',
+                startup: '启动',
                 keyboardNavigation: '键盘导航',
                 mouseButtons: '鼠标按钮',
                 view: '外观',
@@ -1288,7 +1294,7 @@ export const STRINGS_ZH_CN = {
             },
             startView: {
                 name: '默认启动视图',
-                desc: '选择打开 Notebook Navigator 时显示的窗格。导航窗格显示快捷方式、最近文件和文件夹结构。列表窗格显示文件列表。',
+                desc: '选择打开 Notebook Navigator 时处于活动状态的窗格。单窗格布局优先显示该窗格；双窗格布局将键盘焦点移至该窗格。',
                 options: {
                     navigation: '导航窗格',
                     files: '列表窗格'
@@ -1463,6 +1469,10 @@ export const STRINGS_ZH_CN = {
                 name: '显示特色图片',
                 desc: '在日历中显示笔记的特色图片。'
             },
+            calendarShowTasks: {
+                name: '显示任务',
+                desc: '在包含未完成任务的日、周和月上显示指示器。'
+            },
             calendarShowWeekNumber: {
                 name: '显示周号',
                 desc: '在每行开头显示周号。'
@@ -1577,6 +1587,12 @@ export const STRINGS_ZH_CN = {
                     editorDesc: '在下方粘贴或编辑 JSON。未包含的设置将重置为默认值。',
                     placeholder: '{\n  "folderSortOrder": "alpha-desc"\n}',
                     confirmButtonText: '导入',
+                    confirmTitle: '导入设置？',
+                    confirmMessage: '导入会替换当前的 Notebook Navigator 设置。',
+                    backupToggleName: '导入前将当前设置保存到仓库根目录',
+                    backupToggleDesc: '在仓库根目录中创建带时间戳的 JSON 文件。',
+                    successWithBackupNotice: '设置已导入。之前的设置已保存到 {path}。',
+                    backupError: '无法保存当前设置: {message}',
                     successNotice: '设置已导入。',
                     errorNotice: '导入设置失败: {message}',
                     fileReadError: '无法读取文件: {message}'
@@ -1679,6 +1695,11 @@ export const STRINGS_ZH_CN = {
                 name: '隐藏文件夹 (库配置)',
                 desc: '逗号分隔的要隐藏的文件夹列表。名称模式：assets*（以assets开头的文件夹），*_temp（以_temp结尾）。路径模式：/archive（仅根目录archive），/res*（以res开头的根文件夹），/*/temp（一级目录下的temp文件夹），/projects/*（projects内的所有文件夹）。',
                 placeholder: 'templates, assets*, /archive, /res*'
+            },
+            descendantExcludedFolders: {
+                name: '从子文件夹笔记中排除文件夹（库配置）',
+                desc: '逗号分隔的文件夹列表，用于在收集子文件夹中的笔记时跳过这些文件夹。文件夹仍会显示，选择该文件夹时仍会显示其中的笔记。使用与隐藏文件夹相同的模式。',
+                placeholder: '日记, 资源, /archive'
             },
             fileVisibility: {
                 name: '显示文件类型 (库配置)',

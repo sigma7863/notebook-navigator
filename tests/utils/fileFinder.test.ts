@@ -119,8 +119,8 @@ function setFileProperties(file: TFile, properties: PropertyItem[]): void {
     });
 }
 
-function createFolder(path: string, children: TFile[]): TFolder {
-    const folder = new TFolder() as TFolder & { children: TFile[] };
+function createFolder(path: string, children: Array<TFile | TFolder>): TFolder {
+    const folder = new TFolder() as TFolder & { children: Array<TFile | TFolder> };
     folder.path = path;
     folder.name = path.split('/').pop() ?? path;
     folder.children = children;
@@ -151,6 +151,27 @@ describe('fileFinder getFilesForFolder', () => {
         expect(toSortedPaths(getFilesForFolder(folder, { ...createSettings(), hideDrawingPreviewImages: false }, visibility, app))).toEqual(
             ['Drawings/Cover.png', 'Drawings/Sketch.excalidraw.md', 'Drawings/Sketch.excalidraw.png']
         );
+    });
+
+    it('excludes configured folders only from ancestor descendant results', () => {
+        const rootNote = createTestTFile('Root.md');
+        const dailyNote = createTestTFile('Daily/today.md');
+        const dailyYearNote = createTestTFile('Daily/2026/day.md');
+        const workNote = createTestTFile('Work/work.md');
+        const resourceNote = createTestTFile('Work/resources/asset.md');
+
+        const dailyYearFolder = createFolder('Daily/2026', [dailyYearNote]);
+        const dailyFolder = createFolder('Daily', [dailyNote, dailyYearFolder]);
+        const resourcesFolder = createFolder('Work/resources', [resourceNote]);
+        const workFolder = createFolder('Work', [workNote, resourcesFolder]);
+        const rootFolder = createFolder('', [rootNote, dailyFolder, workFolder]);
+
+        const app = createAppWithFiles([rootNote, dailyNote, dailyYearNote, workNote, resourceNote]);
+        const settings = createSettings({ descendantExcludedFolders: ['/Daily', 'resources'] });
+        const visibility: VisibilityPreferences = { includeDescendantNotes: true, showHiddenItems: false };
+
+        expect(toSortedPaths(getFilesForFolder(rootFolder, settings, visibility, app))).toEqual(['Root.md', 'Work/work.md']);
+        expect(toSortedPaths(getFilesForFolder(dailyFolder, settings, visibility, app))).toEqual(['Daily/2026/day.md', 'Daily/today.md']);
     });
 });
 

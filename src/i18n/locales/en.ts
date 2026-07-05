@@ -350,6 +350,9 @@ export const STRINGS_EN = {
             changeBackground: 'Change background',
             excludeFolder: 'Hide folder',
             unhideFolder: 'Unhide folder',
+            excludeFromDescendants: 'Hide from parents',
+            includeInDescendants: 'Show in parents',
+            hiddenFromParentsIndicator: 'Hidden from parent folder lists',
             moveFolder: 'Move folder to...',
             renameFolder: 'Rename folder',
             deleteFolder: 'Delete folder'
@@ -767,6 +770,8 @@ export const STRINGS_EN = {
         notices: {
             hideFolder: 'Folder hidden: {name}',
             showFolder: 'Folder shown: {name}',
+            folderExcludedFromDescendants: 'Hidden from parent folder lists: {name}',
+            folderIncludedInDescendants: 'Shown in parent folder lists: {name}',
             mergeNotes: 'Merged {count} notes into {name}'
         },
         notifications: {
@@ -973,6 +978,7 @@ export const STRINGS_EN = {
                 vaultConfiguration: 'Vault setup',
                 templates: 'Templates',
                 behavior: 'Behavior',
+                startup: 'Startup',
                 keyboardNavigation: 'Keyboard navigation',
                 mouseButtons: 'Mouse buttons',
                 view: 'Appearance',
@@ -1295,7 +1301,7 @@ export const STRINGS_EN = {
             },
             startView: {
                 name: 'Default startup view',
-                desc: 'Choose which pane to display when opening Notebook Navigator. Navigation pane shows shortcuts, recent files, and folder tree. List pane shows file list immediately.',
+                desc: 'Choose which pane is active when Notebook Navigator opens. Single-pane layout shows this pane first; dual-pane layout gives it keyboard focus.',
                 options: {
                     navigation: 'Navigation pane',
                     files: 'List pane'
@@ -1470,6 +1476,10 @@ export const STRINGS_EN = {
                 name: 'Show feature image',
                 desc: 'Display feature images for notes in the calendar.'
             },
+            calendarShowTasks: {
+                name: 'Show tasks',
+                desc: 'Display an indicator on days, weeks, and months with unfinished tasks.'
+            },
             calendarShowWeekNumber: {
                 name: 'Show week number',
                 desc: 'Add a column with the week number.'
@@ -1585,7 +1595,13 @@ export const STRINGS_EN = {
                     editorDesc: 'Paste or edit JSON below. Settings not included are reset to defaults.',
                     placeholder: '{\n  "folderSortOrder": "alpha-desc"\n}',
                     confirmButtonText: 'Import',
+                    confirmTitle: 'Import settings?',
+                    confirmMessage: 'Importing replaces your current Notebook Navigator settings.',
+                    backupToggleName: 'Save current settings to the vault root before importing',
+                    backupToggleDesc: 'Creates a timestamped JSON file in the vault root.',
                     successNotice: 'Settings imported.',
+                    successWithBackupNotice: 'Settings imported. Previous settings saved to {path}.',
+                    backupError: 'Could not save current settings: {message}',
                     errorNotice: 'Failed to import settings: {message}',
                     fileReadError: 'Could not read file: {message}'
                 },
@@ -1720,6 +1736,11 @@ export const STRINGS_EN = {
                 name: 'Hide folders (vault profile)',
                 desc: 'Comma-separated list of folders to hide. Name patterns: assets* (folders starting with assets), *_temp (ending with _temp). Path patterns: /archive (root archive only), /res* (root folders starting with res), /*/temp (temp folders one level deep), /projects/* (all folders inside projects).',
                 placeholder: 'templates, assets*, /archive, /res*'
+            },
+            descendantExcludedFolders: {
+                name: 'Exclude folders from descendants (vault profile)',
+                desc: 'Comma-separated list of folders to omit when collecting notes from subfolders. Folders remain visible, and selecting one still shows its notes. Uses the same patterns as Hide folders.',
+                placeholder: 'daily, resources, /archive'
             },
             showFileDate: {
                 name: 'Show date',

@@ -351,6 +351,9 @@ export const STRINGS_TR = {
             changeBackground: 'Arka planı değiştir',
             excludeFolder: 'Klasörü gizle',
             unhideFolder: 'Klasörü göster',
+            excludeFromDescendants: 'Üst klasörlerde gizle',
+            includeInDescendants: 'Üst klasörlerde göster',
+            hiddenFromParentsIndicator: 'Üst klasör listelerinde gizli',
             moveFolder: 'Klasörü taşı...',
             renameFolder: 'Klasörü yeniden adlandır',
             deleteFolder: 'Klasörü sil'
@@ -771,6 +774,8 @@ export const STRINGS_TR = {
         notices: {
             hideFolder: 'Klasör gizlendi: {name}',
             showFolder: 'Klasör gösterildi: {name}',
+            folderExcludedFromDescendants: 'Üst klasör listelerinde gizli: {name}',
+            folderIncludedInDescendants: 'Üst klasör listelerinde gösteriliyor: {name}',
             mergeNotes: '{count} not {name} içine birleştirildi'
         },
         notifications: {
@@ -977,6 +982,7 @@ export const STRINGS_TR = {
                 vaultConfiguration: 'Kasa kurulumu',
                 templates: 'Şablonlar',
                 behavior: 'Davranış',
+                startup: 'Başlangıç',
                 keyboardNavigation: 'Klavye ile gezinme',
                 mouseButtons: 'Fare düğmeleri',
                 view: 'Görünüm',
@@ -1299,7 +1305,7 @@ export const STRINGS_TR = {
             },
             startView: {
                 name: 'Varsayılan başlangıç görünümü',
-                desc: "Notebook Navigator'ı açarken hangi bölmenin görüntüleneceğini seçin. Gezinme bölmesi kısayolları, son dosyaları ve klasör ağacını gösterir. Liste bölmesi dosya listesini hemen gösterir.",
+                desc: 'Notebook Navigator açıldığında hangi bölmenin etkin olacağını seçin. Tek bölmeli düzen önce bu bölmeyi gösterir; çift bölmeli düzen klavye odağını bu bölmeye verir.',
                 options: {
                     navigation: 'Gezinme bölmesi',
                     files: 'Liste bölmesi'
@@ -1475,6 +1481,10 @@ export const STRINGS_TR = {
                 name: 'Öne çıkan görseli göster',
                 desc: 'Takvimdeki notların öne çıkan görsellerini göster.'
             },
+            calendarShowTasks: {
+                name: 'Görevleri göster',
+                desc: 'Tamamlanmamış görevleri olan gün, hafta ve aylarda bir gösterge gösterir.'
+            },
             calendarShowWeekNumber: {
                 name: 'Hafta numarasını göster',
                 desc: 'Hafta numarasıyla bir sütun ekle.'
@@ -1590,6 +1600,12 @@ export const STRINGS_TR = {
                     editorDesc: 'Aşağıya JSON yapıştırın veya düzenleyin. Dahil edilmeyen ayarlar varsayılan değerlere sıfırlanır.',
                     placeholder: '{\n  "folderSortOrder": "alpha-desc"\n}',
                     confirmButtonText: 'İçe aktar',
+                    confirmTitle: 'Ayarlar içe aktarılsın mı?',
+                    confirmMessage: 'İçe aktarma, mevcut Notebook Navigator ayarlarını değiştirir.',
+                    backupToggleName: 'İçe aktarmadan önce mevcut ayarları kasa köküne kaydet',
+                    backupToggleDesc: 'Kasa kökünde zaman damgalı bir JSON dosyası oluşturur.',
+                    successWithBackupNotice: 'Ayarlar içe aktarıldı. Önceki ayarlar {path} konumuna kaydedildi.',
+                    backupError: 'Mevcut ayarlar kaydedilemedi: {message}',
                     successNotice: 'Ayarlar içe aktarıldı.',
                     errorNotice: 'Ayarlar içe aktarılamadı: {message}',
                     fileReadError: 'Dosya okunamadı: {message}'
@@ -1725,6 +1741,11 @@ export const STRINGS_TR = {
                 name: 'Klasörleri gizle (kasa profili)',
                 desc: 'Virgülle ayrılmış gizlenecek klasörler listesi. Ad desenleri: assets* (assets ile başlayan klasörler), *_temp (_temp ile biten). Yol desenleri: /archive (yalnızca kök arşiv), /res* (res ile başlayan kök klasörler), /*/temp (bir seviye derinlikte temp klasörleri), /projects/* (projects içindeki tüm klasörler).',
                 placeholder: 'şablonlar, assets*, /arşiv, /res*'
+            },
+            descendantExcludedFolders: {
+                name: 'Klasörleri alt klasör notlarından hariç tut (kasa profili)',
+                desc: 'Alt klasörlerden notlar toplanırken atlanacak klasörlerin virgülle ayrılmış listesi. Klasörler görünür kalır ve birini seçmek yine notlarını gösterir. Klasörleri gizle ile aynı desenleri kullanır.',
+                placeholder: 'günlük, kaynaklar, /arşiv'
             },
             showFileDate: {
                 name: 'Tarihi göster',

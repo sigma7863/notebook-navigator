@@ -717,7 +717,9 @@ export class PluginSettingsController {
     }
 
     public refreshMatcherCachesIfNeeded(): void {
-        const folderKey = this.buildPatternCacheKey(profile => profile.hiddenFolders);
+        const folderKey = `${this.buildPatternCacheKey(profile => profile.hiddenFolders)}\u0003${this.buildPatternCacheKey(
+            profile => profile.descendantExcludedFolders
+        )}`;
         const hiddenTagKey = this.buildPatternCacheKey(profile => profile.hiddenTags);
         const hiddenFileTagKey = this.buildPatternCacheKey(profile => profile.hiddenFileTags);
         const tagKey = `${hiddenTagKey}\u0003${hiddenFileTagKey}`;

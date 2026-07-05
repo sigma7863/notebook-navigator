@@ -352,6 +352,9 @@ export const STRINGS_PT_BR = {
             changeBackground: 'Alterar plano de fundo',
             excludeFolder: 'Ocultar pasta',
             unhideFolder: 'Reexibir pasta',
+            excludeFromDescendants: 'Ocultar nas pastas superiores',
+            includeInDescendants: 'Mostrar nas pastas superiores',
+            hiddenFromParentsIndicator: 'Oculta nas listas das pastas superiores',
             moveFolder: 'Mover pasta para...',
             renameFolder: 'Renomear pasta',
             deleteFolder: 'Excluir pasta'
@@ -775,6 +778,8 @@ export const STRINGS_PT_BR = {
         notices: {
             hideFolder: 'Pasta oculta: {name}',
             showFolder: 'Pasta exibida: {name}',
+            folderExcludedFromDescendants: 'Oculta nas listas das pastas superiores: {name}',
+            folderIncludedInDescendants: 'Mostrada nas listas das pastas superiores: {name}',
             mergeNotes: '{count} notas mescladas em {name}'
         },
         notifications: {
@@ -981,6 +986,7 @@ export const STRINGS_PT_BR = {
                 vaultConfiguration: 'Configuração do cofre',
                 templates: 'Modelos',
                 behavior: 'Comportamento',
+                startup: 'Inicialização',
                 keyboardNavigation: 'Navegação por teclado',
                 mouseButtons: 'Botões do mouse',
                 view: 'Aparência',
@@ -1303,7 +1309,7 @@ export const STRINGS_PT_BR = {
             },
             startView: {
                 name: 'Visualização inicial padrão',
-                desc: 'Escolha qual painel exibir ao abrir o Notebook Navigator. O painel de navegação mostra atalhos, arquivos recentes e árvore de pastas. O painel de lista mostra a lista de arquivos imediatamente.',
+                desc: 'Escolha qual painel fica ativo ao abrir o Notebook Navigator. O layout de painel único mostra este painel primeiro; o layout de painel duplo dá a ele o foco do teclado.',
                 options: {
                     navigation: 'Painel de navegação',
                     files: 'Painel de lista'
@@ -1479,6 +1485,10 @@ export const STRINGS_PT_BR = {
                 name: 'Mostrar imagem de destaque',
                 desc: 'Mostrar imagens de destaque das notas no calendário.'
             },
+            calendarShowTasks: {
+                name: 'Mostrar tarefas',
+                desc: 'Exibir um indicador em dias, semanas e meses com tarefas inacabadas.'
+            },
             calendarShowWeekNumber: {
                 name: 'Mostrar número da semana',
                 desc: 'Adicionar uma coluna com o número da semana.'
@@ -1595,6 +1605,12 @@ export const STRINGS_PT_BR = {
                     editorDesc: 'Cole ou edite o JSON abaixo. As configurações não incluídas são redefinidas para os valores padrão.',
                     placeholder: '{\n  "folderSortOrder": "alpha-desc"\n}',
                     confirmButtonText: 'Importar',
+                    confirmTitle: 'Importar configurações?',
+                    confirmMessage: 'A importação substitui as configurações atuais do Notebook Navigator.',
+                    backupToggleName: 'Salvar as configurações atuais na raiz do cofre antes de importar',
+                    backupToggleDesc: 'Cria um arquivo JSON com carimbo de data/hora na raiz do cofre.',
+                    successWithBackupNotice: 'Configurações importadas. As configurações anteriores foram salvas em {path}.',
+                    backupError: 'Não foi possível salvar as configurações atuais: {message}',
                     successNotice: 'Configurações importadas.',
                     errorNotice: 'Falha ao importar configurações: {message}',
                     fileReadError: 'Não foi possível ler o arquivo: {message}'
@@ -1731,6 +1747,11 @@ export const STRINGS_PT_BR = {
                 name: 'Ocultar pastas (perfil do cofre)',
                 desc: 'Lista separada por vírgulas de pastas a ocultar. Padrões de nome: assets* (pastas que começam com assets), *_temp (terminam com _temp). Padrões de caminho: /arquivo (apenas arquivo raiz), /res* (pastas raiz que começam com res), /*/temp (pastas temp um nível abaixo), /projetos/* (todas as pastas dentro de projetos).',
                 placeholder: 'modelos, assets*, /arquivo, /res*'
+            },
+            descendantExcludedFolders: {
+                name: 'Excluir pastas das notas de subpastas (perfil do cofre)',
+                desc: 'Lista separada por vírgulas de pastas a omitir ao coletar notas de subpastas. As pastas permanecem visíveis, e selecionar uma ainda mostra suas notas. Usa os mesmos padrões de Ocultar pastas.',
+                placeholder: 'diário, recursos, /arquivo'
             },
             showFileDate: {
                 name: 'Mostrar data',

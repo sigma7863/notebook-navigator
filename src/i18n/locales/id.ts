@@ -351,6 +351,9 @@ export const STRINGS_ID = {
             changeBackground: 'Ubah latar belakang',
             excludeFolder: 'Sembunyikan folder',
             unhideFolder: 'Tampilkan folder',
+            excludeFromDescendants: 'Sembunyikan dari folder induk',
+            includeInDescendants: 'Tampilkan di folder induk',
+            hiddenFromParentsIndicator: 'Disembunyikan dari daftar folder induk',
             moveFolder: 'Pindahkan folder ke...',
             renameFolder: 'Ubah nama folder',
             deleteFolder: 'Hapus folder'
@@ -773,6 +776,8 @@ export const STRINGS_ID = {
         notices: {
             hideFolder: 'Folder disembunyikan: {name}',
             showFolder: 'Folder ditampilkan: {name}',
+            folderExcludedFromDescendants: 'Disembunyikan dari daftar folder induk: {name}',
+            folderIncludedInDescendants: 'Ditampilkan di daftar folder induk: {name}',
             mergeNotes: 'Menggabungkan {count} catatan menjadi {name}'
         },
         notifications: {
@@ -979,6 +984,7 @@ export const STRINGS_ID = {
                 vaultConfiguration: 'Penyiapan vault',
                 templates: 'Templat',
                 behavior: 'Perilaku',
+                startup: 'Startup',
                 keyboardNavigation: 'Navigasi keyboard',
                 mouseButtons: 'Tombol mouse',
                 view: 'Tampilan',
@@ -1301,7 +1307,7 @@ export const STRINGS_ID = {
             },
             startView: {
                 name: 'Tampilan startup default',
-                desc: 'Pilih panel mana yang ditampilkan saat membuka Notebook Navigator. Panel navigasi menampilkan pintasan, file terbaru, dan pohon folder. Panel daftar menampilkan daftar file segera.',
+                desc: 'Pilih panel yang aktif saat Notebook Navigator dibuka. Tata letak panel tunggal menampilkan panel ini lebih dulu; tata letak panel ganda memberinya fokus keyboard.',
                 options: {
                     navigation: 'Panel navigasi',
                     files: 'Panel daftar'
@@ -1477,6 +1483,10 @@ export const STRINGS_ID = {
                 name: 'Tampilkan gambar fitur',
                 desc: 'Tampilkan gambar fitur untuk catatan di kalender.'
             },
+            calendarShowTasks: {
+                name: 'Tampilkan tugas',
+                desc: 'Tampilkan indikator pada hari, minggu, dan bulan dengan tugas yang belum selesai.'
+            },
             calendarShowWeekNumber: {
                 name: 'Tampilkan nomor minggu',
                 desc: 'Tambahkan kolom dengan nomor minggu.'
@@ -1592,6 +1602,12 @@ export const STRINGS_ID = {
                     editorDesc: 'Tempel atau edit JSON di bawah. Pengaturan yang tidak disertakan akan diatur ulang ke default.',
                     placeholder: '{\n  "folderSortOrder": "alpha-desc"\n}',
                     confirmButtonText: 'Impor',
+                    confirmTitle: 'Impor pengaturan?',
+                    confirmMessage: 'Mengimpor akan mengganti pengaturan Notebook Navigator saat ini.',
+                    backupToggleName: 'Simpan pengaturan saat ini di root vault sebelum mengimpor',
+                    backupToggleDesc: 'Membuat file JSON bertimestamp di root vault.',
+                    successWithBackupNotice: 'Pengaturan diimpor. Pengaturan sebelumnya disimpan ke {path}.',
+                    backupError: 'Tidak dapat menyimpan pengaturan saat ini: {message}',
                     successNotice: 'Pengaturan diimpor.',
                     errorNotice: 'Gagal mengimpor pengaturan: {message}',
                     fileReadError: 'Tidak dapat membaca file: {message}'
@@ -1727,6 +1743,11 @@ export const STRINGS_ID = {
                 name: 'Sembunyikan folder (profil vault)',
                 desc: 'Daftar folder yang dipisahkan koma untuk disembunyikan. Pola nama: assets* (folder yang dimulai dengan assets), *_temp (diakhiri dengan _temp). Pola path: /arsip (arsip root saja), /res* (folder root yang dimulai dengan res), /*/temp (folder temp satu level ke dalam), /proyek/* (semua folder di dalam proyek).',
                 placeholder: 'template, assets*, /arsip, /res*'
+            },
+            descendantExcludedFolders: {
+                name: 'Kecualikan folder dari catatan subfolder (profil vault)',
+                desc: 'Daftar folder yang dipisahkan koma untuk dilewati saat mengumpulkan catatan dari subfolder. Folder tetap terlihat, dan memilih folder tetap menampilkan catatannya. Menggunakan pola yang sama seperti Sembunyikan folder.',
+                placeholder: 'harian, sumber-daya, /arsip'
             },
             showFileDate: {
                 name: 'Tampilkan tanggal',

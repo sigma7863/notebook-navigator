@@ -350,6 +350,9 @@ export const STRINGS_TH = {
             changeBackground: 'เปลี่ยนพื้นหลัง',
             excludeFolder: 'ซ่อนโฟลเดอร์',
             unhideFolder: 'เลิกซ่อนโฟลเดอร์',
+            excludeFromDescendants: 'ซ่อนจากโฟลเดอร์แม่',
+            includeInDescendants: 'แสดงในโฟลเดอร์แม่',
+            hiddenFromParentsIndicator: 'ซ่อนจากรายการโฟลเดอร์แม่',
             moveFolder: 'ย้ายโฟลเดอร์ไปยัง...',
             renameFolder: 'เปลี่ยนชื่อโฟลเดอร์',
             deleteFolder: 'ลบโฟลเดอร์'
@@ -766,6 +769,8 @@ export const STRINGS_TH = {
         notices: {
             hideFolder: 'ซ่อนโฟลเดอร์แล้ว: {name}',
             showFolder: 'แสดงโฟลเดอร์แล้ว: {name}',
+            folderExcludedFromDescendants: 'ซ่อนจากรายการโฟลเดอร์แม่: {name}',
+            folderIncludedInDescendants: 'แสดงในรายการโฟลเดอร์แม่: {name}',
             mergeNotes: 'รวม {count} โน้ตเป็น {name} แล้ว'
         },
         notifications: {
@@ -972,6 +977,7 @@ export const STRINGS_TH = {
                 vaultConfiguration: 'การตั้งค่าห้องนิรภัย',
                 templates: 'เทมเพลต',
                 behavior: 'พฤติกรรม',
+                startup: 'การเริ่มต้น',
                 keyboardNavigation: 'การนำทางด้วยแป้นพิมพ์',
                 mouseButtons: 'ปุ่มเมาส์',
                 view: 'ลักษณะ',
@@ -1294,7 +1300,7 @@ export const STRINGS_TH = {
             },
             startView: {
                 name: 'มุมมองเริ่มต้นเมื่อเริ่มงาน',
-                desc: 'เลือกแผงที่จะแสดงเมื่อเปิด Notebook Navigator แผงนำทางแสดงทางลัด ไฟล์ล่าสุด และต้นไม้โฟลเดอร์ แผงรายการแสดงรายการไฟล์ทันที',
+                desc: 'เลือกแผงที่ใช้งานเมื่อเปิด Notebook Navigator เลย์เอาต์แผงเดียวจะแสดงแผงนี้ก่อน ส่วนเลย์เอาต์สองแผงจะให้โฟกัสแป้นพิมพ์กับแผงนี้',
                 options: {
                     navigation: 'แผงนำทาง',
                     files: 'แผงรายการ'
@@ -1470,6 +1476,10 @@ export const STRINGS_TH = {
                 name: 'แสดงรูปภาพเด่น',
                 desc: 'แสดงรูปภาพเด่นของบันทึกในปฏิทิน'
             },
+            calendarShowTasks: {
+                name: 'แสดงงาน',
+                desc: 'แสดงตัวบ่งชี้ในวัน สัปดาห์ และเดือนที่มีงานที่ยังไม่เสร็จ'
+            },
             calendarShowWeekNumber: {
                 name: 'แสดงหมายเลขสัปดาห์',
                 desc: 'เพิ่มคอลัมน์พร้อมหมายเลขสัปดาห์'
@@ -1585,6 +1595,12 @@ export const STRINGS_TH = {
                     editorDesc: 'วางหรือแก้ไข JSON ด้านล่าง การตั้งค่าที่ไม่ได้รวมไว้จะถูกรีเซ็ตเป็นค่าเริ่มต้น',
                     placeholder: '{\n  "folderSortOrder": "alpha-desc"\n}',
                     confirmButtonText: 'นำเข้า',
+                    confirmTitle: 'นำเข้าการตั้งค่าหรือไม่?',
+                    confirmMessage: 'การนำเข้าจะแทนที่การตั้งค่า Notebook Navigator ปัจจุบัน',
+                    backupToggleName: 'บันทึกการตั้งค่าปัจจุบันไว้ในรูทห้องนิรภัยก่อนนำเข้า',
+                    backupToggleDesc: 'สร้างไฟล์ JSON ที่มีเวลาประทับในรูทห้องนิรภัย',
+                    successWithBackupNotice: 'นำเข้าการตั้งค่าแล้ว บันทึกการตั้งค่าก่อนหน้าไว้ที่ {path}',
+                    backupError: 'ไม่สามารถบันทึกการตั้งค่าปัจจุบันได้: {message}',
                     successNotice: 'นำเข้าการตั้งค่าแล้ว',
                     errorNotice: 'นำเข้าการตั้งค่าล้มเหลว: {message}',
                     fileReadError: 'ไม่สามารถอ่านไฟล์ได้: {message}'
@@ -1719,6 +1735,11 @@ export const STRINGS_TH = {
                 name: 'ซ่อนโฟลเดอร์ (โปรไฟล์ห้องนิรภัย)',
                 desc: 'รายการโฟลเดอร์คั่นด้วยเครื่องหมายจุลภาคที่จะซ่อน รูปแบบชื่อ: assets* (โฟลเดอร์ที่เริ่มด้วย assets), *_temp (ลงท้ายด้วย _temp) รูปแบบเส้นทาง: /archive (archive หลักเท่านั้น), /res* (โฟลเดอร์หลักที่เริ่มด้วย res), /*/temp (โฟลเดอร์ temp ลึกหนึ่งระดับ), /projects/* (โฟลเดอร์ทั้งหมดใน projects)',
                 placeholder: 'templates, assets*, /archive, /res*'
+            },
+            descendantExcludedFolders: {
+                name: 'ยกเว้นโฟลเดอร์จากโน้ตในโฟลเดอร์ย่อย (โปรไฟล์คลัง)',
+                desc: 'รายการโฟลเดอร์คั่นด้วยเครื่องหมายจุลภาคที่จะละเว้นเมื่อรวบรวมโน้ตจากโฟลเดอร์ย่อย โฟลเดอร์ยังคงมองเห็นได้ และเมื่อเลือกโฟลเดอร์นั้นจะยังแสดงโน้ตของโฟลเดอร์นั้น ใช้รูปแบบเดียวกับซ่อนโฟลเดอร์',
+                placeholder: 'รายวัน, ทรัพยากร, /archive'
             },
             showFileDate: {
                 name: 'แสดงวันที่',
