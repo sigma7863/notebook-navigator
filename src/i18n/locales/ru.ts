@@ -351,6 +351,9 @@ export const STRINGS_RU = {
             changeBackground: 'Изменить фон',
             excludeFolder: 'Скрыть папку',
             unhideFolder: 'Показать папку',
+            excludeFromDescendants: 'Скрыть в родительских папках',
+            includeInDescendants: 'Показать в родительских папках',
+            hiddenFromParentsIndicator: 'Скрыто из списков родительских папок',
             moveFolder: 'Переместить папку в...',
             renameFolder: 'Переименовать папку',
             deleteFolder: 'Удалить папку'
@@ -770,6 +773,8 @@ export const STRINGS_RU = {
         notices: {
             hideFolder: 'Папка скрыта: {name}',
             showFolder: 'Папка показана: {name}',
+            folderExcludedFromDescendants: 'Скрыто из списков родительских папок: {name}',
+            folderIncludedInDescendants: 'Показано в списках родительских папок: {name}',
             mergeNotes: 'Объединено {count} заметок в {name}'
         },
         notifications: {
@@ -976,6 +981,7 @@ export const STRINGS_RU = {
                 vaultConfiguration: 'Настройка хранилища',
                 templates: 'Шаблоны',
                 behavior: 'Поведение',
+                startup: 'Запуск',
                 keyboardNavigation: 'Навигация с клавиатуры',
                 mouseButtons: 'Кнопки мыши',
                 view: 'Внешний вид',
@@ -1298,7 +1304,7 @@ export const STRINGS_RU = {
             },
             startView: {
                 name: 'Начальный вид по умолчанию',
-                desc: 'Выберите, какая панель отображается при открытии Notebook Navigator. Панель навигации показывает ярлыки, недавние файлы и дерево папок. Панель списка сразу показывает список файлов.',
+                desc: 'Выберите, какая панель активна при открытии Notebook Navigator. В однопанельном режиме эта панель показывается первой; в двухпанельном режиме она получает фокус клавиатуры.',
                 options: {
                     navigation: 'Панель навигации',
                     files: 'Панель списка'
@@ -1474,6 +1480,10 @@ export const STRINGS_RU = {
                 name: 'Показать изображение-обложку',
                 desc: 'Отображать изображения-обложки заметок в календаре.'
             },
+            calendarShowTasks: {
+                name: 'Показывать задачи',
+                desc: 'Отображать индикатор на днях, неделях и месяцах с незавершёнными задачами.'
+            },
             calendarShowWeekNumber: {
                 name: 'Показать номер недели',
                 desc: 'Добавить колонку с номером недели.'
@@ -1589,6 +1599,12 @@ export const STRINGS_RU = {
                     editorDesc: 'Вставьте или отредактируйте JSON ниже. Не включённые настройки сбрасываются к значениям по умолчанию.',
                     placeholder: '{\n  "folderSortOrder": "alpha-desc"\n}',
                     confirmButtonText: 'Импортировать',
+                    confirmTitle: 'Импортировать настройки?',
+                    confirmMessage: 'Импорт заменит текущие настройки Notebook Navigator.',
+                    backupToggleName: 'Сохранить текущие настройки в корне хранилища перед импортом',
+                    backupToggleDesc: 'Создаёт JSON-файл с временной меткой в корне хранилища.',
+                    successWithBackupNotice: 'Настройки импортированы. Предыдущие настройки сохранены в {path}.',
+                    backupError: 'Не удалось сохранить текущие настройки: {message}',
                     successNotice: 'Настройки импортированы.',
                     errorNotice: 'Не удалось импортировать настройки: {message}',
                     fileReadError: 'Не удалось прочитать файл: {message}'
@@ -1724,6 +1740,11 @@ export const STRINGS_RU = {
                 name: 'Скрыть папки (профиль хранилища)',
                 desc: 'Список папок через запятую для скрытия. Шаблоны имён: assets* (папки, начинающиеся с assets), *_temp (заканчивающиеся на _temp). Шаблоны путей: /archive (только корневой archive), /res* (корневые папки, начинающиеся с res), /*/temp (папки temp на один уровень вглубь), /projects/* (все папки внутри projects).',
                 placeholder: 'templates, assets*, /archive, /res*'
+            },
+            descendantExcludedFolders: {
+                name: 'Исключать папки из заметок подпапок (профиль хранилища)',
+                desc: 'Список папок через запятую, которые пропускаются при сборе заметок из подпапок. Папки остаются видимыми, и при выборе папки её заметки по-прежнему отображаются. Использует те же шаблоны, что и Скрыть папки.',
+                placeholder: 'ежедневные, ресурсы, /archive'
             },
             showFileDate: {
                 name: 'Показывать дату',

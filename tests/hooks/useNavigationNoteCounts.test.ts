@@ -93,6 +93,7 @@ describe('useNavigationNoteCounts', () => {
                 propertyCollectionCount: undefined,
                 effectiveFrontmatterExclusions: [],
                 hiddenFolders: [],
+                descendantExcludedFolders: [],
                 hiddenFileTags: [],
                 showHiddenItems: false,
                 folderCountFileNameMatcher: null,

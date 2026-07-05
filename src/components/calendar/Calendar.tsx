@@ -373,7 +373,7 @@ export function Calendar({
             const hoverPreviewPath =
                 hoverTooltipState && hoverTooltipState.tooltipData.previewEnabled ? hoverTooltipState.tooltipData.previewPath : null;
             const shouldTrackFeatureImage = settings.calendarShowFeatureImage && visibleFeatureImagePaths.size > 0;
-            const shouldTrackTaskIndicator = visibleIndicatorPaths.size > 0;
+            const shouldTrackTaskIndicator = settings.calendarShowTasks && visibleIndicatorPaths.size > 0;
             const shouldTrackHoverPreview = Boolean(hoverPreviewPath);
 
             let hasFeatureImageChange = !shouldTrackFeatureImage;
@@ -423,7 +423,7 @@ export function Calendar({
                 setHoverTooltipPreviewVersion(v => v + 1);
             }
         });
-    }, [db, hoverTooltipStateRef, settings.calendarShowFeatureImage]);
+    }, [db, hoverTooltipStateRef, settings.calendarShowFeatureImage, settings.calendarShowTasks]);
 
     useEffect(() => {
         const frontmatterNameField = settings.frontmatterNameField.trim();
@@ -955,7 +955,7 @@ export function Calendar({
 
         const unfinishedTaskCounts = new Map<string, number>();
 
-        if (!db) {
+        if (!db || !settings.calendarShowTasks) {
             return unfinishedTaskCounts;
         }
 
@@ -966,7 +966,7 @@ export function Calendar({
         }
 
         return unfinishedTaskCounts;
-    }, [db, taskIndicatorVersion, weeks]);
+    }, [db, settings.calendarShowTasks, taskIndicatorVersion, weeks]);
 
     const showYearCalendar = isRightSidebar && settings.calendarShowYearCalendar;
     const renderedWeekRowCount = useMemo(() => {
@@ -1097,6 +1097,20 @@ export function Calendar({
         [clearHoverTooltip, displayLocale, handleDateFilterModifiedClick, onNavigationAction]
     );
 
+    const handleCalendarNoteMiddleMouseDown = useCallback(
+        (event: React.MouseEvent<HTMLElement>): boolean => {
+            if (event.button !== 1) {
+                return false;
+            }
+
+            event.preventDefault();
+            event.stopPropagation();
+            clearHoverTooltip();
+            return true;
+        },
+        [clearHoverTooltip]
+    );
+
     const onVaultChange = useCallback(() => {
         scheduleVaultVersionUpdate();
     }, [scheduleVaultVersionUpdate]);
@@ -1225,12 +1239,13 @@ export function Calendar({
             date: entry.date,
             fullLabel: entry.fullLabel,
             hasDailyNote: entry.hasDailyNote,
-            hasUnfinishedTasks: db ? entry.dayFiles.some(file => (db.getFile(file.path)?.taskUnfinished ?? 0) > 0) : false,
+            hasUnfinishedTasks:
+                db && settings.calendarShowTasks ? entry.dayFiles.some(file => (db.getFile(file.path)?.taskUnfinished ?? 0) > 0) : false,
             key: entry.key,
             monthIndex: entry.monthIndex,
             shortLabel: entry.shortLabel
         }));
-    }, [db, taskIndicatorVersion, yearMonthBaseEntries]);
+    }, [db, settings.calendarShowTasks, taskIndicatorVersion, yearMonthBaseEntries]);
 
     const highlightedMonthFilesByKey = useMemo(() => {
         const filesByKey = new Map<string, TFile>();
@@ -1422,6 +1437,10 @@ export function Calendar({
 
     const handleHeaderPeriodClick = useCallback(
         (event: React.MouseEvent<HTMLElement>, kind: HeaderPeriodKind) => {
+            if (event.button === 1) {
+                return;
+            }
+
             if (!cursorDate) {
                 return;
             }
@@ -1439,6 +1458,23 @@ export function Calendar({
             openOrCreateCustomCalendarNote(kind, periodDate, existingFile);
         },
         [cursorDate, displayLocale, getHeaderPeriodState, handleDateFilterModifiedClick, openOrCreateCustomCalendarNote]
+    );
+
+    const handleHeaderPeriodMouseDown = useCallback(
+        (event: React.MouseEvent<HTMLElement>, kind: HeaderPeriodKind) => {
+            if (!handleCalendarNoteMiddleMouseDown(event) || !cursorDate) {
+                return;
+            }
+
+            const periodDate = cursorDate.clone().locale(displayLocale);
+            const { existingFile, canCreate } = getHeaderPeriodState(kind);
+            if (!canCreate) {
+                return;
+            }
+
+            openOrCreateCustomCalendarNote(kind, periodDate, existingFile, { context: 'tab' });
+        },
+        [cursorDate, displayLocale, getHeaderPeriodState, handleCalendarNoteMiddleMouseDown, openOrCreateCustomCalendarNote]
     );
 
     const handleHeaderPeriodContextMenu = useCallback(
@@ -1469,6 +1505,10 @@ export function Calendar({
 
     const handleYearPanelPeriodClick = useCallback(
         (event: React.MouseEvent<HTMLElement>) => {
+            if (event.button === 1) {
+                return;
+            }
+
             if (!yearPanelDate) {
                 return;
             }
@@ -1484,6 +1524,21 @@ export function Calendar({
             openOrCreateCustomCalendarNote('year', yearPanelDate, yearPanelPeriodNoteFile);
         },
         [handleDateFilterModifiedClick, openOrCreateCustomCalendarNote, yearNotesEnabled, yearPanelDate, yearPanelPeriodNoteFile]
+    );
+
+    const handleYearPanelPeriodMouseDown = useCallback(
+        (event: React.MouseEvent<HTMLElement>) => {
+            if (!handleCalendarNoteMiddleMouseDown(event) || !yearPanelDate) {
+                return;
+            }
+
+            if (!yearNotesEnabled) {
+                return;
+            }
+
+            openOrCreateCustomCalendarNote('year', yearPanelDate, yearPanelPeriodNoteFile, { context: 'tab' });
+        },
+        [handleCalendarNoteMiddleMouseDown, openOrCreateCustomCalendarNote, yearNotesEnabled, yearPanelDate, yearPanelPeriodNoteFile]
     );
 
     const handleYearPanelPeriodContextMenu = useCallback(
@@ -1532,7 +1587,7 @@ export function Calendar({
         // Force refresh when calendar task metadata changes so week number task indicators reflect the latest metadata.
         void taskIndicatorVersion;
 
-        if (!db) {
+        if (!db || !settings.calendarShowTasks) {
             return new Map<string, number>();
         }
 
@@ -1542,7 +1597,7 @@ export function Calendar({
         });
 
         return counts;
-    }, [db, taskIndicatorVersion, weekNoteFilesByKey]);
+    }, [db, settings.calendarShowTasks, taskIndicatorVersion, weekNoteFilesByKey]);
 
     const visibleCalendarNoteFiles = useMemo(() => {
         const files = new Map<string, TFile>();
@@ -1594,6 +1649,10 @@ export function Calendar({
 
     const handleWeekClick = useCallback(
         (event: React.MouseEvent<HTMLElement>, week: CalendarWeek, weekNoteFile: TFile | null) => {
+            if (event.button === 1) {
+                return;
+            }
+
             const weekStart = week.days[0]?.date;
             if (!weekStart) {
                 return;
@@ -1611,6 +1670,26 @@ export function Calendar({
             openOrCreateCustomCalendarNote('week', weekDate, weekNoteFile);
         },
         [displayLocale, handleDateFilterModifiedClick, openOrCreateCustomCalendarNote, weekNotesEnabled]
+    );
+
+    const handleWeekMouseDown = useCallback(
+        (event: React.MouseEvent<HTMLElement>, week: CalendarWeek, weekNoteFile: TFile | null) => {
+            if (!handleCalendarNoteMiddleMouseDown(event)) {
+                return;
+            }
+
+            const weekStart = week.days[0]?.date;
+            if (!weekStart) {
+                return;
+            }
+
+            if (!weekNotesEnabled) {
+                return;
+            }
+
+            openOrCreateCustomCalendarNote('week', weekStart.clone().locale(displayLocale), weekNoteFile, { context: 'tab' });
+        },
+        [displayLocale, handleCalendarNoteMiddleMouseDown, openOrCreateCustomCalendarNote, weekNotesEnabled]
     );
 
     const handleWeekLabelClick = useCallback(
@@ -1644,6 +1723,10 @@ export function Calendar({
 
     const handleDayClick = useCallback(
         (event: React.MouseEvent<HTMLButtonElement>, day: CalendarWeek['days'][number]) => {
+            if (event.button === 1) {
+                return;
+            }
+
             if (handleDateFilterModifiedClick(event, 'day', day.date)) {
                 return;
             }
@@ -1653,8 +1736,19 @@ export function Calendar({
         [handleDateFilterModifiedClick, openOrCreateDailyNote]
     );
 
+    const handleDayMouseDown = useCallback(
+        (event: React.MouseEvent<HTMLButtonElement>, day: CalendarWeek['days'][number]) => {
+            if (!handleCalendarNoteMiddleMouseDown(event)) {
+                return;
+            }
+
+            openOrCreateDailyNote(day.date, day.file, { context: 'tab' });
+        },
+        [handleCalendarNoteMiddleMouseDown, openOrCreateDailyNote]
+    );
+
     const handleDayContextMenu = useCallback(
-        (event: React.MouseEvent<HTMLButtonElement>, day: CalendarWeek['days'][number], canCreate: boolean) => {
+        (event: React.MouseEvent<HTMLButtonElement>, day: CalendarWeek['days'][number], canCreate: boolean, hasFeatureImage: boolean) => {
             const monthKey = day.date.format('YYYY-MM');
             showCalendarNoteContextMenu(event, {
                 kind: 'day',
@@ -1663,11 +1757,11 @@ export function Calendar({
                 canCreate,
                 monthKey,
                 dayIso: day.iso,
-                hasFeatureImage: featureImageKeysByIso.has(day.iso),
+                hasFeatureImage,
                 currentMonthHighlightDayIso: settings.calendarMonthHighlights[monthKey] ?? null
             });
         },
-        [featureImageKeysByIso, settings.calendarMonthHighlights, showCalendarNoteContextMenu]
+        [settings.calendarMonthHighlights, showCalendarNoteContextMenu]
     );
 
     if (!momentApi || !cursorDate) {
@@ -1731,6 +1825,7 @@ export function Calendar({
                     onToday={handleToday}
                     onOpenHelp={openCalendarHelp}
                     onPeriodClick={handleHeaderPeriodClick}
+                    onPeriodMouseDown={handleHeaderPeriodMouseDown}
                     onPeriodContextMenu={handleHeaderPeriodContextMenu}
                 />
 
@@ -1757,8 +1852,10 @@ export function Calendar({
                     onShowTooltip={handleShowTooltip}
                     onHideTooltip={handleHideTooltip}
                     onDayClick={handleDayClick}
+                    onDayMouseDown={handleDayMouseDown}
                     onDayContextMenu={handleDayContextMenu}
                     onWeekClick={handleWeekClick}
+                    onWeekMouseDown={handleWeekMouseDown}
                     onWeekLabelClick={handleWeekLabelClick}
                     onWeekContextMenu={handleWeekContextMenu}
                 />
@@ -1776,6 +1873,7 @@ export function Calendar({
                     highlightedMonthImageUrls={highlightedMonthImageUrls}
                     onNavigateYear={handleNavigateYear}
                     onYearPeriodClick={handleYearPanelPeriodClick}
+                    onYearPeriodMouseDown={handleYearPanelPeriodMouseDown}
                     onYearPeriodContextMenu={handleYearPanelPeriodContextMenu}
                     onSelectYearMonth={handleSelectYearMonth}
                 />

@@ -58,7 +58,7 @@ import { useContextMenu, hideNavigatorContextMenu } from '../hooks/useContextMen
 import { getIconService, useIconServiceVersion } from '../services/icons';
 import { getTooltipPlacement } from '../utils/domUtils';
 import { getFolderNote } from '../utils/folderNoteLookup';
-import { hasSubfolders } from '../utils/fileFilters';
+import { hasSubfolders, shouldExcludeFolderFromDescendants } from '../utils/fileFilters';
 import { IndentGuideColumns } from './IndentGuideColumns';
 import type { NoteCountInfo } from '../types/noteCounts';
 import { buildNoteCountDisplay, buildSortableNoteCountDisplay } from '../utils/noteCountFormatting';
@@ -67,6 +67,7 @@ import { resolveUXIcon } from '../utils/uxIcons';
 import { ItemType, type CSSPropertiesWithVars } from '../types';
 import { buildFolderTooltip } from '../utils/navigationTooltipUtils';
 import { InlineRenameInput, type InlineRenameControl } from './InlineRenameInput';
+import { strings } from '../i18n';
 
 interface FolderItemProps {
     folder: TFolder;
@@ -87,6 +88,7 @@ interface FolderItemProps {
     adjacentFilledClassName?: string;
     countInfo?: NoteCountInfo;
     excludedFolders: string[];
+    descendantExcludedFolders: string[];
     vaultChangeVersion: number;
     disableContextMenu?: boolean;
     disableNavigationSeparatorActions?: boolean;
@@ -126,6 +128,7 @@ export const FolderItem = React.memo(function FolderItem({
     adjacentFilledClassName,
     countInfo,
     excludedFolders,
+    descendantExcludedFolders,
     vaultChangeVersion,
     disableContextMenu,
     disableNavigationSeparatorActions,
@@ -141,6 +144,7 @@ export const FolderItem = React.memo(function FolderItem({
 
     const chevronRef = React.useRef<HTMLDivElement | null>(null);
     const iconRef = React.useRef<HTMLSpanElement | null>(null);
+    const noteCountRef = React.useRef<HTMLSpanElement | null>(null);
     const iconVersion = useIconServiceVersion();
 
     // Merge provided count info with default values to ensure all properties are present
@@ -155,12 +159,22 @@ export const FolderItem = React.memo(function FolderItem({
 
     // Determine if we should show separate counts (e.g., "2 • 5") or combined count (e.g., "7")
     const useSeparateCounts = includeDescendantNotes && settings.separateNoteCounts;
+    // The exclusion only affects parent aggregation, so the indicator applies only while descendant notes are shown
+    const isHiddenFromParentLists = useMemo(
+        () =>
+            includeDescendantNotes &&
+            descendantExcludedFolders.length > 0 &&
+            shouldExcludeFolderFromDescendants(folder.name, descendantExcludedFolders, folder.path),
+        [descendantExcludedFolders, folder.name, folder.path, includeDescendantNotes]
+    );
     // Build formatted display object with label and visibility flags
+    const baseNoteCountDisplay = buildNoteCountDisplay(noteCounts, includeDescendantNotes, useSeparateCounts, '•');
+    // Parentheses around the count mark folders whose notes are omitted from parent folder lists
+    const showsHiddenFromParentsIndicator = isHiddenFromParentLists && baseNoteCountDisplay.shouldDisplay;
     const noteCountDisplay = buildSortableNoteCountDisplay(
-        buildNoteCountDisplay(noteCounts, includeDescendantNotes, useSeparateCounts, '•'),
+        showsHiddenFromParentsIndicator ? { shouldDisplay: true, label: `(${baseNoteCountDisplay.label})` } : baseNoteCountDisplay,
         sortOrderIndicator
     );
-    const noteCountLabel = noteCountDisplay.label;
     // Render count badge when note counts are enabled and there is either a count or a sort override indicator
     const shouldDisplayCount = settings.showNoteCount && noteCountDisplay.shouldDisplay;
 
@@ -335,6 +349,19 @@ export const FolderItem = React.memo(function FolderItem({
         }
     }, [hasChildren, icon, iconVersion, isExpanded, isRootFolder, settings.interfaceIcons, shouldShowFolderIcon]);
 
+    useEffect(() => {
+        if (!noteCountRef.current) return;
+
+        if (isMobile || !settings.showTooltips || !showsHiddenFromParentsIndicator || !shouldDisplayCount) {
+            setTooltip(noteCountRef.current, '');
+            return;
+        }
+
+        setTooltip(noteCountRef.current, strings.contextMenu.folder.hiddenFromParentsIndicator, {
+            placement: getTooltipPlacement()
+        });
+    }, [showsHiddenFromParentsIndicator, isMobile, settings.showTooltips, shouldDisplayCount]);
+
     // Enable context menu
     const folderMenuConfig = disableContextMenu
         ? null
@@ -408,7 +435,11 @@ export const FolderItem = React.memo(function FolderItem({
                     </span>
                 )}
                 <span className="nn-navitem-spacer nn-navitem-spacer--leader" />
-                {shouldDisplayCount && <span className="nn-navitem-count">{noteCountLabel}</span>}
+                {shouldDisplayCount && (
+                    <span ref={noteCountRef} className="nn-navitem-count">
+                        {noteCountDisplay.label}
+                    </span>
+                )}
             </div>
         </div>
     );

@@ -351,6 +351,9 @@ export const STRINGS_PL = {
             changeBackground: 'Zmień tło',
             excludeFolder: 'Ukryj folder',
             unhideFolder: 'Pokaż folder',
+            excludeFromDescendants: 'Ukryj w folderach nadrzędnych',
+            includeInDescendants: 'Pokaż w folderach nadrzędnych',
+            hiddenFromParentsIndicator: 'Ukryte na listach folderów nadrzędnych',
             moveFolder: 'Przenieś folder do...',
             renameFolder: 'Zmień nazwę folderu',
             deleteFolder: 'Usuń folder'
@@ -776,6 +779,8 @@ export const STRINGS_PL = {
         notices: {
             hideFolder: 'Ukryty folder: {name}',
             showFolder: 'Widoczny folder: {name}',
+            folderExcludedFromDescendants: 'Ukryte na listach folderów nadrzędnych: {name}',
+            folderIncludedInDescendants: 'Pokazane na listach folderów nadrzędnych: {name}',
             mergeNotes: 'Scalono {count} notatek w {name}'
         },
         notifications: {
@@ -982,6 +987,7 @@ export const STRINGS_PL = {
                 vaultConfiguration: 'Konfiguracja sejfu',
                 templates: 'Szablony',
                 behavior: 'Zachowanie',
+                startup: 'Uruchamianie',
                 keyboardNavigation: 'Nawigacja klawiaturą',
                 mouseButtons: 'Przyciski myszy',
                 view: 'Wygląd',
@@ -1304,7 +1310,7 @@ export const STRINGS_PL = {
             },
             startView: {
                 name: 'Domyślny widok początkowy',
-                desc: 'Wybierz, który panel ma być widoczny po otwarciu Notebook Navigator. Panel nawigacji pokazuje skróty, ostatnie pliki i strukturę folderów. Panel listy od razu pokazuje listę plików.',
+                desc: 'Wybierz, który panel jest aktywny po otwarciu Notebook Navigator. Układ jednopanelowy pokazuje ten panel jako pierwszy; układ dwupanelowy przenosi na niego fokus klawiatury.',
                 options: {
                     navigation: 'Panel nawigacji',
                     files: 'Panel listy'
@@ -1480,6 +1486,10 @@ export const STRINGS_PL = {
                 name: 'Pokaż wyróżniony obraz',
                 desc: 'Wyświetla wyróżnione obrazy notatek w kalendarzu.'
             },
+            calendarShowTasks: {
+                name: 'Pokaż zadania',
+                desc: 'Wyświetla wskaźnik przy dniach, tygodniach i miesiącach z niezakończonymi zadaniami.'
+            },
             calendarShowWeekNumber: {
                 name: 'Pokaż numer tygodnia',
                 desc: 'Dodaje kolumnę z numerem tygodnia.'
@@ -1595,6 +1605,12 @@ export const STRINGS_PL = {
                     editorDesc: 'Wklej lub edytuj JSON poniżej. Nieuwzględnione ustawienia zostaną zresetowane do wartości domyślnych.',
                     placeholder: '{\n  "folderSortOrder": "alpha-desc"\n}',
                     confirmButtonText: 'Importuj',
+                    confirmTitle: 'Zaimportować ustawienia?',
+                    confirmMessage: 'Importowanie zastąpi bieżące ustawienia Notebook Navigator.',
+                    backupToggleName: 'Zapisz bieżące ustawienia w katalogu głównym sejfu przed importem',
+                    backupToggleDesc: 'Tworzy plik JSON ze znacznikiem czasu w katalogu głównym sejfu.',
+                    successWithBackupNotice: 'Ustawienia zaimportowane. Poprzednie ustawienia zapisano w {path}.',
+                    backupError: 'Nie można zapisać bieżących ustawień: {message}',
                     successNotice: 'Ustawienia zaimportowane.',
                     errorNotice: 'Nie udało się zaimportować ustawień: {message}',
                     fileReadError: 'Nie można odczytać pliku: {message}'
@@ -1731,6 +1747,11 @@ export const STRINGS_PL = {
                 name: 'Ukryj foldery (profil sejfu)',
                 desc: 'Lista folderów rozdzielonych przecinkami. Wzory nazw: assets* (foldery zaczynające się od assets), *_temp (kończące się na _temp). Wzory ścieżek: /archive (folder nadrzędny o nazwie archive), /res* (folder nadrzędny o nazwie zaczynającej się od res), /*/temp (foldery podrzędne o nazwie temp), /projects/* (wszystkie foldery wewnątrz folderu projects).',
                 placeholder: 'templates, assets*, /archive, /res*'
+            },
+            descendantExcludedFolders: {
+                name: 'Wyklucz foldery z notatek z podfolderów (profil skarbca)',
+                desc: 'Lista folderów oddzielonych przecinkami, które mają być pomijane podczas zbierania notatek z podfolderów. Foldery pozostają widoczne, a wybranie folderu nadal pokazuje jego notatki. Używa tych samych wzorców co Ukryj foldery.',
+                placeholder: 'dzienne, zasoby, /archiwum'
             },
             showFileDate: {
                 name: 'Pokaż datę',

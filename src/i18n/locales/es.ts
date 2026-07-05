@@ -351,6 +351,9 @@ export const STRINGS_ES = {
             changeBackground: 'Cambiar fondo',
             excludeFolder: 'Ocultar carpeta',
             unhideFolder: 'Mostrar carpeta',
+            excludeFromDescendants: 'Ocultar en carpetas superiores',
+            includeInDescendants: 'Mostrar en carpetas superiores',
+            hiddenFromParentsIndicator: 'Oculta en listas de carpetas superiores',
             moveFolder: 'Mover carpeta a...',
             renameFolder: 'Renombrar carpeta',
             deleteFolder: 'Eliminar carpeta'
@@ -774,6 +777,8 @@ export const STRINGS_ES = {
         notices: {
             hideFolder: 'Carpeta oculta: {name}',
             showFolder: 'Carpeta mostrada: {name}',
+            folderExcludedFromDescendants: 'Oculta en listas de carpetas superiores: {name}',
+            folderIncludedInDescendants: 'Visible en listas de carpetas superiores: {name}',
             mergeNotes: 'Se combinaron {count} notas en {name}'
         },
         notifications: {
@@ -980,6 +985,7 @@ export const STRINGS_ES = {
                 vaultConfiguration: 'Configuración de la bóveda',
                 templates: 'Plantillas',
                 behavior: 'Comportamiento',
+                startup: 'Inicio',
                 keyboardNavigation: 'Navegación con teclado',
                 mouseButtons: 'Botones del ratón',
                 view: 'Apariencia',
@@ -1302,7 +1308,7 @@ export const STRINGS_ES = {
             },
             startView: {
                 name: 'Vista de inicio predeterminada',
-                desc: 'Elige qué panel mostrar al abrir Notebook Navigator. El panel de navegación muestra los accesos directos, los archivos recientes y la estructura de carpetas. El panel de lista muestra la lista de archivos en pantalla.',
+                desc: 'Elige qué panel está activo al abrir Notebook Navigator. El diseño de panel único muestra este panel primero; el diseño de doble panel le da el foco del teclado.',
                 options: {
                     navigation: 'Panel de navegación',
                     files: 'Panel de lista'
@@ -1478,6 +1484,10 @@ export const STRINGS_ES = {
                 name: 'Mostrar imagen destacada',
                 desc: 'Mostrar imágenes destacadas de las notas en el calendario.'
             },
+            calendarShowTasks: {
+                name: 'Mostrar tareas',
+                desc: 'Mostrar un indicador en días, semanas y meses con tareas pendientes.'
+            },
             calendarShowWeekNumber: {
                 name: 'Mostrar número de semana',
                 desc: 'Agregar una columna con el número de semana.'
@@ -1594,6 +1604,12 @@ export const STRINGS_ES = {
                         'Pega o edita el JSON a continuación. Los ajustes no incluidos se restablecen a los valores predeterminados.',
                     placeholder: '{\n  "folderSortOrder": "alpha-desc"\n}',
                     confirmButtonText: 'Importar',
+                    confirmTitle: '¿Importar ajustes?',
+                    confirmMessage: 'La importación reemplaza los ajustes actuales de Notebook Navigator.',
+                    backupToggleName: 'Guardar los ajustes actuales en la raíz de la bóveda antes de importar',
+                    backupToggleDesc: 'Crea un archivo JSON con marca de tiempo en la raíz de la bóveda.',
+                    successWithBackupNotice: 'Ajustes importados. Los ajustes anteriores se guardaron en {path}.',
+                    backupError: 'No se pudieron guardar los ajustes actuales: {message}',
                     successNotice: 'Ajustes importados.',
                     errorNotice: 'Error al importar los ajustes: {message}',
                     fileReadError: 'No se pudo leer el archivo: {message}'
@@ -1698,6 +1714,11 @@ export const STRINGS_ES = {
                 name: 'Ocultar carpetas (perfil de bóveda)',
                 desc: 'Lista de carpetas a ocultar separadas por comas. Patrones de nombre: assets* (carpetas que comienzan con assets), *_temp (terminan con _temp). Patrones de ruta: /archive (solo archivo raíz), /res* (carpetas raíz que comienzan con res), /*/temp (carpetas temp un nivel abajo), /projects/* (todas las carpetas dentro de projects).',
                 placeholder: 'templates, assets*, /archive, /res*'
+            },
+            descendantExcludedFolders: {
+                name: 'Excluir carpetas de notas de subcarpetas (perfil de bóveda)',
+                desc: 'Lista de carpetas separadas por comas que se omiten al recopilar notas de subcarpetas. Las carpetas permanecen visibles, y al seleccionar una se siguen mostrando sus notas. Usa los mismos patrones que Ocultar carpetas.',
+                placeholder: 'diario, recursos, /archivo'
             },
             fileVisibility: {
                 name: 'Mostrar tipos de archivo (perfil de bóveda)',

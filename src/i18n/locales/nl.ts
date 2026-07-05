@@ -353,6 +353,9 @@ export const STRINGS_NL = {
             changeBackground: 'Achtergrond wijzigen',
             excludeFolder: 'Map verbergen',
             unhideFolder: 'Map zichtbaar maken',
+            excludeFromDescendants: 'Verbergen in bovenliggende mappen',
+            includeInDescendants: 'Weergeven in bovenliggende mappen',
+            hiddenFromParentsIndicator: 'Verborgen in lijsten van bovenliggende mappen',
             moveFolder: 'Map verplaatsen naar...',
             renameFolder: 'Map hernoemen',
             deleteFolder: 'Map verwijderen'
@@ -775,6 +778,8 @@ export const STRINGS_NL = {
         notices: {
             hideFolder: 'Map verborgen: {name}',
             showFolder: 'Map zichtbaar: {name}',
+            folderExcludedFromDescendants: 'Verborgen in lijsten van bovenliggende mappen: {name}',
+            folderIncludedInDescendants: 'Weergegeven in lijsten van bovenliggende mappen: {name}',
             mergeNotes: '{count} notities samengevoegd in {name}'
         },
         notifications: {
@@ -981,6 +986,7 @@ export const STRINGS_NL = {
                 vaultConfiguration: 'Kluisinstelling',
                 templates: 'Sjablonen',
                 behavior: 'Gedrag',
+                startup: 'Opstarten',
                 keyboardNavigation: 'Toetsenbordnavigatie',
                 mouseButtons: 'Muisknoppen',
                 view: 'Uiterlijk',
@@ -1303,7 +1309,7 @@ export const STRINGS_NL = {
             },
             startView: {
                 name: 'Standaard opstartweergave',
-                desc: 'Kies welk paneel wordt weergegeven bij het openen van Notebook Navigator. Navigatiepaneel toont snelkoppelingen, recente bestanden en mappenstructuur. Lijstpaneel toont direct de bestandenlijst.',
+                desc: 'Kies welk paneel actief is bij het openen van Notebook Navigator. De enkelpaneelweergave toont dit paneel eerst; de dubbelpaneelweergave geeft het de toetsenbordfocus.',
                 options: {
                     navigation: 'Navigatiepaneel',
                     files: 'Lijstpaneel'
@@ -1479,6 +1485,10 @@ export const STRINGS_NL = {
                 name: 'Uitgelichte afbeelding tonen',
                 desc: 'Toon uitgelichte afbeeldingen voor notities in de kalender.'
             },
+            calendarShowTasks: {
+                name: 'Taken tonen',
+                desc: 'Een indicator weergeven op dagen, weken en maanden met onvoltooide taken.'
+            },
             calendarShowWeekNumber: {
                 name: 'Weeknummer tonen',
                 desc: 'Voeg een kolom toe met het weeknummer.'
@@ -1594,6 +1604,12 @@ export const STRINGS_NL = {
                     editorDesc: 'Plak of bewerk JSON hieronder. Niet-opgenomen instellingen worden teruggezet naar de standaardwaarden.',
                     placeholder: '{\n  "folderSortOrder": "alpha-desc"\n}',
                     confirmButtonText: 'Importeren',
+                    confirmTitle: 'Instellingen importeren?',
+                    confirmMessage: 'Bij importeren worden de huidige Notebook Navigator-instellingen vervangen.',
+                    backupToggleName: 'Huidige instellingen vóór importeren opslaan in de kluisroot',
+                    backupToggleDesc: 'Maakt een JSON-bestand met tijdstempel in de kluisroot.',
+                    successWithBackupNotice: 'Instellingen geïmporteerd. Vorige instellingen opgeslagen in {path}.',
+                    backupError: 'Kan huidige instellingen niet opslaan: {message}',
                     successNotice: 'Instellingen geïmporteerd.',
                     errorNotice: 'Importeren van instellingen mislukt: {message}',
                     fileReadError: 'Kan bestand niet lezen: {message}'
@@ -1730,6 +1746,11 @@ export const STRINGS_NL = {
                 name: 'Mappen verbergen (kluisprofiel)',
                 desc: 'Kommagescheiden lijst van te verbergen mappen. Naampatronen: assets* (mappen beginnend met assets), *_temp (eindigend met _temp). Padpatronen: /archive (alleen root archive), /res* (root mappen beginnend met res), /*/temp (temp mappen één niveau diep), /projects/* (alle mappen binnen projects).',
                 placeholder: 'templates, assets*, /archive, /res*'
+            },
+            descendantExcludedFolders: {
+                name: 'Mappen uitsluiten van notities uit submappen (kluisprofiel)',
+                desc: 'Kommagescheiden lijst met mappen die worden overgeslagen bij het verzamelen van notities uit submappen. Mappen blijven zichtbaar, en het selecteren van een map toont nog steeds de notities. Gebruikt dezelfde patronen als Mappen verbergen.',
+                placeholder: 'dagelijks, bronnen, /archief'
             },
             showFileDate: {
                 name: 'Datum tonen',

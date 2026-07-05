@@ -507,6 +507,7 @@ export interface VaultProfile {
     fileVisibility: FileVisibility;
     propertyKeys: VaultProfilePropertyKey[];
     hiddenFolders: string[];
+    descendantExcludedFolders: string[];
     hiddenTags: string[];
     hiddenFileNames: string[];
     hiddenFileTags: string[];
@@ -756,6 +757,7 @@ export interface NotebookNavigatorSettings {
     calendarMonthHeadingFormat: CalendarMonthHeadingFormat;
     calendarHighlightToday: boolean;
     calendarShowFeatureImage: boolean;
+    calendarShowTasks: boolean;
     calendarMonthHighlights: Record<string, string>;
     calendarShowWeekNumber: boolean;
     calendarShowQuarter: boolean;

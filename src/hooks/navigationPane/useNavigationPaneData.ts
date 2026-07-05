@@ -160,6 +160,7 @@ export function useNavigationPaneData({
     const {
         effectiveFrontmatterExclusions,
         hiddenFolders,
+        descendantExcludedFolders,
         hiddenFileTags,
         fileVisibility,
         navigationBannerPath,
@@ -252,6 +253,7 @@ export function useNavigationPaneData({
         propertyCollectionCount,
         effectiveFrontmatterExclusions,
         hiddenFolders,
+        descendantExcludedFolders,
         hiddenFileTags,
         showHiddenItems,
         folderCountFileNameMatcher,

@@ -350,6 +350,9 @@ export const STRINGS_AR = {
             changeBackground: 'تغيير الخلفية',
             excludeFolder: 'إخفاء المجلد',
             unhideFolder: 'إظهار المجلد',
+            excludeFromDescendants: 'إخفاء من المجلدات الأصلية',
+            includeInDescendants: 'إظهار في المجلدات الأصلية',
+            hiddenFromParentsIndicator: 'مخفى من قوائم المجلدات الأصلية',
             moveFolder: 'نقل المجلد إلى...',
             renameFolder: 'إعادة تسمية المجلد',
             deleteFolder: 'حذف المجلد'
@@ -768,6 +771,8 @@ export const STRINGS_AR = {
         notices: {
             hideFolder: 'تم إخفاء المجلد: {name}',
             showFolder: 'تم إظهار المجلد: {name}',
+            folderExcludedFromDescendants: 'مخفى من قوائم المجلدات الأصلية: {name}',
+            folderIncludedInDescendants: 'ظاهر في قوائم المجلدات الأصلية: {name}',
             mergeNotes: 'تم دمج {count} ملاحظة في {name}'
         },
         notifications: {
@@ -974,6 +979,7 @@ export const STRINGS_AR = {
                 vaultConfiguration: 'إعداد الخزنة',
                 templates: 'قوالب',
                 behavior: 'السلوك',
+                startup: 'بدء التشغيل',
                 keyboardNavigation: 'التنقل بلوحة المفاتيح',
                 mouseButtons: 'أزرار الفأرة',
                 view: 'المظهر',
@@ -1296,7 +1302,7 @@ export const STRINGS_AR = {
             },
             startView: {
                 name: 'عرض البدء الافتراضي',
-                desc: 'اختر اللوحة التي تعرض عند فتح متصفح الدفتر. لوحة التنقل تعرض الاختصارات والملفات الحديثة وشجرة المجلدات. لوحة القائمة تعرض قائمة الملفات فورًا.',
+                desc: 'اختر اللوحة النشطة عند فتح متصفح الدفتر. في تخطيط اللوحة الواحدة تظهر هذه اللوحة أولًا، وفي تخطيط اللوحتين تحصل على تركيز لوحة المفاتيح.',
                 options: {
                     navigation: 'لوحة التنقل',
                     files: 'لوحة القائمة'
@@ -1471,6 +1477,10 @@ export const STRINGS_AR = {
                 name: 'عرض صورة الميزة',
                 desc: 'عرض صور الميزات للملاحظات في التقويم.'
             },
+            calendarShowTasks: {
+                name: 'إظهار المهام',
+                desc: 'عرض مؤشر على الأيام والأسابيع والأشهر التي تحتوي على مهام غير مكتملة.'
+            },
             calendarShowWeekNumber: {
                 name: 'عرض رقم الأسبوع',
                 desc: 'إضافة عمود برقم الأسبوع.'
@@ -1586,6 +1596,12 @@ export const STRINGS_AR = {
                     editorDesc: 'الصق أو عدّل JSON أدناه. الإعدادات غير المضمنة تُعاد إلى القيم الافتراضية.',
                     placeholder: '{\n  "folderSortOrder": "alpha-desc"\n}',
                     confirmButtonText: 'استيراد',
+                    confirmTitle: 'استيراد الإعدادات؟',
+                    confirmMessage: 'سيؤدي الاستيراد إلى استبدال إعدادات Notebook Navigator الحالية.',
+                    backupToggleName: 'حفظ الإعدادات الحالية في جذر الخزنة قبل الاستيراد',
+                    backupToggleDesc: 'ينشئ ملف JSON مختومًا بالوقت في جذر الخزنة.',
+                    successWithBackupNotice: 'تم استيراد الإعدادات. حُفظت الإعدادات السابقة في {path}.',
+                    backupError: 'تعذّر حفظ الإعدادات الحالية: {message}',
                     successNotice: 'تم استيراد الإعدادات.',
                     errorNotice: 'فشل استيراد الإعدادات: {message}',
                     fileReadError: 'تعذّر قراءة الملف: {message}'
@@ -1721,6 +1737,11 @@ export const STRINGS_AR = {
                 name: 'إخفاء المجلدات (ملف الخزنة)',
                 desc: 'قائمة مفصولة بفاصلة من المجلدات لإخفائها. أنماط الاسم: assets* (المجلدات التي تبدأ بـ assets)، *_temp (التي تنتهي بـ _temp). أنماط المسار: /archive (الأرشيف الجذري فقط)، /res* (المجلدات الجذرية التي تبدأ بـ res)، /*/temp (مجلدات temp بمستوى واحد)، /projects/* (جميع المجلدات داخل projects).',
                 placeholder: 'templates, assets*, /archive, /res*'
+            },
+            descendantExcludedFolders: {
+                name: 'استبعاد المجلدات من ملاحظات المجلدات الفرعية (ملف تعريف الخزنة)',
+                desc: 'قائمة مفصولة بفواصل للمجلدات التي يتم تجاهلها عند جمع الملاحظات من المجلدات الفرعية. تبقى المجلدات مرئية، ويظل تحديدها يعرض ملاحظاتها. تستخدم نفس أنماط إخفاء المجلدات.',
+                placeholder: 'يومي، موارد، /archive'
             },
             showFileDate: {
                 name: 'إظهار التاريخ',

@@ -313,6 +313,7 @@ export interface LocalStorageKeys {
     collapsedListGroupsKey: string;
     mergeNotesSeparatorKey: string;
     mergeNotesMoveSourcesToTrashKey: string;
+    settingsImportBackupToRootKey: string;
 }
 
 /**
@@ -376,7 +377,8 @@ export const STORAGE_KEYS: LocalStorageKeys = {
     featureImagePixelSizeKey: 'notebook-navigator-feature-image-pixel-size',
     collapsedListGroupsKey: 'notebook-navigator-collapsed-list-groups',
     mergeNotesSeparatorKey: 'notebook-navigator-merge-notes-separator',
-    mergeNotesMoveSourcesToTrashKey: 'notebook-navigator-merge-notes-move-sources-to-trash'
+    mergeNotesMoveSourcesToTrashKey: 'notebook-navigator-merge-notes-move-sources-to-trash',
+    settingsImportBackupToRootKey: 'notebook-navigator-settings-import-backup-to-root'
 };
 
 export interface UXPreferences {

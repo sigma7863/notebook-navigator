@@ -51,6 +51,7 @@ export interface UseNavigationNoteCountsParams {
     propertyCollectionCount: NoteCountInfo | undefined;
     effectiveFrontmatterExclusions: string[];
     hiddenFolders: string[];
+    descendantExcludedFolders: string[];
     hiddenFileTags: string[];
     showHiddenItems: boolean;
     folderCountFileNameMatcher: HiddenFileNameMatcher | null;
@@ -74,6 +75,7 @@ export function useNavigationNoteCounts(params: UseNavigationNoteCountsParams): 
         propertyCollectionCount,
         effectiveFrontmatterExclusions,
         hiddenFolders,
+        descendantExcludedFolders,
         hiddenFileTags,
         showHiddenItems,
         folderCountFileNameMatcher,
@@ -261,6 +263,7 @@ export function useNavigationNoteCounts(params: UseNavigationNoteCountsParams): 
             excludedFiles: excludedProperties,
             excludedFileMatcher,
             excludedFolders: excludedFolderPatterns,
+            descendantExcludedFolders,
             fileNameMatcher: folderCountFileNameMatcher,
             hiddenFileTagVisibility,
             includeDescendants,
@@ -280,6 +283,7 @@ export function useNavigationNoteCounts(params: UseNavigationNoteCountsParams): 
     }, [
         app,
         effectiveFrontmatterExclusions,
+        descendantExcludedFolders,
         fileVisibility,
         folderCountFileNameMatcher,
         hiddenFileTagDataVersion,

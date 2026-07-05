@@ -33,7 +33,6 @@ export type ShortcutContextMenuTarget =
     | { type: 'missing'; key: string; kind: 'folder' | 'note' | 'tag' | 'property' };
 
 export interface NavigationPaneShortcutRenderState {
-    activeShortcutId: string | null;
     shouldUseShortcutDnd: boolean;
     allowEmptyShortcutDrop: boolean;
     shortcutDragHandleConfig: { visible: true; only: true } | undefined;
@@ -62,7 +61,23 @@ export interface NavigationPaneShortcutRenderState {
     getMissingNoteLabel: (path: string) => string;
 }
 
+/** Shortcut state read during row render; row context includes it as a reactive member so rows re-render on change */
+export type NavigationPaneShortcutUiState = Pick<
+    NavigationPaneShortcutRenderState,
+    | 'shouldUseShortcutDnd'
+    | 'allowEmptyShortcutDrop'
+    | 'shortcutDragHandleConfig'
+    | 'shortcutHeaderTrailingAction'
+    | 'propertiesHeaderTrailingAction'
+    | 'shortcutNumberBadgesByKey'
+    | 'shouldShowShortcutCounts'
+>;
+
+/** Shortcut handlers and lookups exposed to rows through an identity-stable facade */
+export type NavigationPaneShortcutRowHandlers = Omit<NavigationPaneShortcutRenderState, keyof NavigationPaneShortcutUiState>;
+
 export interface NavigationPaneShortcutsResult extends NavigationPaneShortcutRenderState {
+    activeShortcutId: string | null;
     shortcutsExpanded: boolean;
     setShortcutsExpanded: React.Dispatch<React.SetStateAction<boolean>>;
     recentNotesExpanded: boolean;

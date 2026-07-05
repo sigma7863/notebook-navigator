@@ -50,6 +50,7 @@ describe('calendar active editor state', () => {
                 onToday: () => {},
                 onOpenHelp: () => {},
                 onPeriodClick: () => {},
+                onPeriodMouseDown: () => {},
                 onPeriodContextMenu: () => {}
             })
         );
@@ -85,8 +86,10 @@ describe('calendar active editor state', () => {
                 onShowTooltip: () => {},
                 onHideTooltip: () => {},
                 onDayClick: () => {},
+                onDayMouseDown: () => {},
                 onDayContextMenu: () => {},
                 onWeekClick: () => {},
+                onWeekMouseDown: () => {},
                 onWeekLabelClick: () => {},
                 onWeekContextMenu: () => {}
             })
@@ -119,6 +122,7 @@ describe('calendar active editor state', () => {
                 highlightedMonthImageUrls: {},
                 onNavigateYear: () => {},
                 onYearPeriodClick: () => {},
+                onYearPeriodMouseDown: () => {},
                 onYearPeriodContextMenu: () => {},
                 onSelectYearMonth: () => {}
             })

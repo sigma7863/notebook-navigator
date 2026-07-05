@@ -24,6 +24,7 @@ import {
     getActiveHiddenFileNames,
     getActiveHiddenFileTags,
     getActiveHiddenFileProperties,
+    getHiddenFolderBoundaryMatcher,
     getActiveHiddenFolders,
     getHiddenFolderMatcher
 } from './vaultProfiles';
@@ -505,8 +506,12 @@ function matchesFolderPattern(folderName: string, pattern: string): boolean {
  * @param folderPath - The full folder path for path-based patterns (e.g., "root/archive")
  * @returns true if the folder should be excluded
  */
-export function shouldExcludeFolder(folderName: string, patterns: string[], folderPath?: string): boolean {
-    const pathMatcher = getHiddenFolderMatcher(patterns).matches;
+function matchesFolderExclusionPatterns(
+    folderName: string,
+    patterns: string[],
+    folderPath: string | undefined,
+    pathMatcher: (path: string) => boolean
+): boolean {
     const hasNamePattern = patterns.some(pattern => !pattern.startsWith('/') && matchesFolderPattern(folderName, pattern));
 
     if (hasNamePattern) {
@@ -519,6 +524,19 @@ export function shouldExcludeFolder(folderName: string, patterns: string[], fold
 
     const normalizedPath = folderPath.startsWith('/') ? folderPath : `/${folderPath}`;
     return pathMatcher(normalizedPath);
+}
+
+export function shouldExcludeFolder(folderName: string, patterns: string[], folderPath?: string): boolean {
+    return matchesFolderExclusionPatterns(folderName, patterns, folderPath, getHiddenFolderMatcher(patterns).matches);
+}
+
+/**
+ * Checks if a folder's notes should be omitted from parent folder aggregation.
+ * Uses the same name and path pattern syntax as shouldExcludeFolder, but path
+ * patterns match only the folder itself, not its descendants.
+ */
+export function shouldExcludeFolderFromDescendants(folderName: string, patterns: string[], folderPath?: string): boolean {
+    return matchesFolderExclusionPatterns(folderName, patterns, folderPath, getHiddenFolderBoundaryMatcher(patterns).matches);
 }
 
 /**
