@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { TFile, TFolder, type App } from 'obsidian';
 import { PointerSensor, type DragEndEvent, type DragStartEvent, useSensor, useSensors } from '@dnd-kit/core';
 import { arrayMove } from '@dnd-kit/sortable';
@@ -377,16 +377,22 @@ export function useNavigationPaneShortcutDnD({
         [allowEmptyShortcutDrop, handleShortcutDrop]
     );
 
+    // The returned handler objects are built during row render and held in memoized row props,
+    // so they resolve the latest drag handlers through a ref at event time instead of capturing
+    // the handlers current at build time.
+    const externalDragHandlersRef = useRef({ handleShortcutDragOver, handleShortcutDrop });
+    externalDragHandlersRef.current = { handleShortcutDragOver, handleShortcutDrop };
+
     const buildShortcutExternalHandlers = useCallback(
         (key: string): ListReorderHandlers => ({
             onDragOver: event => {
-                handleShortcutDragOver(event);
+                externalDragHandlersRef.current.handleShortcutDragOver(event);
             },
             onDrop: event => {
-                handleShortcutDrop(event, key);
+                externalDragHandlersRef.current.handleShortcutDrop(event, key);
             }
         }),
-        [handleShortcutDragOver, handleShortcutDrop]
+        []
     );
 
     return {

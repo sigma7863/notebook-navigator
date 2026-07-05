@@ -1748,7 +1748,7 @@ export function Calendar({
     );
 
     const handleDayContextMenu = useCallback(
-        (event: React.MouseEvent<HTMLButtonElement>, day: CalendarWeek['days'][number], canCreate: boolean) => {
+        (event: React.MouseEvent<HTMLButtonElement>, day: CalendarWeek['days'][number], canCreate: boolean, hasFeatureImage: boolean) => {
             const monthKey = day.date.format('YYYY-MM');
             showCalendarNoteContextMenu(event, {
                 kind: 'day',
@@ -1757,11 +1757,11 @@ export function Calendar({
                 canCreate,
                 monthKey,
                 dayIso: day.iso,
-                hasFeatureImage: featureImageKeysByIso.has(day.iso),
+                hasFeatureImage,
                 currentMonthHighlightDayIso: settings.calendarMonthHighlights[monthKey] ?? null
             });
         },
-        [featureImageKeysByIso, settings.calendarMonthHighlights, showCalendarNoteContextMenu]
+        [settings.calendarMonthHighlights, showCalendarNoteContextMenu]
     );
 
     if (!momentApi || !cursorDate) {
