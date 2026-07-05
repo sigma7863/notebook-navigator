@@ -349,6 +349,9 @@ export const STRINGS_KO = {
             changeBackground: '배경색 변경',
             excludeFolder: '폴더 숨기기',
             unhideFolder: '폴더 표시',
+            excludeFromDescendants: '상위 폴더에서 숨기기',
+            includeInDescendants: '상위 폴더에서 표시',
+            hiddenFromParentsIndicator: '상위 폴더 목록에서 숨김',
             moveFolder: '폴더 이동...',
             renameFolder: '폴더 이름 변경',
             deleteFolder: '폴더 삭제'
@@ -770,6 +773,8 @@ export const STRINGS_KO = {
         notices: {
             hideFolder: '폴더 숨김: {name}',
             showFolder: '폴더 표시: {name}',
+            folderExcludedFromDescendants: '상위 폴더 목록에서 숨김: {name}',
+            folderIncludedInDescendants: '상위 폴더 목록에 표시됨: {name}',
             mergeNotes: '{count}개 노트를 {name}에 병합했습니다'
         },
         notifications: {
@@ -976,6 +981,7 @@ export const STRINGS_KO = {
                 vaultConfiguration: '보관소 설정',
                 templates: '템플릿',
                 behavior: '동작',
+                startup: '시작',
                 keyboardNavigation: '키보드 탐색',
                 mouseButtons: '마우스 버튼',
                 view: '모양',
@@ -1298,7 +1304,7 @@ export const STRINGS_KO = {
             },
             startView: {
                 name: '기본 시작 보기',
-                desc: 'Notebook Navigator를 열 때 표시할 창을 선택하세요. 탐색 창은 바로가기, 최근 파일, 폴더 구조를 표시합니다. 목록 창은 파일 목록을 표시합니다.',
+                desc: 'Notebook Navigator를 열 때 활성화되는 창을 선택하세요. 단일 창 레이아웃에서는 이 창이 먼저 표시되고, 이중 창 레이아웃에서는 이 창에 키보드 포커스가 이동합니다.',
                 options: {
                     navigation: '탐색 창',
                     files: '목록 창'
@@ -1473,6 +1479,10 @@ export const STRINGS_KO = {
                 name: '대표 이미지 표시',
                 desc: '캘린더에서 노트의 대표 이미지를 표시합니다.'
             },
+            calendarShowTasks: {
+                name: '작업 표시',
+                desc: '미완료 작업이 있는 일, 주, 월에 표시기를 표시합니다.'
+            },
             calendarShowWeekNumber: {
                 name: '주 번호 표시',
                 desc: '주 번호 열을 추가합니다.'
@@ -1588,6 +1598,12 @@ export const STRINGS_KO = {
                     editorDesc: '아래에 JSON을 붙여넣거나 편집하세요. 포함되지 않은 설정은 기본값으로 초기화됩니다.',
                     placeholder: '{\n  "folderSortOrder": "alpha-desc"\n}',
                     confirmButtonText: '가져오기',
+                    confirmTitle: '설정을 가져오시겠습니까?',
+                    confirmMessage: '가져오면 현재 Notebook Navigator 설정이 대체됩니다.',
+                    backupToggleName: '가져오기 전에 현재 설정을 보관소 루트에 저장',
+                    backupToggleDesc: '보관소 루트에 타임스탬프가 있는 JSON 파일을 만듭니다.',
+                    successWithBackupNotice: '설정을 가져왔습니다. 이전 설정은 {path}에 저장되었습니다.',
+                    backupError: '현재 설정을 저장할 수 없습니다: {message}',
                     successNotice: '설정을 가져왔습니다.',
                     errorNotice: '설정 가져오기에 실패했습니다: {message}',
                     fileReadError: '파일을 읽을 수 없습니다: {message}'
@@ -1723,6 +1739,11 @@ export const STRINGS_KO = {
                 name: '폴더 숨기기 (볼트 프로필)',
                 desc: '숨길 폴더의 쉼표로 구분된 목록입니다. 이름 패턴: assets* (assets로 시작하는 폴더), *_temp (_temp로 끝나는). 경로 패턴: /archive (루트 archive만), /res* (res로 시작하는 루트 폴더), /*/temp (한 레벨 깊이의 temp 폴더), /projects/* (projects 내부의 모든 폴더).',
                 placeholder: 'templates, assets*, /archive, /res*'
+            },
+            descendantExcludedFolders: {
+                name: '하위 폴더 노트에서 폴더 제외(볼트 프로필)',
+                desc: '하위 폴더에서 노트를 모을 때 제외할 폴더의 쉼표로 구분된 목록입니다. 폴더는 계속 표시되며, 선택하면 해당 노트가 계속 표시됩니다. 폴더 숨기기와 같은 패턴을 사용합니다.',
+                placeholder: '일지, 자료, /archive'
             },
             showFileDate: {
                 name: '날짜 표시',

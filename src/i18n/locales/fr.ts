@@ -352,6 +352,9 @@ export const STRINGS_FR = {
             changeBackground: 'Changer l’arrière-plan',
             excludeFolder: 'Masquer le dossier',
             unhideFolder: 'Afficher le dossier',
+            excludeFromDescendants: 'Masquer dans les dossiers parents',
+            includeInDescendants: 'Afficher dans les dossiers parents',
+            hiddenFromParentsIndicator: 'Masqué dans les listes des dossiers parents',
             moveFolder: 'Déplacer le dossier vers...',
             renameFolder: 'Renommer le dossier',
             deleteFolder: 'Supprimer le dossier'
@@ -776,6 +779,8 @@ export const STRINGS_FR = {
         notices: {
             hideFolder: 'Dossier masqué : {name}',
             showFolder: 'Dossier affiché : {name}',
+            folderExcludedFromDescendants: 'Masqué dans les listes des dossiers parents : {name}',
+            folderIncludedInDescendants: 'Affiché dans les listes des dossiers parents : {name}',
             mergeNotes: '{count} notes fusionnées dans {name}'
         },
         notifications: {
@@ -983,6 +988,7 @@ export const STRINGS_FR = {
                 vaultConfiguration: 'Configuration du coffre',
                 templates: 'Modèles',
                 behavior: 'Comportement',
+                startup: 'Démarrage',
                 keyboardNavigation: 'Navigation au clavier',
                 mouseButtons: 'Boutons de souris',
                 view: 'Apparence',
@@ -1305,7 +1311,7 @@ export const STRINGS_FR = {
             },
             startView: {
                 name: 'Vue de démarrage par défaut',
-                desc: "Choisissez le panneau affiché lors de l'ouverture de Notebook Navigator. Le panneau de navigation montre les raccourcis, les fichiers récents et la structure des dossiers. Le panneau de liste affiche immédiatement la liste des fichiers.",
+                desc: "Choisissez le panneau actif à l'ouverture de Notebook Navigator. La disposition à panneau unique affiche ce panneau en premier ; la disposition à double panneau lui donne le focus clavier.",
                 options: {
                     navigation: 'Panneau de navigation',
                     files: 'Panneau de liste'
@@ -1481,6 +1487,10 @@ export const STRINGS_FR = {
                 name: "Afficher l'image mise en avant",
                 desc: 'Afficher les images mises en avant des notes dans le calendrier.'
             },
+            calendarShowTasks: {
+                name: 'Afficher les tâches',
+                desc: 'Afficher un indicateur sur les jours, semaines et mois avec des tâches inachevées.'
+            },
             calendarShowWeekNumber: {
                 name: 'Afficher le numéro de semaine',
                 desc: 'Ajouter une colonne avec le numéro de semaine.'
@@ -1598,6 +1608,12 @@ export const STRINGS_FR = {
                         'Collez ou modifiez le JSON ci-dessous. Les paramètres non inclus sont réinitialisés aux valeurs par défaut.',
                     placeholder: '{\n  "folderSortOrder": "alpha-desc"\n}',
                     confirmButtonText: 'Importer',
+                    confirmTitle: 'Importer les paramètres ?',
+                    confirmMessage: 'L’importation remplace les paramètres actuels de Notebook Navigator.',
+                    backupToggleName: 'Enregistrer les paramètres actuels à la racine du coffre avant l’importation',
+                    backupToggleDesc: 'Crée un fichier JSON horodaté à la racine du coffre.',
+                    successWithBackupNotice: 'Paramètres importés. Paramètres précédents enregistrés dans {path}.',
+                    backupError: 'Impossible d’enregistrer les paramètres actuels : {message}',
                     successNotice: 'Paramètres importés.',
                     errorNotice: "Échec de l'importation des paramètres : {message}",
                     fileReadError: 'Impossible de lire le fichier : {message}'
@@ -1702,6 +1718,11 @@ export const STRINGS_FR = {
                 name: 'Masquer les dossiers (profil du coffre)',
                 desc: 'Liste de dossiers à masquer séparés par des virgules. Modèles de nom : assets* (dossiers commençant par assets), *_temp (finissant par _temp). Modèles de chemin : /archive (archive racine uniquement), /res* (dossiers racine commençant par res), /*/temp (dossiers temp un niveau plus bas), /projects/* (tous les dossiers dans projects).',
                 placeholder: 'templates, assets*, /archive, /res*'
+            },
+            descendantExcludedFolders: {
+                name: 'Exclure des dossiers des notes de sous-dossiers (profil du coffre)',
+                desc: 'Liste de dossiers séparés par des virgules à ignorer lors de la collecte des notes des sous-dossiers. Les dossiers restent visibles, et leur sélection affiche toujours leurs notes. Utilise les mêmes modèles que Masquer les dossiers.',
+                placeholder: 'quotidien, ressources, /archive'
             },
             fileVisibility: {
                 name: 'Afficher les types de fichiers (profil du coffre)',

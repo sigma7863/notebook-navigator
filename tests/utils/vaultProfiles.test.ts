@@ -23,6 +23,7 @@ import {
     cloneNavRainbowSettings,
     cloneShortcuts,
     createValidatedVaultProfileFromTemplate,
+    getActiveDescendantExcludedFolders,
     getActiveFileVisibility,
     getActiveHiddenFileNames,
     getActiveHiddenFileTags,
@@ -31,6 +32,7 @@ import {
     getActiveHiddenTags,
     getActivePropertyKeySet,
     getActiveVaultProfile,
+    getHiddenFolderBoundaryMatcher,
     getHiddenFolderMatcher,
     getPropertyFieldsFromPropertyKeys,
     getPropertyKeySet,
@@ -57,12 +59,14 @@ describe('updateHiddenFolderExactMatches', () => {
             {
                 ...baseProfile,
                 id: 'default',
-                hiddenFolders: ['/Projects/Archive', '/Reports/*', 'Archive']
+                hiddenFolders: ['/Projects/Archive', '/Reports/*', 'Archive'],
+                descendantExcludedFolders: ['/Projects/Archive', '/Daily']
             },
             {
                 ...baseProfile,
                 id: 'profile-b',
-                hiddenFolders: ['/Projects/Archive/', '/Other']
+                hiddenFolders: ['/Projects/Archive/', '/Other'],
+                descendantExcludedFolders: ['/Projects/Archive/']
             }
         ];
         settings.vaultProfile = 'default';
@@ -76,6 +80,11 @@ describe('updateHiddenFolderExactMatches', () => {
             'Archive'
         ]);
         expect(settings.vaultProfiles.find(profile => profile.id === 'profile-b')?.hiddenFolders).toEqual(['/Areas/Archive', '/Other']);
+        expect(settings.vaultProfiles.find(profile => profile.id === 'default')?.descendantExcludedFolders).toEqual([
+            '/Areas/Archive',
+            '/Daily'
+        ]);
+        expect(settings.vaultProfiles.find(profile => profile.id === 'profile-b')?.descendantExcludedFolders).toEqual(['/Areas/Archive']);
     });
 
     it('renames path patterns even when casing differs', () => {
@@ -208,12 +217,14 @@ describe('removeHiddenFolderExactMatches', () => {
             {
                 ...baseProfile,
                 id: 'default',
-                hiddenFolders: ['/Projects/Archive', '/Reports/*', 'Archive']
+                hiddenFolders: ['/Projects/Archive', '/Reports/*', 'Archive'],
+                descendantExcludedFolders: ['/Projects/Archive', '/Daily']
             },
             {
                 ...baseProfile,
                 id: 'profile-b',
-                hiddenFolders: ['/Projects/Archive/', '/Other']
+                hiddenFolders: ['/Projects/Archive/', '/Other'],
+                descendantExcludedFolders: ['/Projects/Archive/']
             }
         ];
 
@@ -222,6 +233,8 @@ describe('removeHiddenFolderExactMatches', () => {
         expect(didRemove).toBe(true);
         expect(settings.vaultProfiles.find(profile => profile.id === 'default')?.hiddenFolders).toEqual(['/Reports/*', 'Archive']);
         expect(settings.vaultProfiles.find(profile => profile.id === 'profile-b')?.hiddenFolders).toEqual(['/Other']);
+        expect(settings.vaultProfiles.find(profile => profile.id === 'default')?.descendantExcludedFolders).toEqual(['/Daily']);
+        expect(settings.vaultProfiles.find(profile => profile.id === 'profile-b')?.descendantExcludedFolders).toEqual([]);
     });
 
     it('removes path patterns even when casing differs', () => {
@@ -540,6 +553,7 @@ describe('vault profile selectors', () => {
         expect(getActiveHiddenFileNames(settings)).toBe(settings.vaultProfiles[0].hiddenFileNames);
         expect(getActiveHiddenTags(settings)).toBe(settings.vaultProfiles[0].hiddenTags);
         expect(getActiveHiddenFileTags(settings)).toBe(settings.vaultProfiles[0].hiddenFileTags);
+        expect(getActiveDescendantExcludedFolders(settings)).toBe(settings.vaultProfiles[0].descendantExcludedFolders);
         expect(getActiveFileVisibility(settings)).toBe(settings.vaultProfiles[0].fileVisibility);
     });
 });
@@ -632,6 +646,16 @@ describe('hidden folder matcher', () => {
 
         expect(matcher.matches('/Projects')).toBe(false);
         expect(matcher.matches('/Projects/Client')).toBe(true);
+    });
+
+    it('matches boundary paths without matching descendants', () => {
+        const matcher = getHiddenFolderBoundaryMatcher(['/Daily', '/Projects/*', '/Res*']);
+
+        expect(matcher.matches('/Daily')).toBe(true);
+        expect(matcher.matches('/Daily/2026')).toBe(false);
+        expect(matcher.matches('/Projects/Client')).toBe(true);
+        expect(matcher.matches('/Projects/Client/Archive')).toBe(false);
+        expect(matcher.matches('/Resources')).toBe(true);
     });
 });
 

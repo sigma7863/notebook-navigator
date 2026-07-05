@@ -351,6 +351,9 @@ export const STRINGS_DE = {
             changeBackground: 'Hintergrund ändern',
             excludeFolder: 'Ordner verstecken',
             unhideFolder: 'Ordner einblenden',
+            excludeFromDescendants: 'In übergeordneten Ordnern ausblenden',
+            includeInDescendants: 'In übergeordneten Ordnern anzeigen',
+            hiddenFromParentsIndicator: 'Aus übergeordneten Ordnerlisten ausgeblendet',
             moveFolder: 'Ordner verschieben nach...',
             renameFolder: 'Ordner umbenennen',
             deleteFolder: 'Ordner löschen'
@@ -775,6 +778,8 @@ export const STRINGS_DE = {
         notices: {
             hideFolder: 'Ordner ausgeblendet: {name}',
             showFolder: 'Ordner eingeblendet: {name}',
+            folderExcludedFromDescendants: 'Aus übergeordneten Ordnerlisten ausgeblendet: {name}',
+            folderIncludedInDescendants: 'In übergeordneten Ordnerlisten angezeigt: {name}',
             mergeNotes: '{count} Notizen in {name} zusammengeführt'
         },
         notifications: {
@@ -981,6 +986,7 @@ export const STRINGS_DE = {
                 vaultConfiguration: 'Tresor-Einrichtung',
                 templates: 'Vorlagen',
                 behavior: 'Verhalten',
+                startup: 'Start',
                 keyboardNavigation: 'Tastaturnavigation',
                 mouseButtons: 'Maustasten',
                 view: 'Darstellung',
@@ -1303,7 +1309,7 @@ export const STRINGS_DE = {
             },
             startView: {
                 name: 'Standard-Startansicht',
-                desc: 'Wählen Sie den Bereich, der beim Öffnen von Notebook Navigator angezeigt wird. Der Navigationsbereich zeigt Verknüpfungen, neueste Dateien und die Ordnerstruktur. Der Listenbereich zeigt die Dateiliste.',
+                desc: 'Wählen Sie den Bereich, der beim Öffnen von Notebook Navigator aktiv ist. In der einspaltigen Ansicht wird dieser Bereich zuerst angezeigt, in der zweispaltigen Ansicht erhält er den Tastaturfokus.',
                 options: {
                     navigation: 'Navigationsbereich',
                     files: 'Listenbereich'
@@ -1479,6 +1485,10 @@ export const STRINGS_DE = {
                 name: 'Feature-Bild anzeigen',
                 desc: 'Feature-Bilder für Notizen im Kalender anzeigen.'
             },
+            calendarShowTasks: {
+                name: 'Aufgaben anzeigen',
+                desc: 'Einen Indikator an Tagen, Wochen und Monaten mit unerledigten Aufgaben anzeigen.'
+            },
             calendarShowWeekNumber: {
                 name: 'Wochennummer anzeigen',
                 desc: 'Spalte mit der Wochennummer hinzufügen.'
@@ -1596,6 +1606,12 @@ export const STRINGS_DE = {
                         'JSON unten einfügen oder bearbeiten. Nicht enthaltene Einstellungen werden auf Standardwerte zurückgesetzt.',
                     placeholder: '{\n  "folderSortOrder": "alpha-desc"\n}',
                     confirmButtonText: 'Importieren',
+                    confirmTitle: 'Einstellungen importieren?',
+                    confirmMessage: 'Beim Importieren werden Ihre aktuellen Notebook Navigator-Einstellungen ersetzt.',
+                    backupToggleName: 'Aktuelle Einstellungen vor dem Importieren im Stammordner des Tresors speichern',
+                    backupToggleDesc: 'Erstellt eine JSON-Datei mit Zeitstempel im Stammordner des Tresors.',
+                    successWithBackupNotice: 'Einstellungen importiert. Vorherige Einstellungen wurden unter {path} gespeichert.',
+                    backupError: 'Aktuelle Einstellungen konnten nicht gespeichert werden: {message}',
                     successNotice: 'Einstellungen importiert.',
                     errorNotice: 'Einstellungen konnten nicht importiert werden: {message}',
                     fileReadError: 'Datei konnte nicht gelesen werden: {message}'
@@ -1700,6 +1716,11 @@ export const STRINGS_DE = {
                 name: 'Ordner verstecken (Tresorprofil)',
                 desc: 'Kommagetrennte Liste von auszublendenden Ordnern. Namensmuster: assets* (Ordner die mit assets beginnen), *_temp (endet mit _temp). Pfadmuster: /archive (nur Wurzel-Archive), /res* (Wurzelordner die mit res beginnen), /*/temp (temp-Ordner eine Ebene tief), /projects/* (alle Ordner in projects).',
                 placeholder: 'templates, assets*, /archive, /res*'
+            },
+            descendantExcludedFolders: {
+                name: 'Ordner aus Unterordner-Notizen ausschließen (Tresorprofil)',
+                desc: 'Kommagetrennte Liste von Ordnern, die beim Sammeln von Notizen aus Unterordnern ausgelassen werden. Die Ordner bleiben sichtbar, und beim Auswählen eines Ordners werden seine Notizen weiterhin angezeigt. Verwendet dieselben Muster wie Ordner verstecken.',
+                placeholder: 'daily, ressourcen, /archive'
             },
             fileVisibility: {
                 name: 'Dateitypen anzeigen (Tresorprofil)',

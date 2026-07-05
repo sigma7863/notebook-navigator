@@ -122,6 +122,7 @@ describe('useNavigationPaneTreeInteractions', () => {
         const keyNode = createPropertyKeyNode('status', 'Status', ['notes/a.md'], []);
         const propertyTree = new Map<string, PropertyTreeNode>([[keyNode.key, keyNode]]);
         const collectDescendantNodeIds = vi.fn(() => new Set([childNode.id]));
+        const expansionDispatch = vi.fn();
 
         const propertyTreeProvider: IPropertyTreeProvider = {
             hasNodes: () => true,
@@ -149,7 +150,7 @@ describe('useNavigationPaneTreeInteractions', () => {
                     expandedProperties: new Set(),
                     expandedVirtualFolders: new Set()
                 },
-                expansionDispatch: vi.fn(),
+                expansionDispatch,
                 selectionState: createSelectionState(),
                 selectionDispatch: vi.fn(),
                 uiDispatch: vi.fn(),
@@ -175,8 +176,14 @@ describe('useNavigationPaneTreeInteractions', () => {
         }
         const result = captured as NavigationPaneTreeInteractionsResult;
 
-        expect(result.getAllDescendantPropertyNodeIds(keyNode)).toEqual([childNode.id]);
+        result.handlePropertyToggleAllSiblings(keyNode);
+
         expect(collectDescendantNodeIds).toHaveBeenCalledWith(keyNode.id);
+        expect(expansionDispatch).toHaveBeenCalledWith({
+            type: 'TOGGLE_DESCENDANT_PROPERTIES',
+            descendantNodeIds: [childNode.id],
+            expand: true
+        });
     });
 
     it('switches to the list pane when a right-sidebar folder note is clicked in single-pane mode', () => {

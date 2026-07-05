@@ -23,6 +23,7 @@ import { ItemType, PROPERTIES_ROOT_VIRTUAL_FOLDER_ID, TAGGED_TAG_ID, UNTAGGED_TA
 import {
     createFrontmatterPropertyExclusionMatcher,
     shouldExcludeFolder,
+    shouldExcludeFolderFromDescendants,
     shouldExcludeFileWithMatcher,
     createHiddenFileNameMatcherForVisibility,
     getFilteredDocumentFiles,
@@ -40,6 +41,7 @@ import { getFolderNote, getFolderNoteDetectionSettings } from './folderNoteLooku
 import { createHiddenTagVisibility, normalizeTagPathValue } from './tagPrefixMatcher';
 import {
     getActiveFileVisibility,
+    getActiveDescendantExcludedFolders,
     getActiveHiddenFileNames,
     getActiveHiddenFileTags,
     getActiveHiddenFileProperties,
@@ -349,6 +351,7 @@ export function getFilesForFolder(
 ): TFile[] {
     const files: TFile[] = [];
     const excludedFolderPatterns = getActiveHiddenFolders(settings);
+    const descendantExcludedFolderPatterns = getActiveDescendantExcludedFolders(settings);
     const excludedFileProperties = getActiveHiddenFileProperties(settings);
     const excludedFilePropertyMatcher = createFrontmatterPropertyExclusionMatcher(excludedFileProperties);
     const excludedFileNamePatterns = getActiveHiddenFileNames(settings);
@@ -386,7 +389,10 @@ export function getFilesForFolder(
                 if (excludedFolderPatterns.length > 0 && shouldExcludeFolder(child.name, excludedFolderPatterns, child.path)) {
                     childHidden = true;
                 }
-                const shouldTraverse = showHiddenFolders || !childHidden;
+                const childExcludedFromDescendants =
+                    descendantExcludedFolderPatterns.length > 0 &&
+                    shouldExcludeFolderFromDescendants(child.name, descendantExcludedFolderPatterns, child.path);
+                const shouldTraverse = (showHiddenFolders || !childHidden) && !childExcludedFromDescendants;
                 if (shouldTraverse) {
                     collectFiles(child, childHidden);
                 }

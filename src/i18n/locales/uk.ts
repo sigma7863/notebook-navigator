@@ -352,6 +352,9 @@ export const STRINGS_UK = {
             changeBackground: 'Змінити фон',
             excludeFolder: 'Сховати папку',
             unhideFolder: 'Показати папку',
+            excludeFromDescendants: 'Сховати в батьківських папках',
+            includeInDescendants: 'Показати в батьківських папках',
+            hiddenFromParentsIndicator: 'Сховано зі списків батьківських папок',
             moveFolder: 'Перемістити папку...',
             renameFolder: 'Перейменувати папку',
             deleteFolder: 'Видалити папку'
@@ -770,6 +773,8 @@ export const STRINGS_UK = {
         notices: {
             hideFolder: 'Папку сховано: {name}',
             showFolder: 'Папку показано: {name}',
+            folderExcludedFromDescendants: 'Сховано зі списків батьківських папок: {name}',
+            folderIncludedInDescendants: 'Показано у списках батьківських папок: {name}',
             mergeNotes: 'Об’єднано {count} нотаток у {name}'
         },
         notifications: {
@@ -976,6 +981,7 @@ export const STRINGS_UK = {
                 vaultConfiguration: 'Налаштування сховища',
                 templates: 'Шаблони',
                 behavior: 'Поведінка',
+                startup: 'Запуск',
                 keyboardNavigation: 'Навігація з клавіатури',
                 mouseButtons: 'Кнопки миші',
                 view: 'Вигляд',
@@ -1298,7 +1304,7 @@ export const STRINGS_UK = {
             },
             startView: {
                 name: 'Вигляд при запуску за замовчуванням',
-                desc: 'Виберіть, яку панель відображати при відкритті Notebook Navigator. Панель навігації показує ярлики, останні файли та дерево папок. Панель списку одразу показує список файлів.',
+                desc: 'Виберіть, яка панель активна при відкритті Notebook Navigator. В однопанельному режимі ця панель показується першою; у двопанельному режимі вона отримує фокус клавіатури.',
                 options: {
                     navigation: 'Панель навігації',
                     files: 'Панель списку'
@@ -1474,6 +1480,10 @@ export const STRINGS_UK = {
                 name: 'Показати обкладинку',
                 desc: 'Відображати зображення-обкладинки нотаток у календарі.'
             },
+            calendarShowTasks: {
+                name: 'Показувати завдання',
+                desc: 'Показувати індикатор на днях, тижнях і місяцях із незавершеними завданнями.'
+            },
             calendarShowWeekNumber: {
                 name: 'Показати номер тижня',
                 desc: 'Додати колонку з номером тижня.'
@@ -1589,6 +1599,12 @@ export const STRINGS_UK = {
                     editorDesc: 'Вставте або відредагуйте JSON нижче. Не включені налаштування скидаються до значень за замовчуванням.',
                     placeholder: '{\n  "folderSortOrder": "alpha-desc"\n}',
                     confirmButtonText: 'Імпортувати',
+                    confirmTitle: 'Імпортувати налаштування?',
+                    confirmMessage: 'Імпорт замінить поточні налаштування Notebook Navigator.',
+                    backupToggleName: 'Зберегти поточні налаштування в корені сховища перед імпортом',
+                    backupToggleDesc: 'Створює JSON-файл із часовою позначкою в корені сховища.',
+                    successWithBackupNotice: 'Налаштування імпортовано. Попередні налаштування збережено в {path}.',
+                    backupError: 'Не вдалося зберегти поточні налаштування: {message}',
                     successNotice: 'Налаштування імпортовано.',
                     errorNotice: 'Не вдалося імпортувати налаштування: {message}',
                     fileReadError: 'Не вдалося прочитати файл: {message}'
@@ -1724,6 +1740,11 @@ export const STRINGS_UK = {
                 name: 'Приховати папки (профіль сховища)',
                 desc: 'Список папок для приховування, розділених комами. Шаблони назв: assets* (папки, що починаються з assets), *_temp (закінчуються на _temp). Шаблони шляхів: /archive (лише кореневий архів), /res* (кореневі папки, що починаються з res), /*/temp (папки temp на один рівень вглиб), /projects/* (всі папки всередині projects).',
                 placeholder: 'шаблони, assets*, /архів, /res*'
+            },
+            descendantExcludedFolders: {
+                name: 'Виключати папки з нотаток підпапок (профіль сховища)',
+                desc: 'Список папок, розділених комами, які пропускаються під час збирання нотаток із підпапок. Папки залишаються видимими, і вибір папки й надалі показує її нотатки. Використовує ті самі шаблони, що й Сховати папки.',
+                placeholder: 'щоденні, ресурси, /archive'
             },
             showFileDate: {
                 name: 'Показувати дату',

@@ -50,7 +50,7 @@ interface ListPaneHeaderProps {
     showIcon: boolean;
 }
 
-export function ListPaneHeader({
+export const ListPaneHeader = React.memo(function ListPaneHeader({
     onHeaderClick,
     isSearchActive,
     onSearchToggle,
@@ -470,4 +470,4 @@ export function ListPaneHeader({
             </div>
         </div>
     );
-}
+});

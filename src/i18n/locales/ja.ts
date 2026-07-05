@@ -350,6 +350,9 @@ export const STRINGS_JA = {
             changeBackground: '背景色を変更',
             excludeFolder: 'フォルダを非表示',
             unhideFolder: 'フォルダを表示',
+            excludeFromDescendants: '親フォルダで非表示',
+            includeInDescendants: '親フォルダで表示',
+            hiddenFromParentsIndicator: '親フォルダのリストから非表示',
             moveFolder: 'フォルダを移動先...',
             renameFolder: 'フォルダの名前を変更',
             deleteFolder: 'フォルダを削除'
@@ -772,6 +775,8 @@ export const STRINGS_JA = {
         notices: {
             hideFolder: 'フォルダを非表示: {name}',
             showFolder: 'フォルダを表示: {name}',
+            folderExcludedFromDescendants: '親フォルダのリストから非表示: {name}',
+            folderIncludedInDescendants: '親フォルダのリストに表示: {name}',
             mergeNotes: '{count} 個のノートを {name} に結合しました'
         },
         notifications: {
@@ -978,6 +983,7 @@ export const STRINGS_JA = {
                 vaultConfiguration: '保管庫のセットアップ',
                 templates: 'テンプレート',
                 behavior: '動作',
+                startup: '起動',
                 keyboardNavigation: 'キーボード操作',
                 mouseButtons: 'マウスボタン',
                 view: '外観',
@@ -1300,7 +1306,7 @@ export const STRINGS_JA = {
             },
             startView: {
                 name: 'デフォルト起動ビュー',
-                desc: 'Notebook Navigator を開いたときに表示するペインを選択します。ナビゲーションペインはショートカット、最近のファイル、フォルダ構造を表示します。リストペインはファイル一覧を表示します。',
+                desc: 'Notebook Navigator を開いたときにアクティブになるペインを選択します。シングルペインレイアウトではこのペインが最初に表示され、デュアルペインレイアウトではこのペインにキーボードフォーカスが移ります。',
                 options: {
                     navigation: 'ナビゲーションペイン',
                     files: 'リストペイン'
@@ -1475,6 +1481,10 @@ export const STRINGS_JA = {
                 name: 'アイキャッチ画像を表示',
                 desc: 'カレンダーでノートのアイキャッチ画像を表示します。'
             },
+            calendarShowTasks: {
+                name: 'タスクを表示',
+                desc: '未完了のタスクがある日、週、月にインジケーターを表示します。'
+            },
             calendarShowWeekNumber: {
                 name: '週番号を表示',
                 desc: '週番号の列を追加します。'
@@ -1590,6 +1600,12 @@ export const STRINGS_JA = {
                     editorDesc: '下にJSONを貼り付けまたは編集してください。含まれていない設定はデフォルトにリセットされます。',
                     placeholder: '{\n  "folderSortOrder": "alpha-desc"\n}',
                     confirmButtonText: 'インポート',
+                    confirmTitle: '設定をインポートしますか？',
+                    confirmMessage: 'インポートすると、現在の Notebook Navigator 設定が置き換えられます。',
+                    backupToggleName: 'インポート前に現在の設定をボールトのルートに保存',
+                    backupToggleDesc: 'ボールトのルートにタイムスタンプ付きの JSON ファイルを作成します。',
+                    successWithBackupNotice: '設定がインポートされました。以前の設定は {path} に保存されました。',
+                    backupError: '現在の設定を保存できませんでした: {message}',
                     successNotice: '設定がインポートされました。',
                     errorNotice: '設定のインポートに失敗しました: {message}',
                     fileReadError: 'ファイルを読み込めませんでした: {message}'
@@ -1693,6 +1709,11 @@ export const STRINGS_JA = {
                 name: 'フォルダを非表示 (ボルトプロファイル)',
                 desc: '非表示にするフォルダのカンマ区切りリスト。名前パターン: assets*（assetsで始まるフォルダ）、*_temp（_tempで終わる）。パスパターン: /archive（ルートのアーカイブのみ）、/res*（resで始まるルートフォルダ）、/*/temp（1階層下のtempフォルダ）、/projects/*（projects内のすべてのフォルダ）。',
                 placeholder: 'templates, assets*, /archive, /res*'
+            },
+            descendantExcludedFolders: {
+                name: 'サブフォルダのノートからフォルダを除外（保管庫プロファイル）',
+                desc: 'サブフォルダからノートを収集するときに除外するフォルダのカンマ区切りリスト。フォルダは表示されたままで、選択するとそのノートは引き続き表示されます。「フォルダを非表示」と同じパターンを使用します。',
+                placeholder: '日記, リソース, /archive'
             },
             fileVisibility: {
                 name: 'ファイルタイプを表示 (ボルトプロファイル)',

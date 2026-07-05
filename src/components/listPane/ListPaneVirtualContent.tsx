@@ -30,7 +30,7 @@ import type { NotebookNavigatorSettings, SortOption } from '../../settings/types
 import type { InclusionOperator } from '../../utils/filterSearch';
 import type { FolderDecorationModel } from '../../utils/folderDecoration';
 import type { NavigateToFolderOptions } from '../../hooks/useNavigatorReveal';
-import { FileItem, type FileItemStorageHelpers } from '../FileItem';
+import { FileItem, type FileItemInlineRenameHandlers, type FileItemPaneProps, type FileItemStorageHelpers } from '../FileItem';
 import { ServiceIcon } from '../ServiceIcon';
 import type { ListPaneAppearanceSettings } from '../../hooks/useListPaneAppearance';
 import type { FileNameIconNeedle } from '../../utils/fileIconUtils';
@@ -248,7 +248,7 @@ function shouldHideManualSortGoalHeaderSeparator(header: HeaderRenderModel | nul
         : false;
 }
 
-function ListPaneGroupHeader({
+const ListPaneGroupHeader = React.memo(function ListPaneGroupHeader({
     header,
     collapseChevronIcons,
     pinnedSectionIcon,
@@ -396,7 +396,163 @@ function ListPaneGroupHeader({
     }
 
     return headerRow;
+});
+
+interface ListPaneRowProps {
+    index: number;
+    top: number;
+    rowHeight: number;
+    item: ListPaneItem;
+    headerModel: HeaderRenderModel | null;
+    topSpacerHeight: number;
+    isSelected: boolean;
+    hasSelectedAbove: boolean;
+    hasSelectedBelow: boolean;
+    isLastFile: boolean;
+    hideSeparator: boolean;
+    shouldHideHeaderSeparatorForGroup: boolean;
+    hasFilledBackground: boolean;
+    hasPreviousFilledBackground: boolean;
+    hasNextFilledBackground: boolean;
+    hasCustomBackground: boolean;
+    hasPreviousCustomBackground: boolean;
+    hasNextCustomBackground: boolean;
+    showQuickActionsPanel: boolean;
+    isInlineRenaming: boolean;
+    groupHeaderLabel: string | null;
+    shortcutKey: string | undefined;
+    fileItemPaneProps: FileItemPaneProps;
+    inlineRenameHandlers: FileItemInlineRenameHandlers;
+    collapseChevronIcons: {
+        collapsed: string;
+        expanded: string;
+    };
+    pinnedSectionIcon: string;
+    onPinnedGroupHeaderToggle: () => void;
+    onListGroupHeaderToggle: (collapseKey: string) => void;
+    onFolderGroupHeaderClick: (event: React.MouseEvent<HTMLSpanElement>, target: FolderGroupHeaderTarget) => void;
+    onFolderGroupHeaderMouseDown: (event: React.MouseEvent<HTMLSpanElement>, target: FolderGroupHeaderTarget) => void;
+    onGroupHeaderContextMenu: (event: React.MouseEvent<HTMLDivElement>, header: HeaderRenderModel) => void;
 }
+
+/**
+ * One virtualized list row. Memoized so commits that do not change a row's
+ * inputs (offset-only scroll updates, hover moves on other rows) skip the
+ * row subtree entirely.
+ */
+const ListPaneRow = React.memo(function ListPaneRow({
+    index,
+    top,
+    rowHeight,
+    item,
+    headerModel,
+    topSpacerHeight,
+    isSelected,
+    hasSelectedAbove,
+    hasSelectedBelow,
+    isLastFile,
+    hideSeparator,
+    shouldHideHeaderSeparatorForGroup,
+    hasFilledBackground,
+    hasPreviousFilledBackground,
+    hasNextFilledBackground,
+    hasCustomBackground,
+    hasPreviousCustomBackground,
+    hasNextCustomBackground,
+    showQuickActionsPanel,
+    isInlineRenaming,
+    groupHeaderLabel,
+    shortcutKey,
+    fileItemPaneProps,
+    inlineRenameHandlers,
+    collapseChevronIcons,
+    pinnedSectionIcon,
+    onPinnedGroupHeaderToggle,
+    onListGroupHeaderToggle,
+    onFolderGroupHeaderClick,
+    onFolderGroupHeaderMouseDown,
+    onGroupHeaderContextMenu
+}: ListPaneRowProps) {
+    const virtualItemStyle: VirtualRowStyle = {
+        top,
+        '--item-height': `${rowHeight}px`
+    };
+    const virtualItemClasses = ['nn-virtual-item'];
+    if (item.type === ListPaneItemType.FILE) {
+        virtualItemClasses.push('nn-virtual-file-item');
+    }
+    if (headerModel) {
+        virtualItemClasses.push('nn-virtual-list-group-header');
+    }
+    if (shouldHideHeaderSeparatorForGroup) {
+        virtualItemClasses.push('nn-hide-list-group-header-separator');
+    }
+    if (isLastFile) {
+        virtualItemClasses.push('nn-last-file');
+    }
+    if (hideSeparator) {
+        virtualItemClasses.push('nn-hide-separator-selection');
+    }
+    if (hasFilledBackground) {
+        virtualItemClasses.push('nn-virtual-file-item-has-filled-background');
+    }
+    if (hasPreviousFilledBackground) {
+        virtualItemClasses.push('nn-virtual-file-item-has-filled-background-previous');
+    }
+    if (hasNextFilledBackground) {
+        virtualItemClasses.push('nn-virtual-file-item-has-filled-background-next');
+    }
+    if (hasCustomBackground) {
+        virtualItemClasses.push('nn-virtual-file-item-has-custom-background');
+    }
+    if (hasPreviousCustomBackground) {
+        virtualItemClasses.push('nn-virtual-file-item-has-custom-background-previous');
+    }
+    if (hasNextCustomBackground) {
+        virtualItemClasses.push('nn-virtual-file-item-has-custom-background-next');
+    }
+
+    return (
+        <div className={virtualItemClasses.join(' ')} style={virtualItemStyle} data-index={index}>
+            {headerModel ? (
+                <ListPaneGroupHeader
+                    header={headerModel}
+                    collapseChevronIcons={collapseChevronIcons}
+                    pinnedSectionIcon={pinnedSectionIcon}
+                    onPinnedGroupHeaderToggle={onPinnedGroupHeaderToggle}
+                    onListGroupHeaderToggle={onListGroupHeaderToggle}
+                    onFolderGroupHeaderClick={onFolderGroupHeaderClick}
+                    onFolderGroupHeaderMouseDown={onFolderGroupHeaderMouseDown}
+                    onGroupHeaderContextMenu={onGroupHeaderContextMenu}
+                />
+            ) : item.type === ListPaneItemType.HEADER_SPACER ? (
+                <div className="nn-list-group-header-spacer" />
+            ) : item.type === ListPaneItemType.TOP_SPACER ? (
+                <div className="nn-list-top-spacer" style={{ height: `${topSpacerHeight}px` }} />
+            ) : item.type === ListPaneItemType.BOTTOM_SPACER ? (
+                <div className="nn-list-bottom-spacer" />
+            ) : item.type === ListPaneItemType.FILE && item.data instanceof TFile ? (
+                <FileItem
+                    key={item.key}
+                    file={item.data}
+                    paneProps={fileItemPaneProps}
+                    isSelected={isSelected}
+                    hasSelectedAbove={hasSelectedAbove}
+                    hasSelectedBelow={hasSelectedBelow}
+                    showQuickActionsPanel={showQuickActionsPanel}
+                    fileIndex={item.fileIndex}
+                    groupHeaderLabel={groupHeaderLabel}
+                    parentFolder={item.parentFolder}
+                    isPinned={item.isPinned}
+                    searchMeta={item.searchMeta}
+                    isHidden={Boolean(item.isHidden)}
+                    shortcutKey={shortcutKey}
+                    inlineRename={isInlineRenaming ? inlineRenameHandlers : undefined}
+                />
+            ) : null}
+        </div>
+    );
+});
 
 function getHoveredFilePathFromTarget(target: EventTarget | null): string | null {
     if (!(target instanceof Element)) {
@@ -822,6 +978,62 @@ export function ListPaneVirtualContent({
         [isFileSelected, isFolderNavigation, lastSelectedFilePath]
     );
 
+    // One stable object shared by all file rows; identity changes only when a pane-level input changes.
+    const fileItemPaneProps = useMemo<FileItemPaneProps>(
+        () => ({
+            onFileClick,
+            selectionType,
+            sortOption,
+            searchQuery: searchHighlightQuery,
+            onModifySearchWithTag,
+            onModifySearchWithProperty,
+            localDayReference,
+            fileIconSize,
+            appearanceSettings,
+            includeDescendantNotes,
+            hiddenTagVisibility,
+            fileNameIconNeedles,
+            visiblePropertyKeys: visibleListPropertyKeys,
+            visibleNavigationPropertyKeys,
+            fileItemStorage,
+            onToggleNoteShortcut,
+            folderDecorationModel,
+            fileItemPillDecorationModel,
+            fileItemPillOrderModel,
+            getSolidBackground
+        }),
+        [
+            onFileClick,
+            selectionType,
+            sortOption,
+            searchHighlightQuery,
+            onModifySearchWithTag,
+            onModifySearchWithProperty,
+            localDayReference,
+            fileIconSize,
+            appearanceSettings,
+            includeDescendantNotes,
+            hiddenTagVisibility,
+            fileNameIconNeedles,
+            visibleListPropertyKeys,
+            visibleNavigationPropertyKeys,
+            fileItemStorage,
+            onToggleNoteShortcut,
+            folderDecorationModel,
+            fileItemPillDecorationModel,
+            fileItemPillOrderModel,
+            getSolidBackground
+        ]
+    );
+    const inlineRenameHandlers = useMemo<FileItemInlineRenameHandlers>(
+        () => ({
+            onCommit: onFileRenameCommit,
+            onCancel: onFileRenameCancel,
+            onRestoreFocus: onFileRenameRestoreFocus
+        }),
+        [onFileRenameCommit, onFileRenameCancel, onFileRenameRestoreFocus]
+    );
+
     const virtualItems = rowVirtualizer.getVirtualItems();
     const scrollOffset = rowVirtualizer.scrollOffset ?? 0;
     const stickyGroupHeaders = settings.stickyGroupHeaders;
@@ -932,118 +1144,43 @@ export function ListPaneVirtualContent({
                             const hideHeaderSeparator = firstFileAfterHeader !== null && isFileVisuallySelected(firstFileAfterHeader);
                             const hideSeparator = hideFileSeparator || hideHeaderSeparator;
 
-                            const virtualItemStyle: VirtualRowStyle = {
-                                top: Math.max(0, virtualItem.start),
-                                '--item-height': `${virtualItem.size}px`
-                            };
-                            const virtualItemClasses = ['nn-virtual-item'];
-                            if (item.type === ListPaneItemType.FILE) {
-                                virtualItemClasses.push('nn-virtual-file-item');
-                            }
-                            if (headerModel) {
-                                virtualItemClasses.push('nn-virtual-list-group-header');
-                            }
-                            if (shouldHideHeaderSeparatorForGroup) {
-                                virtualItemClasses.push('nn-hide-list-group-header-separator');
-                            }
-                            if (isLastFile) {
-                                virtualItemClasses.push('nn-last-file');
-                            }
-                            if (hideSeparator) {
-                                virtualItemClasses.push('nn-hide-separator-selection');
-                            }
-                            if (hasFilledBackground) {
-                                virtualItemClasses.push('nn-virtual-file-item-has-filled-background');
-                            }
-                            if (hasPreviousFilledBackground) {
-                                virtualItemClasses.push('nn-virtual-file-item-has-filled-background-previous');
-                            }
-                            if (hasNextFilledBackground) {
-                                virtualItemClasses.push('nn-virtual-file-item-has-filled-background-next');
-                            }
-                            if (hasCustomBackground) {
-                                virtualItemClasses.push('nn-virtual-file-item-has-custom-background');
-                            }
-                            if (hasPreviousCustomBackground) {
-                                virtualItemClasses.push('nn-virtual-file-item-has-custom-background-previous');
-                            }
-                            if (hasNextCustomBackground) {
-                                virtualItemClasses.push('nn-virtual-file-item-has-custom-background-next');
-                            }
-
                             return (
-                                <div
+                                <ListPaneRow
                                     key={virtualItem.key}
-                                    className={virtualItemClasses.join(' ')}
-                                    style={virtualItemStyle}
-                                    data-index={virtualItem.index}
-                                >
-                                    {headerModel ? (
-                                        <ListPaneGroupHeader
-                                            header={headerModel}
-                                            collapseChevronIcons={collapseChevronIcons}
-                                            pinnedSectionIcon={pinnedSectionIcon}
-                                            onPinnedGroupHeaderToggle={onPinnedGroupHeaderToggle}
-                                            onListGroupHeaderToggle={onListGroupHeaderToggle}
-                                            onFolderGroupHeaderClick={handleFolderGroupHeaderClick}
-                                            onFolderGroupHeaderMouseDown={handleFolderGroupHeaderMouseDown}
-                                            onGroupHeaderContextMenu={handleGroupHeaderContextMenu}
-                                        />
-                                    ) : item.type === ListPaneItemType.HEADER_SPACER ? (
-                                        <div className="nn-list-group-header-spacer" />
-                                    ) : item.type === ListPaneItemType.TOP_SPACER ? (
-                                        <div className="nn-list-top-spacer" style={{ height: `${topSpacerHeight}px` }} />
-                                    ) : item.type === ListPaneItemType.BOTTOM_SPACER ? (
-                                        <div className="nn-list-bottom-spacer" />
-                                    ) : item.type === ListPaneItemType.FILE && item.data instanceof TFile ? (
-                                        <FileItem
-                                            key={item.key}
-                                            file={item.data}
-                                            isSelected={isSelected}
-                                            hasSelectedAbove={hasSelectedAbove}
-                                            hasSelectedBelow={hasSelectedBelow}
-                                            showQuickActionsPanel={
-                                                !isInlineRenaming && !suppressRowHover && hoveredFilePath === item.data.path
-                                            }
-                                            onFileClick={onFileClick}
-                                            fileIndex={item.fileIndex}
-                                            selectionType={selectionType}
-                                            groupHeaderLabel={groupHeaderLabel}
-                                            sortOption={sortOption}
-                                            parentFolder={item.parentFolder}
-                                            isPinned={item.isPinned}
-                                            searchQuery={searchHighlightQuery}
-                                            searchMeta={item.searchMeta}
-                                            isHidden={Boolean(item.isHidden)}
-                                            onModifySearchWithTag={onModifySearchWithTag}
-                                            onModifySearchWithProperty={onModifySearchWithProperty}
-                                            localDayReference={localDayReference}
-                                            fileIconSize={fileIconSize}
-                                            appearanceSettings={appearanceSettings}
-                                            includeDescendantNotes={includeDescendantNotes}
-                                            hiddenTagVisibility={hiddenTagVisibility}
-                                            fileNameIconNeedles={fileNameIconNeedles}
-                                            visiblePropertyKeys={visibleListPropertyKeys}
-                                            visibleNavigationPropertyKeys={visibleNavigationPropertyKeys}
-                                            fileItemStorage={fileItemStorage}
-                                            shortcutKey={shortcutKey}
-                                            onToggleNoteShortcut={onToggleNoteShortcut}
-                                            folderDecorationModel={folderDecorationModel}
-                                            fileItemPillDecorationModel={fileItemPillDecorationModel}
-                                            fileItemPillOrderModel={fileItemPillOrderModel}
-                                            getSolidBackground={getSolidBackground}
-                                            inlineRename={
-                                                isInlineRenaming
-                                                    ? {
-                                                          onCommit: onFileRenameCommit,
-                                                          onCancel: onFileRenameCancel,
-                                                          onRestoreFocus: onFileRenameRestoreFocus
-                                                      }
-                                                    : undefined
-                                            }
-                                        />
-                                    ) : null}
-                                </div>
+                                    index={virtualItem.index}
+                                    top={Math.max(0, virtualItem.start)}
+                                    rowHeight={virtualItem.size}
+                                    item={item}
+                                    headerModel={headerModel}
+                                    topSpacerHeight={topSpacerHeight}
+                                    isSelected={isSelected}
+                                    hasSelectedAbove={hasSelectedAbove}
+                                    hasSelectedBelow={hasSelectedBelow}
+                                    isLastFile={Boolean(isLastFile)}
+                                    hideSeparator={hideSeparator}
+                                    shouldHideHeaderSeparatorForGroup={shouldHideHeaderSeparatorForGroup}
+                                    hasFilledBackground={hasFilledBackground}
+                                    hasPreviousFilledBackground={Boolean(hasPreviousFilledBackground)}
+                                    hasNextFilledBackground={Boolean(hasNextFilledBackground)}
+                                    hasCustomBackground={hasCustomBackground}
+                                    hasPreviousCustomBackground={hasPreviousCustomBackground}
+                                    hasNextCustomBackground={hasNextCustomBackground}
+                                    showQuickActionsPanel={
+                                        isFileRow && !isInlineRenaming && !suppressRowHover && hoveredFilePath === item.data.path
+                                    }
+                                    isInlineRenaming={isInlineRenaming}
+                                    groupHeaderLabel={groupHeaderLabel}
+                                    shortcutKey={shortcutKey}
+                                    fileItemPaneProps={fileItemPaneProps}
+                                    inlineRenameHandlers={inlineRenameHandlers}
+                                    collapseChevronIcons={collapseChevronIcons}
+                                    pinnedSectionIcon={pinnedSectionIcon}
+                                    onPinnedGroupHeaderToggle={onPinnedGroupHeaderToggle}
+                                    onListGroupHeaderToggle={onListGroupHeaderToggle}
+                                    onFolderGroupHeaderClick={handleFolderGroupHeaderClick}
+                                    onFolderGroupHeaderMouseDown={handleFolderGroupHeaderMouseDown}
+                                    onGroupHeaderContextMenu={handleGroupHeaderContextMenu}
+                                />
                             );
                         })}
                     </div>

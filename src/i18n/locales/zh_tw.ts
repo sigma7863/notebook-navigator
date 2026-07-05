@@ -350,6 +350,9 @@ export const STRINGS_ZH_TW = {
             changeBackground: '變更背景',
             excludeFolder: '隱藏資料夾',
             unhideFolder: '顯示資料夾',
+            excludeFromDescendants: '在父資料夾中隱藏',
+            includeInDescendants: '在父資料夾中顯示',
+            hiddenFromParentsIndicator: '已從父資料夾列表中隱藏',
             moveFolder: '移動資料夾至...',
             renameFolder: '重新命名資料夾',
             deleteFolder: '刪除資料夾'
@@ -763,6 +766,8 @@ export const STRINGS_ZH_TW = {
         notices: {
             hideFolder: '已隱藏資料夾：{name}',
             showFolder: '已顯示資料夾：{name}',
+            folderExcludedFromDescendants: '已從父資料夾列表中隱藏：{name}',
+            folderIncludedInDescendants: '已在父資料夾列表中顯示：{name}',
             mergeNotes: '已將 {count} 則筆記合併到 {name}'
         },
         notifications: {
@@ -969,6 +974,7 @@ export const STRINGS_ZH_TW = {
                 vaultConfiguration: '保險庫設定',
                 templates: '範本',
                 behavior: '行為',
+                startup: '啟動',
                 keyboardNavigation: '鍵盤導覽',
                 mouseButtons: '滑鼠按鈕',
                 view: '外觀',
@@ -1288,7 +1294,7 @@ export const STRINGS_ZH_TW = {
             },
             startView: {
                 name: '預設啟動檢視',
-                desc: '選擇開啟 Notebook Navigator 時顯示的窗格。導覽窗格顯示捷徑、最近檔案和資料夾結構。列表窗格顯示檔案列表。',
+                desc: '選擇開啟 Notebook Navigator 時處於作用中的窗格。單窗格版面配置會優先顯示此窗格；雙窗格版面配置會將鍵盤焦點移至此窗格。',
                 options: {
                     navigation: '導覽窗格',
                     files: '列表窗格'
@@ -1463,6 +1469,10 @@ export const STRINGS_ZH_TW = {
                 name: '顯示特色圖片',
                 desc: '在日曆中顯示筆記的特色圖片。'
             },
+            calendarShowTasks: {
+                name: '顯示任務',
+                desc: '在包含未完成任務的日、週和月上顯示指示器。'
+            },
             calendarShowWeekNumber: {
                 name: '顯示週號',
                 desc: '在每行開頭顯示週號。'
@@ -1577,6 +1587,12 @@ export const STRINGS_ZH_TW = {
                     editorDesc: '在下方貼上或編輯 JSON。未包含的設定將重設為預設值。',
                     placeholder: '{\n  "folderSortOrder": "alpha-desc"\n}',
                     confirmButtonText: '匯入',
+                    confirmTitle: '匯入設定？',
+                    confirmMessage: '匯入會取代目前的 Notebook Navigator 設定。',
+                    backupToggleName: '匯入前將目前設定儲存到保險庫根目錄',
+                    backupToggleDesc: '在保險庫根目錄中建立含時間戳的 JSON 檔案。',
+                    successWithBackupNotice: '設定已匯入。先前的設定已儲存到 {path}。',
+                    backupError: '無法儲存目前設定: {message}',
                     successNotice: '設定已匯入。',
                     errorNotice: '匯入設定失敗: {message}',
                     fileReadError: '無法讀取檔案: {message}'
@@ -1679,6 +1695,11 @@ export const STRINGS_ZH_TW = {
                 name: '隱藏資料夾（保險庫設定檔）',
                 desc: '逗號分隔的要隱藏的資料夾列表。名稱模式：assets*（以 assets 開頭的資料夾），*_temp（以 _temp 結尾）。路徑模式：/archive（僅根目錄 archive），/res*（以 res 開頭的根資料夾），/*/temp（一級目錄下的 temp 資料夾），/projects/*（projects 內的所有資料夾）。',
                 placeholder: 'templates, assets*, /archive, /res*'
+            },
+            descendantExcludedFolders: {
+                name: '從子資料夾筆記中排除資料夾（保險庫設定檔）',
+                desc: '逗號分隔的資料夾列表，用於在收集子資料夾中的筆記時略過這些資料夾。資料夾仍會顯示，選取該資料夾時仍會顯示其中的筆記。使用與隱藏資料夾相同的模式。',
+                placeholder: '日記, 資源, /archive'
             },
             fileVisibility: {
                 name: '顯示檔案類型（保險庫設定檔）',

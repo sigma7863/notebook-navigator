@@ -108,6 +108,7 @@ const BOOLEAN_SETTING_KEYS = [
     'calendarConfirmBeforeCreate',
     'calendarHighlightToday',
     'calendarShowFeatureImage',
+    'calendarShowTasks',
     'calendarShowWeekNumber',
     'calendarShowQuarter',
     'calendarShowYearCalendar',
