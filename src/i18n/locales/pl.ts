@@ -673,6 +673,7 @@ export const STRINGS_PL = {
         },
         navigationBanner: {
             placeholder: 'Wyszukaj obrazy...',
+            svgMissingDimensions: 'Wybrany plik SVG nie definiuje szerokości, wysokości ani viewBox.',
             instructions: {
                 navigate: 'aby przejść',
                 select: 'aby ustawić baner',

@@ -670,6 +670,7 @@ export const STRINGS_TR = {
         },
         navigationBanner: {
             placeholder: 'Görsel ara...',
+            svgMissingDimensions: 'Seçilen SVG dosyası genişlik, yükseklik veya viewBox tanımlamıyor.',
             instructions: {
                 navigate: 'gezinmek için',
                 select: 'afiş olarak ayarlamak için',

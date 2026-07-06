@@ -668,6 +668,7 @@ export const STRINGS_KO = {
         },
         navigationBanner: {
             placeholder: '이미지 검색...',
+            svgMissingDimensions: '선택한 SVG 파일에 너비, 높이 또는 viewBox가 정의되어 있지 않습니다.',
             instructions: {
                 navigate: '이동',
                 select: '배너 설정',

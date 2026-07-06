@@ -22,7 +22,7 @@ import type { ContentProviderType } from '../interfaces/IContentProvider';
 import type { NotebookNavigatorSettings } from '../settings/types';
 import type { FileData } from '../storage/IndexedDBStorage';
 import { getDBInstance } from '../storage/fileOperations';
-import { isPdfFile } from '../utils/fileTypeUtils';
+import { isGeneratedThumbnailFile } from '../utils/fileTypeUtils';
 import { getActiveHiddenFileProperties } from '../utils/vaultProfiles';
 import { getLocalFeatureImageKey } from '../services/content/FeatureImageContentProvider';
 import { createCaseInsensitiveKeyMatcher } from '../utils/recordUtils';
@@ -179,7 +179,7 @@ export function filterFilesRequiringMetadataSources(
 }
 
 function getFileThumbnailFeatureImageKey(file: TFile): string | null {
-    if (isPdfFile(file)) {
+    if (isGeneratedThumbnailFile(file)) {
         return getLocalFeatureImageKey(file);
     }
 

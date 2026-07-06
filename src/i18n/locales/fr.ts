@@ -673,6 +673,7 @@ export const STRINGS_FR = {
         },
         navigationBanner: {
             placeholder: 'Rechercher des images...',
+            svgMissingDimensions: 'Le fichier SVG sélectionné ne définit ni largeur, ni hauteur, ni viewBox.',
             instructions: {
                 navigate: 'pour naviguer',
                 select: 'pour définir la bannière',

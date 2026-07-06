@@ -672,6 +672,7 @@ export const STRINGS_NL = {
         },
         navigationBanner: {
             placeholder: 'Afbeeldingen zoeken...',
+            svgMissingDimensions: 'Het geselecteerde SVG-bestand definieert geen breedte, hoogte of viewBox.',
             instructions: {
                 navigate: 'om te navigeren',
                 select: 'om banner in te stellen',

@@ -96,7 +96,9 @@ const RELEASE_NOTES: ReleaseNote[] = [
         showOnUpdate: false,
         new: [
             '**Calendar.** New setting: ==Show tasks== in Calendar > Appearance. Displays an indicator on days, weeks, and months with unfinished tasks. Enabled by default.',
-            '**Display filters.** New setting: ==Exclude folders from descendants==. Matching folders stay visible, but their notes are omitted when a parent folder shows notes from subfolders. Use it to keep periodic-note folders such as `Daily`, `Weekly`, or `Monthly` out of parent folder lists while the folders remain visible and selectable.'
+            '**Display filters.** New setting: ==Exclude folders from descendants==. Matching folders stay visible, but their notes are omitted when a parent folder shows notes from subfolders. Use it to keep periodic-note folders such as `Daily`, `Weekly`, or `Monthly` out of parent folder lists while the folders remain visible and selectable.',
+            '**Feature images.** SVG images are supported as feature images again. SVG sources are rasterized once into cached thumbnails during content generation instead of rendering live in the list. SVG files that embed bitmap images are skipped. Local `.svg` files shown in the list pane also receive generated thumbnails.',
+            '**Navigation banner.** SVG files can be selected as the navigation banner image.'
         ],
         improved: [
             '**Performance.** Reduced list pane rendering work. List rows and pane headers now skip re-rendering when their content is unchanged, file rows mount with fewer React hooks, and formatted dates and date group labels are cached. React rendering work while scrolling is 15-25% lower, and building the file list when switching folders is about 60% faster.',

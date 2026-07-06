@@ -672,6 +672,7 @@ export const STRINGS_VI = {
         },
         navigationBanner: {
             placeholder: 'Tìm ảnh...',
+            svgMissingDimensions: 'Tệp SVG đã chọn không xác định chiều rộng, chiều cao hoặc viewBox.',
             instructions: {
                 navigate: 'để điều hướng',
                 select: 'để đặt banner',

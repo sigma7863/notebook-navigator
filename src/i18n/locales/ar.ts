@@ -667,6 +667,7 @@ export const STRINGS_AR = {
         },
         navigationBanner: {
             placeholder: 'البحث عن صور...',
+            svgMissingDimensions: 'ملف SVG المحدد لا يحدد عرضًا أو ارتفاعًا أو viewBox.',
             instructions: {
                 navigate: 'للتنقل',
                 select: 'لتعيين الشعار',

@@ -18,7 +18,7 @@
 
 import { TFile, TFolder, App } from 'obsidian';
 import type { NotebookNavigatorSettings } from '../settings/types';
-import { isPdfFile, isPrimaryDocumentFile, shouldDisplayFile } from './fileTypeUtils';
+import { isGeneratedThumbnailFile, isPrimaryDocumentFile, shouldDisplayFile } from './fileTypeUtils';
 import {
     getActiveFileVisibility,
     getActiveHiddenFileNames,
@@ -797,7 +797,7 @@ export function getFilteredIndexableFiles(app: App, settings: NotebookNavigatorS
         }
 
         const isNonMarkdownDrawingFile = isNonMarkdownDrawingFeatureImageFile(file);
-        if (!isPdfFile(file) && !isNonMarkdownDrawingFile) {
+        if (!isGeneratedThumbnailFile(file) && !isNonMarkdownDrawingFile) {
             continue;
         }
 

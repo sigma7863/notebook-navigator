@@ -671,6 +671,7 @@ export const STRINGS_ES = {
         },
         navigationBanner: {
             placeholder: 'Buscar imágenes...',
+            svgMissingDimensions: 'El archivo SVG seleccionado no define ancho, alto ni viewBox.',
             instructions: {
                 navigate: 'para navegar',
                 select: 'para establecer banner',

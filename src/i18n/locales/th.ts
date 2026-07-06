@@ -665,6 +665,7 @@ export const STRINGS_TH = {
         },
         navigationBanner: {
             placeholder: 'ค้นหารูปภาพ...',
+            svgMissingDimensions: 'ไฟล์ SVG ที่เลือกไม่ได้กำหนดความกว้าง ความสูง หรือ viewBox',
             instructions: {
                 navigate: 'เพื่อนำทาง',
                 select: 'เพื่อตั้งแบนเนอร์',

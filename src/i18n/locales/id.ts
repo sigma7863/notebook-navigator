@@ -671,6 +671,7 @@ export const STRINGS_ID = {
         },
         navigationBanner: {
             placeholder: 'Cari gambar...',
+            svgMissingDimensions: 'Berkas SVG yang dipilih tidak menentukan lebar, tinggi, atau viewBox.',
             instructions: {
                 navigate: 'untuk navigasi',
                 select: 'untuk mengatur banner',

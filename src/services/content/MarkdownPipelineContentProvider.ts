@@ -50,8 +50,9 @@ import {
     hasMarkdownWordCountConsumer
 } from '../../utils/markdownPipelineContentTypes';
 import { areMarkdownTaskCountsEqual, countMarkdownTasksFromMetadata, type MarkdownTaskCounts } from '../../utils/markdownTaskCounts';
+import { isGeneratedThumbnailFile } from '../../utils/fileTypeUtils';
 import type { ContentProviderProcessResult } from './BaseContentProvider';
-import { findFeatureImageReference, type FeatureImageReference } from './featureImageReferenceResolver';
+import { findFeatureImageReference, hasSvgUrlPathExtension, type FeatureImageReference } from './featureImageReferenceResolver';
 import { FeatureImageContentProvider } from './FeatureImageContentProvider';
 
 type MarkdownPipelineContext = {
@@ -1298,6 +1299,20 @@ export class MarkdownPipelineContentProvider extends FeatureImageContentProvider
         const hasStableThumbnail = params.fileData?.featureImageKey === featureImageKey && params.fileData.featureImageStatus === 'has';
 
         if (hasStableThumbnail) {
+            return null;
+        }
+
+        // Local keys include the source mtime and external keys include the URL, so a rejected
+        // generated thumbnail (PDF cover, rasterized SVG) is not re-attempted on every note edit.
+        const isGeneratedThumbnailSource =
+            (reference.kind === 'local' && isGeneratedThumbnailFile(reference.file)) ||
+            (reference.kind === 'external' && hasSvgUrlPathExtension(reference.url));
+        const hasRejectedThumbnailMarker =
+            isGeneratedThumbnailSource &&
+            params.fileData?.featureImageKey === featureImageKey &&
+            params.fileData.featureImageStatus === 'none';
+
+        if (hasRejectedThumbnailMarker) {
             return null;
         }
 

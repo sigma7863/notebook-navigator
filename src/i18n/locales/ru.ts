@@ -668,6 +668,7 @@ export const STRINGS_RU = {
         },
         navigationBanner: {
             placeholder: 'Поиск изображений...',
+            svgMissingDimensions: 'Выбранный SVG-файл не задаёт ширину, высоту или viewBox.',
             instructions: {
                 navigate: 'для навигации',
                 select: 'для установки баннера',

@@ -669,6 +669,7 @@ export const STRINGS_JA = {
         },
         navigationBanner: {
             placeholder: '画像を検索...',
+            svgMissingDimensions: '選択したSVGファイルには幅、高さ、またはviewBoxが定義されていません。',
             instructions: {
                 navigate: 'でナビゲート',
                 select: 'でバナーを設定',

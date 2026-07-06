@@ -664,6 +664,7 @@ export const STRINGS_ZH_CN = {
         },
         navigationBanner: {
             placeholder: '搜索图片...',
+            svgMissingDimensions: '所选 SVG 文件未定义宽度、高度或 viewBox。',
             instructions: {
                 navigate: '导航',
                 select: '设为横幅',

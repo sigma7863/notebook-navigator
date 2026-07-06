@@ -671,6 +671,7 @@ export const STRINGS_FA = {
         },
         navigationBanner: {
             placeholder: 'جستجوی تصویر...',
+            svgMissingDimensions: 'فایل SVG انتخاب‌شده عرض، ارتفاع یا viewBox تعریف نمی‌کند.',
             instructions: {
                 navigate: 'برای ناوبری',
                 select: 'برای تنظیم بنر',
