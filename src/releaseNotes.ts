@@ -105,7 +105,8 @@ const RELEASE_NOTES: ReleaseNote[] = [
             '**Performance.** Faster startup. Database initialization now completes cache loading before the initial vault scan runs. Previously the scan could see an empty cache, rewrite all file records, and requeue content generation on every start. Storage initialization on warm starts is about 5 times faster, with the largest gains on mobile and in large vaults.',
             '**Performance.** Reduced navigation pane and calendar rendering work. Navigation pane rows now skip re-rendering while scrolling, and selecting, expanding, or renaming an item re-renders only the affected rows instead of all visible rows. Calendar day cells skip re-rendering when their content is unchanged, and formatted day labels are cached.',
             '**Settings.** Importing settings now shows a confirmation dialog with an option to save current settings to a timestamped file in the vault root. Exported settings files use timestamped filenames and record the plugin version. Import rejects JSON that is not a Notebook Navigator export or recognizable legacy settings diff.',
-            '**Calendar.** Middle-click on day cells, week numbers, month, quarter and year headers, and the year panel opens the calendar note in a new tab, creating it if needed.'
+            '**Calendar.** Middle-click on day cells, week numbers, month, quarter and year headers, and the year panel opens the calendar note in a new tab, creating it if needed.',
+            '**Feature images.** Thumbnails with transparent backgrounds, such as SVG or PNG images, no longer show an outline over transparent areas.'
         ],
         fixed: [
             '**Drag and drop.** Fixed drag and drop not working on some Windows PCs where the system did not expose drag data during the drag operation.'
