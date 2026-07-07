@@ -52,7 +52,7 @@ import { useStorageContentQueue } from './storage/useStorageContentQueue';
 import { useStorageFileQueries } from './storage/useStorageFileQueries';
 import { useTagTreeSync } from './storage/useTagTreeSync';
 import { usePropertyTreeSync } from './storage/usePropertyTreeSync';
-import { useStorageVaultSync } from './storage/useStorageVaultSync';
+import { useStorageVaultSync, type PendingFileFlushBuffer } from './storage/useStorageVaultSync';
 import { useStorageSettingsSync } from './storage/useStorageSettingsSync';
 import { METADATA_SENTINEL, type FileData as DBFileData, type IndexedDBStorage } from '../storage/IndexedDBStorage';
 import { getDBInstance } from '../storage/fileOperations';
@@ -182,6 +182,12 @@ export function StorageProvider({ app, api, children }: StorageProviderProps) {
     // Map: file path -> pending metadata-dependent wait mask (used by `useMetadataCacheQueue`).
     const pendingMetadataWaitPathsRef = useRef<Map<string, number>>(new Map());
     const pendingRenameDataRef = useRef<Map<string, DBFileData>>(new Map());
+    // Buffered vault `modify` events awaiting a debounced flush. Owned here so buffered entries survive
+    // remounts of the vault-sync effect (it re-runs on settings changes).
+    const modifyFlushBufferRef = useRef<PendingFileFlushBuffer>({ files: new Map(), timerId: null, isProcessing: false });
+    // Buffered `metadataCache.changed` events awaiting a debounced flush. This flush is the only content
+    // trigger for markdown saves, so buffered entries must survive effect remounts.
+    const metadataChangeFlushBufferRef = useRef<PendingFileFlushBuffer>({ files: new Map(), timerId: null, isProcessing: false });
     const latestSettingsRef = useRef(settings);
     latestSettingsRef.current = settings;
     const activeVaultEventRefs = useRef<EventRef[] | null>(null);
@@ -519,6 +525,8 @@ export function StorageProvider({ app, api, children }: StorageProviderProps) {
         contentRegistryRef: contentRegistry,
         pendingSyncTimeoutIdRef: pendingSyncTimeoutId,
         pendingRenameDataRef,
+        modifyFlushBufferRef,
+        metadataChangeFlushBufferRef,
         buildFileCacheFnRef,
         rebuildFileCacheRef,
         activeVaultEventRefsRef: activeVaultEventRefs,
@@ -541,14 +549,13 @@ export function StorageProvider({ app, api, children }: StorageProviderProps) {
      * Augment context with control methods
      *
      * Adds the stopAllProcessing method to the context value.
-     * This method is called when:
-     * - The view is being closed
-     * - The plugin is being disabled
-     * - A cache rebuild is starting (to stop current operations)
+     * Called during plugin shutdown (main.ts stopNavigatorContentProcessing via the view's
+     * stopContentProcessing handle). Not called on plain view close; cache rebuilds run their
+     * own stop sequence in useStorageCacheRebuild.
      *
      * It ensures clean shutdown by:
      * - Stopping all content providers
-     * - Cancelling pending operations
+     * - Cancelling pending operations and buffered flushes
      * - Detaching event listeners
      * - Preventing any new operations from starting
      */
@@ -569,6 +576,16 @@ export function StorageProvider({ app, api, children }: StorageProviderProps) {
                         window.clearTimeout(pendingSyncTimeoutId.current);
                     }
                     pendingSyncTimeoutId.current = null;
+                }
+                // Drop buffered modify/metadata flushes and their timers
+                for (const buffer of [modifyFlushBufferRef.current, metadataChangeFlushBufferRef.current]) {
+                    if (buffer.timerId !== null) {
+                        if (typeof window !== 'undefined') {
+                            window.clearTimeout(buffer.timerId);
+                        }
+                        buffer.timerId = null;
+                    }
+                    buffer.files.clear();
                 }
                 // Optionally detach event subscriptions and cancel debouncers
                 try {

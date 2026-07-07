@@ -41,6 +41,20 @@ import { finishStartupDiagnostics, isDebugLogPath, recordStartupDiagnostic } fro
 import { getMarkdownPipelineContentTypes } from '../../utils/markdownPipelineContentTypes';
 
 /**
+ * Buffered vault/metadata events awaiting a debounced flush. The whole buffer (files, timer, processing flag) is
+ * shared through a ref so an in-flight flush started before an effect remount and a flush scheduled after it
+ * operate on the same state.
+ */
+export interface PendingFileFlushBuffer {
+    /** Pending files keyed by path */
+    files: Map<string, TFile>;
+    /** Active flush timer id, or null when no flush is scheduled */
+    timerId: number | null;
+    /** True while a flush batch is being processed */
+    isProcessing: boolean;
+}
+
+/**
  * Syncs vault changes into the IndexedDB cache and triggers derived-content generation.
  *
  * Responsibilities:
@@ -53,8 +67,14 @@ import { getMarkdownPipelineContentTypes } from '../../utils/markdownPipelineCon
  * Design notes:
  * - Vault events can arrive in bursts or in multi-step sequences (especially renames/moves). A shared debouncer
  *   (TIMEOUTS.FILE_OPERATION_DELAY) collapses those bursts into a single `calculateFileDiff()` pass.
+ * - A markdown save fires both `vault.on('modify')` and `metadataCache.on('changed')`. The modify flush records
+ *   stat changes and queues non-markdown thumbnails only; markdown content generation is queued by the
+ *   metadata-change flush so providers read the metadata cache after Obsidian has indexed the save.
  * - Rename handling preserves existing cached content by seeding the new path with the old record and moving any
  *   stored blobs/text before the next diff runs.
+ * - The modify/metadata flush buffers are refs owned by `StorageContext`. This effect re-runs on settings changes,
+ *   and events buffered but not yet flushed must survive the remount: cleanup clears only the flush timers, and
+ *   the mount path reschedules flushes for entries still in the buffers.
  * - `latestSettingsRef` is used inside async callbacks to avoid stale closures when settings change mid-queue.
  */
 export function useStorageVaultSync(params: {
@@ -71,6 +91,8 @@ export function useStorageVaultSync(params: {
     contentRegistryRef: MutableRefObject<ContentProviderRegistry | null>;
     pendingSyncTimeoutIdRef: MutableRefObject<number | null>;
     pendingRenameDataRef: MutableRefObject<Map<string, DBFileData>>;
+    modifyFlushBufferRef: MutableRefObject<PendingFileFlushBuffer>;
+    metadataChangeFlushBufferRef: MutableRefObject<PendingFileFlushBuffer>;
     buildFileCacheFnRef: MutableRefObject<((isInitialLoad?: boolean) => Promise<void>) | null>;
     rebuildFileCacheRef: MutableRefObject<ReturnType<typeof debounce> | null>;
     activeVaultEventRefsRef: MutableRefObject<EventRef[] | null>;
@@ -106,6 +128,8 @@ export function useStorageVaultSync(params: {
         contentRegistryRef,
         pendingSyncTimeoutIdRef,
         pendingRenameDataRef,
+        modifyFlushBufferRef,
+        metadataChangeFlushBufferRef,
         buildFileCacheFnRef,
         rebuildFileCacheRef,
         activeVaultEventRefsRef,
@@ -349,31 +373,27 @@ export function useStorageVaultSync(params: {
             queueFilesContentRefresh([file]);
         };
 
-        const pendingModifiedFiles = new Map<string, TFile>();
-        let pendingModifyFlushTimerId: number | null = null;
-        let isProcessingModifyBatch = false;
-        const pendingMetadataChangedFiles = new Map<string, TFile>();
-        let pendingMetadataChangeFlushTimerId: number | null = null;
-        let isProcessingMetadataChangeBatch = false;
+        const modifyFlushBuffer = modifyFlushBufferRef.current;
+        const metadataChangeFlushBuffer = metadataChangeFlushBufferRef.current;
 
         const clearPendingModifyFlushTimer = () => {
-            if (pendingModifyFlushTimerId === null) {
+            if (modifyFlushBuffer.timerId === null) {
                 return;
             }
             if (typeof window !== 'undefined') {
-                window.clearTimeout(pendingModifyFlushTimerId);
+                window.clearTimeout(modifyFlushBuffer.timerId);
             }
-            pendingModifyFlushTimerId = null;
+            modifyFlushBuffer.timerId = null;
         };
 
         const clearPendingMetadataChangeFlushTimer = () => {
-            if (pendingMetadataChangeFlushTimerId === null) {
+            if (metadataChangeFlushBuffer.timerId === null) {
                 return;
             }
             if (typeof window !== 'undefined') {
-                window.clearTimeout(pendingMetadataChangeFlushTimerId);
+                window.clearTimeout(metadataChangeFlushBuffer.timerId);
             }
-            pendingMetadataChangeFlushTimerId = null;
+            metadataChangeFlushBuffer.timerId = null;
         };
 
         const resolveLiveFiles = (files: TFile[]): TFile[] => {
@@ -388,19 +408,19 @@ export function useStorageVaultSync(params: {
         };
 
         const flushModifiedFiles = () => {
-            pendingModifyFlushTimerId = null;
-            if (isProcessingModifyBatch) {
+            modifyFlushBuffer.timerId = null;
+            if (modifyFlushBuffer.isProcessing) {
                 return;
             }
 
             runAsyncAction(async () => {
                 if (stoppedRef.current) {
-                    pendingModifiedFiles.clear();
+                    modifyFlushBuffer.files.clear();
                     return;
                 }
 
-                const pendingFiles = Array.from(pendingModifiedFiles.values());
-                pendingModifiedFiles.clear();
+                const pendingFiles = Array.from(modifyFlushBuffer.files.values());
+                modifyFlushBuffer.files.clear();
                 if (pendingFiles.length === 0) {
                     return;
                 }
@@ -411,7 +431,7 @@ export function useStorageVaultSync(params: {
                 }
 
                 let recordedChanges = false;
-                isProcessingModifyBatch = true;
+                modifyFlushBuffer.isProcessing = true;
                 try {
                     const db = getDBInstance();
                     const existingData = db.getFiles(files.map(file => file.path));
@@ -420,26 +440,32 @@ export function useStorageVaultSync(params: {
                 } catch (error: unknown) {
                     console.error('Failed to record file changes on modify:', error);
                 } finally {
-                    isProcessingModifyBatch = false;
+                    modifyFlushBuffer.isProcessing = false;
                 }
 
                 if (recordedChanges) {
-                    queueFilesContentRefresh(files);
+                    // Markdown content is queued by the metadata-change flush once Obsidian has indexed the
+                    // modified file. Queueing markdown here as well runs the metadata-dependent providers a
+                    // second time per save, against a metadata cache that may not reflect the save yet.
+                    const nonMarkdownFiles = files.filter(file => file.extension !== 'md');
+                    if (nonMarkdownFiles.length > 0) {
+                        queueFilesContentRefresh(nonMarkdownFiles);
+                    }
                 }
 
-                if (pendingModifiedFiles.size > 0 && !stoppedRef.current) {
+                if (modifyFlushBuffer.files.size > 0 && !stoppedRef.current) {
                     scheduleModifiedFilesFlush();
                 }
             });
         };
 
         const scheduleModifiedFilesFlush = () => {
-            if (stoppedRef.current || isProcessingModifyBatch || pendingModifyFlushTimerId !== null) {
+            if (stoppedRef.current || modifyFlushBuffer.isProcessing || modifyFlushBuffer.timerId !== null) {
                 return;
             }
 
             if (typeof window !== 'undefined') {
-                pendingModifyFlushTimerId = window.setTimeout(flushModifiedFiles, TIMEOUTS.FILE_OPERATION_DELAY);
+                modifyFlushBuffer.timerId = window.setTimeout(flushModifiedFiles, TIMEOUTS.FILE_OPERATION_DELAY);
                 return;
             }
 
@@ -447,19 +473,19 @@ export function useStorageVaultSync(params: {
         };
 
         const flushMetadataChangedFiles = () => {
-            pendingMetadataChangeFlushTimerId = null;
-            if (isProcessingMetadataChangeBatch) {
+            metadataChangeFlushBuffer.timerId = null;
+            if (metadataChangeFlushBuffer.isProcessing) {
                 return;
             }
 
             runAsyncAction(async () => {
                 if (stoppedRef.current) {
-                    pendingMetadataChangedFiles.clear();
+                    metadataChangeFlushBuffer.files.clear();
                     return;
                 }
 
-                const pendingFiles = Array.from(pendingMetadataChangedFiles.values());
-                pendingMetadataChangedFiles.clear();
+                const pendingFiles = Array.from(metadataChangeFlushBuffer.files.values());
+                metadataChangeFlushBuffer.files.clear();
                 if (pendingFiles.length === 0) {
                     return;
                 }
@@ -486,45 +512,56 @@ export function useStorageVaultSync(params: {
                 if (filesToRefresh.length === 0) {
                     return;
                 }
-                let canQueueContentRefresh = true;
 
-                isProcessingMetadataChangeBatch = true;
+                metadataChangeFlushBuffer.isProcessing = true;
                 try {
                     if (metadataDependentTypes.length > 0) {
                         // Obsidian's metadata cache can change after initial indexing even when file mtime did
                         // not trigger a "modify" handler in the expected order. Mark files for regeneration so
                         // metadata-dependent providers re-run against the updated cache snapshot.
+                        // The processed-mtime reset also invalidates in-flight provider batches whose
+                        // `expectedPreviousMtime` snapshot was non-zero: their guarded writes are dropped after
+                        // the reset, so such a batch cannot persist content from a pre-change cache snapshot.
                         await markFilesForRegeneration(filesToRefresh, metadataDependentTypes);
                     }
                 } catch (error: unknown) {
-                    canQueueContentRefresh = false;
                     console.error('Failed to mark files for regeneration:', error);
                 } finally {
-                    isProcessingMetadataChangeBatch = false;
+                    metadataChangeFlushBuffer.isProcessing = false;
                 }
 
-                if (canQueueContentRefresh) {
-                    queueFilesContentRefresh(filesToRefresh);
-                }
+                // Queue even when marking fails: this flush is the only content trigger for markdown saves, and
+                // files whose processed mtimes are already stale still pass the queue filters without the reset.
+                queueFilesContentRefresh(filesToRefresh);
 
-                if (pendingMetadataChangedFiles.size > 0 && !stoppedRef.current) {
+                if (metadataChangeFlushBuffer.files.size > 0 && !stoppedRef.current) {
                     scheduleMetadataChangedFilesFlush();
                 }
             });
         };
 
         const scheduleMetadataChangedFilesFlush = () => {
-            if (stoppedRef.current || isProcessingMetadataChangeBatch || pendingMetadataChangeFlushTimerId !== null) {
+            if (stoppedRef.current || metadataChangeFlushBuffer.isProcessing || metadataChangeFlushBuffer.timerId !== null) {
                 return;
             }
 
             if (typeof window !== 'undefined') {
-                pendingMetadataChangeFlushTimerId = window.setTimeout(flushMetadataChangedFiles, TIMEOUTS.FILE_OPERATION_DELAY);
+                metadataChangeFlushBuffer.timerId = window.setTimeout(flushMetadataChangedFiles, TIMEOUTS.FILE_OPERATION_DELAY);
                 return;
             }
 
             flushMetadataChangedFiles();
         };
+
+        // Entries buffered before an effect remount have no active timer (cleanup cleared it); reschedule their
+        // flushes. When a flush batch from the previous effect run is still in flight, the schedule guard skips
+        // and that batch reschedules on completion if the buffer is non-empty.
+        if (modifyFlushBuffer.files.size > 0) {
+            scheduleModifiedFilesFlush();
+        }
+        if (metadataChangeFlushBuffer.files.size > 0) {
+            scheduleMetadataChangedFilesFlush();
+        }
 
         const notifyDrawingCompanionChange = (imagePath: string) => {
             emitDrawingCompanionImageChange(app, imagePath);
@@ -632,7 +669,7 @@ export function useStorageVaultSync(params: {
                 return;
             }
 
-            pendingModifiedFiles.set(file.path, file);
+            modifyFlushBuffer.files.set(file.path, file);
             scheduleModifiedFilesFlush();
         };
 
@@ -665,7 +702,7 @@ export function useStorageVaultSync(params: {
                 return;
             }
 
-            pendingMetadataChangedFiles.set(file.path, file);
+            metadataChangeFlushBuffer.files.set(file.path, file);
             scheduleMetadataChangedFilesFlush();
         };
 
@@ -685,10 +722,9 @@ export function useStorageVaultSync(params: {
                 }
                 pendingSyncTimeoutIdRef.current = null;
             }
+            // Keep buffered files so the next effect run can reschedule their flushes; only cancel the timers.
             clearPendingModifyFlushTimer();
-            pendingModifiedFiles.clear();
             clearPendingMetadataChangeFlushTimer();
-            pendingMetadataChangedFiles.clear();
 
             // Clears debouncers and pending waits so no background work continues after teardown.
             cancelTagTreeRebuildDebouncer({ reset: true });
@@ -711,6 +747,8 @@ export function useStorageVaultSync(params: {
         isIndexedDBReady,
         isStorageReadyRef,
         latestSettingsRef,
+        metadataChangeFlushBufferRef,
+        modifyFlushBufferRef,
         pendingRenameDataRef,
         pendingSyncTimeoutIdRef,
         queueIndexableFilesForContentGeneration,
